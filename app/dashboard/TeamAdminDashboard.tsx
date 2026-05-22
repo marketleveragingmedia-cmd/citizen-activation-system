@@ -1,0 +1,307 @@
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import AddNoteModal from './AddNoteModal'
+import AddPartnerModal from './AddPartnerModal'
+import AddTeamModal from './AddTeamModal'
+import StripeConnectButton from './StripeConnectButton'
+
+interface TeamAdminDashboardProps {
+  team: any
+  hasStripeAccount?: boolean
+  stripeAccountId?: string | null
+  stats: any
+  recentRequests: any[]
+  userName: string
+}
+
+export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccountId, stats, recentRequests, userName }: TeamAdminDashboardProps) {
+  const [selectedRequest, setSelectedRequest] = useState<any>(null)
+  const [showAddNote, setShowAddNote] = useState<any>(null)
+  const [showAddPartner, setShowAddPartner] = useState(false)
+  const [showAddTeam, setShowAddTeam] = useState(false)
+
+  // Helper to check if request is delayed (3+ days)
+  const isDelayed = (request: any) => {
+    if (request.status !== 'Assigned') return false
+    const daysSince = Math.floor(
+      (Date.now() - new Date(request.dateSubmitted).getTime()) / (1000 * 60 * 60 * 24)
+    )
+    return daysSince >= 3
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <nav className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            {team.logoUrl && (
+              <img src={team.logoUrl} alt={team.name} className="h-10" />
+            )}
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">{team.name}</h1>
+              <p className="text-sm text-gray-600">
+                {team.tierType === 'FullSystem' ? 'Team Admin Dashboard' : 'Organization Admin Dashboard'}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/profile" className="text-gray-600 hover:text-gray-900">
+              Profile
+            </Link>
+            <span className="text-gray-600">{userName}</span>
+            <Link href="/api/auth/signout" className="text-red-600 hover:underline">
+              Sign Out
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <div className="max-w-7xl mx-auto p-6">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white p-6 rounded-lg shadow">
+            <div className="text-gray-600 text-sm mb-2">Total Requests</div>
+            <div className="text-3xl font-bold text-gray-900">{stats.totalRequests}</div>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <div className="text-gray-600 text-sm mb-2">Pending</div>
+            <div className="text-3xl font-bold text-yellow-600">{stats.pending}</div>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <div className="text-gray-600 text-sm mb-2">Activations</div>
+            <div className="text-3xl font-bold text-[#1E8E5A]">{stats.activations}</div>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <div className="text-gray-600 text-sm mb-2">Active Strategic Partners</div>
+            <div className="text-3xl font-bold text-gray-900">{stats.activePartners}</div>
+          </div>
+        </div>
+
+        {/* Stripe Connect Section */}
+        <div className="mb-8">
+          <StripeConnectButton 
+            hasStripeAccount={!!hasStripeAccount} 
+            stripeAccountId={stripeAccountId || undefined}
+          />
+        </div>
+
+        {/* Quick Actions */}
+        <div className="bg-white rounded-lg shadow mb-8 p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+          <div className="flex gap-4">
+            <button
+              onClick={() => setShowAddTeam(true)}
+              className="bg-[#C9A441] hover:bg-[#B8932F] text-white font-bold py-3 px-6 rounded-lg"
+            >
+              + Add Team Admin
+            </button>
+            <button
+              onClick={() => setShowAddPartner(true)}
+              className="bg-[#1E8E5A] hover:bg-[#177349] text-white font-bold py-3 px-6 rounded-lg"
+            >
+              + Add Strategic Partner
+            </button>
+          </div>
+        </div>
+
+        {/* Recent Requests */}
+        <div className="bg-white rounded-lg shadow">
+          <div className="p-6 border-b">
+            <h2 className="text-xl font-bold text-gray-900">Your Requests</h2>
+            <p className="text-gray-600 text-sm mt-1">Showing {recentRequests.length} most recent requests for your {team.tierType === 'FullSystem' ? 'team' : 'organization'}</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requester</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned To</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {recentRequests.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                      No requests yet. Share your request form link to start receiving requests!
+                    </td>
+                  </tr>
+                ) : (
+                  recentRequests.map((request: any) => (
+                    <tr key={request.id} className={`hover:bg-gray-50 ${isDelayed(request) ? 'bg-red-50' : ''}`}>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          {isDelayed(request) && (
+                            <span className="text-red-600 font-bold" title="Delayed 3+ days">⚠️</span>
+                          )}
+                          <button
+                            onClick={() => setSelectedRequest(request)}
+                            className="font-medium text-[#1E8E5A] hover:underline text-left"
+                          >
+                            {`${request.requesterFirstName} ${request.requesterLastName}`}
+                          </button>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <a href={`tel:${request.requesterPhone}`} className="text-[#1E8E5A] hover:underline">
+                          {request.requesterPhone}
+                        </a>
+                      </td>
+                      <td className="px-6 py-4">
+                        <a href={`mailto:${request.requesterEmail}`} className="text-gray-600 hover:underline text-sm">
+                          {request.requesterEmail}
+                        </a>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900">{request.activationLevel}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        {`${request.assignedPartner?.firstName || ""} ${request.assignedPartner?.lastName || ""}`.trim() || 'Unassigned'}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`px-2 py-1 text-xs rounded-full ${
+                          request.status === 'Activated' ? 'bg-green-100 text-green-800' :
+                          request.status === 'OnboardingScheduled' ? 'bg-blue-100 text-blue-800' :
+                          request.status === 'Invited' ? 'bg-purple-100 text-purple-800' :
+                          'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {request.status.replace(/([A-Z])/g, ' $1').trim()}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-500">
+                        {new Date(request.dateSubmitted).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Request Detail Modal */}
+      {selectedRequest && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-3xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-start mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Request Details</h2>
+              <button
+                onClick={() => setSelectedRequest(null)}
+                className="text-gray-400 hover:text-gray-600 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm text-gray-600">Name</div>
+                  <div className="font-semibold text-lg">{`${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600">Activation Level</div>
+                  <div className="font-semibold text-lg">{selectedRequest.activationLevel}</div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm text-gray-600">Phone Number</div>
+                  <a href={`tel:${selectedRequest.requesterPhone}`} className="font-semibold text-lg text-[#1E8E5A] hover:underline">
+                    {selectedRequest.requesterPhone}
+                  </a>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600">Email</div>
+                  <a href={`mailto:${selectedRequest.requesterEmail}`} className="font-semibold text-lg text-[#1E8E5A] hover:underline break-all">
+                    {selectedRequest.requesterEmail}
+                  </a>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm text-gray-600">Assigned Strategic Partner</div>
+                  <div className="font-semibold text-lg">
+                    {`${selectedRequest.assignedPartner?.firstName || ""} ${selectedRequest.assignedPartner?.lastName || ""}`.trim() || 'Unassigned'}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600">Status</div>
+                  <div className="font-semibold text-lg">
+                    {selectedRequest.status.replace(/([A-Z])/g, ' $1').trim()}
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm text-gray-600">Date Submitted</div>
+                  <div className="font-semibold">{new Date(selectedRequest.dateSubmitted).toLocaleString()}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600">Assignment Type</div>
+                  <div className="font-semibold">{selectedRequest.assignmentType}</div>
+                </div>
+              </div>
+
+              {selectedRequest.referralCodeUsed && (
+                <div>
+                  <div className="text-sm text-gray-600">Referral Code Used</div>
+                  <div className="font-semibold text-lg font-mono bg-gray-100 px-3 py-1 rounded inline-block">
+                    {selectedRequest.referralCodeUsed}
+                  </div>
+                </div>
+              )}
+
+              {selectedRequest.notes && (
+                <div>
+                  <div className="text-sm text-gray-600">Notes</div>
+                  <div className="text-gray-900 bg-gray-50 p-3 rounded">
+                    {selectedRequest.notes}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => setSelectedRequest(null)}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showAddPartner && (
+        <AddPartnerModal
+          onClose={() => setShowAddPartner(false)}
+          onSuccess={() => {
+            setShowAddPartner(false)
+            window.location.reload()
+          }}
+        />
+      )}
+
+      {showAddTeam && (
+        <AddTeamModal
+          isMainAdmin={false}
+          onClose={() => setShowAddTeam(false)}
+          onSuccess={() => {
+            setShowAddTeam(false)
+            window.location.reload()
+          }}
+        />
+      )}
+    </div>
+  )
+}

@@ -1,0 +1,58 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { stripe } from '@/lib/stripe'
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { email, name, tier } = body
+
+    if (!email || !name) {
+      return NextResponse.json(
+        { error: 'Email and name are required' },
+        { status: 400 }
+      )
+    }
+
+    // Determine price based on tier (promo or regular)
+    const isPromo = tier === 'promo'
+    const amount = isPromo ? 199700 : 299700 // $1,997 or $2,997
+
+    // Create Stripe Checkout Session for Option 3: White-Label
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: `Citizen Activation System - White-Label ${isPromo ? '(Promotional)' : '(Regular)'}`,
+              description: `Year 1: $${isPromo ? '1,997' : '2,997'} (one-time setup) | Year 2+: $497/year recurring`,
+            },
+            unit_amount: amount,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/cancelled`,
+      customer_email: email,
+      metadata: {
+        type: 'white_label_purchase',
+        customerName: name,
+        option: '3',
+        tier: tier || 'regular',
+        setupFee: isPromo ? '1997' : '2997',
+        recurringFee: '497',
+      },
+    })
+
+    return NextResponse.json({ url: session.url })
+  } catch (error: any) {
+    console.error('Checkout error:', error)
+    return NextResponse.json(
+      { error: error.message || 'Failed to create checkout session' },
+      { status: 500 }
+    )
+  }
+}

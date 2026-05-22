@@ -1,0 +1,148 @@
+// Citizen Activation System Database Schema
+// Generated: May 21, 2026
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id          String   @id @default(cuid())
+  role        Role     @default(TEAM_ADMIN)
+  firstName   String
+  lastName    String
+  email       String   @unique
+  phone       String?
+  passwordHash String
+  teamId      String?
+  team        Team?    @relation(fields: [teamId], references: [id])
+  createdDate DateTime @default(now())
+  lastLogin   DateTime?
+  status      AdminStatus @default(Active)
+
+  @@map("admins")
+}
+
+model Team {
+  id                String   @id @default(cuid())
+  name              String
+  adminId           String
+  tierType          TierType @default(FullSystem)
+  customDomain      String?
+  logoUrl           String?
+  stripeAccountId   String?  @unique // Stripe Connect account ID for revenue splits
+  autoAssignEnabled Boolean  @default(true)
+  createdDate       DateTime @default(now())
+  status            TeamStatus @default(Active)
+  
+  admins            Admin[]
+  strategicPartners StrategicPartner[]
+  requests          Request[]
+
+  @@map("teams")
+}
+
+model StrategicPartner {
+  id                 String   @id @default(cuid())
+  teamId             String
+  team               Team     @relation(fields: [teamId], references: [id])
+  firstName          String
+  lastName           String
+  email              String   @unique
+  passwordHash       String
+  phone              String?
+  referralCode       String   @unique // MOSCA-issued referral code (identifies them as activated Citizen)
+  slotsUsed          Int      @default(0)
+  slotsAvailable     Int      @default(3)
+  status             PartnerStatus @default(Active)
+  lastAssigned       DateTime?
+  totalAssigned      Int      @default(0)
+  activationLevel    ActivationLevel
+  activationDate     DateTime?
+  originalRequestId  String?
+  originalRequest    Request? @relation("OriginalRequest", fields: [originalRequestId], references: [id])
+  createdDate        DateTime @default(now())
+  
+  assignedRequests   Request[] @relation("AssignedPartner")
+  promotedFrom       Request[] @relation("BecamePartner")
+
+  @@map("strategic_partners")
+}
+
+model Request {
+  id                    String   @id @default(cuid())
+  teamId                String
+  team                  Team     @relation(fields: [teamId], references: [id])
+  requesterFirstName    String
+  requesterLastName     String
+  requesterEmail        String
+  requesterPhone        String
+  referralCodeUsed      String?  // MOSCA referral code used (if any)
+  activationLevel       ActivationLevel
+  assignedPartnerId     String?
+  assignedPartner       StrategicPartner? @relation("AssignedPartner", fields: [assignedPartnerId], references: [id])
+  assignmentType        AssignmentType @default(Auto)
+  status                RequestStatus @default(Assigned)
+  dateSubmitted         DateTime @default(now())
+  dateAssigned          DateTime?
+  dateInvited           DateTime?
+  dateOnboardingScheduled DateTime?
+  dateActivated         DateTime?
+  becamePartnerId       String?
+  becamePartner         StrategicPartner? @relation("BecamePartner", fields: [becamePartnerId], references: [id])
+  notes                 String?
+  escalated             Boolean @default(false) // 3-day escalation alert sent
+  escalatedDate         DateTime? // When escalation alert was sent
+  
+  promotedToPartner     StrategicPartner[] @relation("OriginalRequest")
+
+  @@map("requests")
+}
+
+enum Role {
+  MAIN_ADMIN
+  TEAM_ADMIN
+}
+
+enum AdminStatus {
+  Active
+  Inactive
+}
+
+enum TeamStatus {
+  Active
+  Inactive
+}
+
+enum TierType {
+  FullSystem
+  SoloOrg
+}
+
+enum PartnerStatus {
+  Active
+  Paused
+  Full
+}
+
+enum ActivationLevel {
+  Citizen
+  Enterprise
+}
+
+enum AssignmentType {
+  Auto
+  Manual
+  Referral
+}
+
+enum RequestStatus {
+  Assigned
+  Invited
+  OnboardingScheduled
+  Activated
+}

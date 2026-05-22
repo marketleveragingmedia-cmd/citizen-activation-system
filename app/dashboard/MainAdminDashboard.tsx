@@ -99,6 +99,28 @@ export default function MainAdminDashboard({ stats, recentRequests, userName, is
 
       <div className="max-w-7xl mx-auto p-6">
         {/* Stats Grid */}
+
+        {/* Checkout Pages Section */}
+        <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Checkout Pages</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            <a href="/checkout/team-admin" target="_blank" className="block p-4 border-2 border-[#1E8E5A] rounded-lg hover:bg-green-50 transition">
+              <h3 className="font-bold text-[#1E8E5A] mb-1">Team Admin</h3>
+              <p className="text-sm text-gray-600 mb-2">$497/year</p>
+              <span className="text-xs text-[#1E8E5A]">View Page →</span>
+            </a>
+            <a href="/checkout/organization-admin" target="_blank" className="block p-4 border-2 border-[#1E8E5A] rounded-lg hover:bg-green-50 transition">
+              <h3 className="font-bold text-[#1E8E5A] mb-1">Organization Admin</h3>
+              <p className="text-sm text-gray-600 mb-2">$997 Year 1</p>
+              <span className="text-xs text-[#1E8E5A]">View Page →</span>
+            </a>
+            <a href="/checkout/white-label" target="_blank" className="block p-4 border-2 border-[#1E8E5A] rounded-lg hover:bg-green-50 transition">
+              <h3 className="font-bold text-[#1E8E5A] mb-1">White-Label</h3>
+              <p className="text-sm text-gray-600 mb-2">$1,997 or $2,997</p>
+              <span className="text-xs text-[#1E8E5A]">View Page →</span>
+            </a>
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow">
             <div className="text-gray-600 text-sm mb-2">Total Teams</div>

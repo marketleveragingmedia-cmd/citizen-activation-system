@@ -36,7 +36,7 @@ export default function OrganizationAdminCheckout() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1E8E5A] to-[#155d3a] flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-6">
+      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
         <div className="text-center mb-6">
           <div className="inline-block bg-[#C9A441] text-white px-3 py-1 rounded-full text-sm font-semibold mb-2">
             POPULAR

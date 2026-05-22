@@ -37,9 +37,9 @@ export default function WhiteLabelCheckout() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1E8E5A] to-[#155d3a] flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[#1E8E5A] mb-2">
+      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold text-[#1E8E5A] mb-2">
             White-Label System
           </h1>
           <p className="text-gray-600">
@@ -61,10 +61,10 @@ export default function WhiteLabelCheckout() {
                 <div className="inline-block bg-[#C9A441] text-white px-2 py-1 rounded text-xs font-semibold mb-2">
                   PROMOTIONAL
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900">White-Label (Promo)</h2>
+                <h2 className="text-xl font-bold text-gray-900">White-Label (Promo)</h2>
               </div>
               <div className="text-right">
-                <div className="text-3xl font-bold text-[#1E8E5A]">$1,997</div>
+                <div className="text-2xl font-bold text-[#1E8E5A]">$1,997</div>
                 <div className="text-sm text-gray-600">Year 1</div>
               </div>
             </div>
@@ -82,9 +82,9 @@ export default function WhiteLabelCheckout() {
             }`}
           >
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">White-Label (Regular)</h2>
+              <h2 className="text-xl font-bold text-gray-900">White-Label (Regular)</h2>
               <div className="text-right">
-                <div className="text-3xl font-bold text-[#1E8E5A]">$2,997</div>
+                <div className="text-2xl font-bold text-[#1E8E5A]">$2,997</div>
                 <div className="text-sm text-gray-600">Year 1</div>
               </div>
             </div>
@@ -94,24 +94,24 @@ export default function WhiteLabelCheckout() {
           </div>
         </div>
 
-        <div className="bg-gray-50 rounded-lg p-6 mb-6">
+        <div className="bg-gray-50 rounded-lg p-4 mb-6">
           <h3 className="font-bold text-gray-900 mb-3">What's Included:</h3>
           <div className="space-y-2 text-gray-700">
             <div className="flex items-start gap-2">
               <span className="text-[#1E8E5A] mt-1">✓</span>
-              <span>Your own separate system</span>
+              <span>Your Own Separate System</span>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-[#1E8E5A] mt-1">✓</span>
-              <span>Full independence & control</span>
+              <span>Full Independence & Control</span>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-[#1E8E5A] mt-1">✓</span>
-              <span>Own domain/subdomain</span>
+              <span>Own Domain/Subdomain</span>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-[#1E8E5A] mt-1">✓</span>
-              <span>Main Admin access</span>
+              <span>Main Admin Access</span>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-[#1E8E5A] mt-1">✓</span>
@@ -119,7 +119,7 @@ export default function WhiteLabelCheckout() {
             </div>
             <div className="flex items-start gap-2">
               <span className="text-[#1E8E5A] mt-1">✓</span>
-              <span>White-label branding</span>
+              <span>White-Label Branding</span>
             </div>
           </div>
         </div>
@@ -163,7 +163,7 @@ export default function WhiteLabelCheckout() {
         </form>
 
         <p className="text-xs text-gray-500 text-center mt-6">
-          All payments are secure and processed through Stripe.<br />
+          All payments are secure and processed through Stripe.<br/>
           Year 2+ renewals are automatic at $497/year.
         </p>
       </div>

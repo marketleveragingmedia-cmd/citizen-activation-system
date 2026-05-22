@@ -58,6 +58,7 @@ model StrategicPartner {
   referralCode       String   @unique // MOSCA-issued referral code (identifies them as activated Citizen)
   slotsUsed          Int      @default(0)
   slotsAvailable     Int      @default(3)
+  customSlotLimit    Int?     // Optional: Override default 3-slot limit (Main Admin can increase)
   status             PartnerStatus @default(Active)
   lastAssigned       DateTime?
   totalAssigned      Int      @default(0)

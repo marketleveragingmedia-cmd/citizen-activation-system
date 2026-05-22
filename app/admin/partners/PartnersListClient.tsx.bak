@@ -8,14 +8,6 @@ export default function PartnersListClient({ partners, userName }: any) {
   const [selectedPartner, setSelectedPartner] = useState<any>(null)
   const [editingPartner, setEditingPartner] = useState<any>(null)
 
-      {updatingSlots && (
-        <UpdateSlotLimitModal
-          partner={updatingSlots}
-          onClose={() => setUpdatingSlots(null)}
-          onUpdate={() => window.location.reload()}
-        />
-      )}
-
   const toggleStatus = async (partnerId: string, currentStatus: string) => {
     const newStatus = currentStatus === 'Active' ? 'Paused' : 'Active'
     

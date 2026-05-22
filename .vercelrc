@@ -1,0 +1,8 @@
+{
+  "env": {
+    "STRIPE_SECRET_KEY": "sk_test_WZK9PvSxC0HHaJxH3nkCXWk3003LxOF3Sz",
+    "STRIPE_PUBLISHABLE_KEY": "pk_test_52iwoYlX2LDpLAyFQs6zlPI900hk4RXOVk", 
+    "STRIPE_WEBHOOK_SECRET": "whsec_IQhlbHpiyghe2r2zCxcoMMmci2Ah0OPw",
+    "CRON_SECRET": "mvlNzKtH2C5w6pAsIBGIX5xabDgbbLo83UaEn80cSfE="
+  }
+}

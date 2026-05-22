@@ -37,7 +37,7 @@ export default function WhiteLabelCheckout() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1E8E5A] to-[#155d3a] flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-8">
+      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-[#1E8E5A] mb-2">
             White-Label System

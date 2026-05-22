@@ -42,7 +42,7 @@ export default function TeamAdminCheckout() {
             Team Admin Access
           </h1>
           <p className="text-gray-600">
-            Join the Citizen Activation System
+            Citizen Activation System
           </p>
         </div>
 

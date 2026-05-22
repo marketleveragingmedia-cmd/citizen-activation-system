@@ -36,12 +36,12 @@ export default function OrganizationAdminCheckout() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1E8E5A] to-[#155d3a] flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-8">
-        <div className="text-center mb-8">
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-6">
+        <div className="text-center mb-6">
           <div className="inline-block bg-[#C9A441] text-white px-3 py-1 rounded-full text-sm font-semibold mb-2">
             POPULAR
           </div>
-          <h1 className="text-3xl font-bold text-[#1E8E5A] mb-2">
+          <h1 className="text-2xl font-bold text-[#1E8E5A] mb-2">
             Organization Admin
           </h1>
           <p className="text-gray-600">
@@ -49,11 +49,11 @@ export default function OrganizationAdminCheckout() {
           </p>
         </div>
 
-        <div className="bg-gray-50 rounded-lg p-6 mb-6">
+        <div className="bg-gray-50 rounded-lg p-4 mb-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">Organization Admin</h2>
+            <h2 className="text-xl font-bold text-gray-900">Organization Admin</h2>
             <div className="text-right">
-              <div className="text-3xl font-bold text-[#1E8E5A]">$997</div>
+              <div className="text-2xl font-bold text-[#1E8E5A]">$997</div>
               <div className="text-sm text-gray-600">Year 1</div>
             </div>
           </div>
@@ -61,23 +61,23 @@ export default function OrganizationAdminCheckout() {
           <div className="space-y-2 text-gray-700">
             <div className="flex items-start gap-2">
               <span className="text-[#1E8E5A] mt-1">✓</span>
-              <span>Everything in Team Admin</span>
+              <span>Everything In Team Admin</span>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-[#1E8E5A] mt-1">✓</span>
-              <span>Dedicated branding (custom logo)</span>
+              <span>Dedicated Branding (Custom Logo)</span>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-[#1E8E5A] mt-1">✓</span>
-              <span>Custom subdomain (optional)</span>
+              <span>Custom Subdomain (Optional)</span>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-[#1E8E5A] mt-1">✓</span>
-              <span>Single organization focus</span>
+              <span>Single Organization Focus</span>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-[#1E8E5A] mt-1">✓</span>
-              <span>Enhanced features</span>
+              <span>Enhanced Features</span>
             </div>
           </div>
 

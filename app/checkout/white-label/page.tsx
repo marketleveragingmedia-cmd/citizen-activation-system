@@ -50,7 +50,7 @@ export default function WhiteLabelCheckout() {
         <div className="space-y-4 mb-6">
           <div 
             onClick={() => setTier('promo')}
-            className={`border-2 rounded-lg p-6 cursor-pointer transition-all ${
+            className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
               tier === 'promo' 
                 ? 'border-[#1E8E5A] bg-green-50' 
                 : 'border-gray-300 hover:border-[#1E8E5A]'
@@ -75,7 +75,7 @@ export default function WhiteLabelCheckout() {
 
           <div 
             onClick={() => setTier('regular')}
-            className={`border-2 rounded-lg p-6 cursor-pointer transition-all ${
+            className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
               tier === 'regular' 
                 ? 'border-[#1E8E5A] bg-green-50' 
                 : 'border-gray-300 hover:border-[#1E8E5A]'

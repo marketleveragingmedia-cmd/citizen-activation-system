@@ -15,11 +15,11 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const user = await prisma.user.findUnique({
+    const admin = await prisma.admin.findUnique({
       where: { email: session.user.email }
     })
 
-    if (!user || (user.role !== 'MainAdmin' && user.role !== 'TeamAdmin')) {
+    if (!admin || (admin.role !== 'MAIN_ADMIN' && admin.role !== 'TEAM_ADMIN')) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 

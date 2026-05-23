@@ -15,16 +15,16 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const user = await prisma.user.findUnique({
+    const admin = await prisma.admin.findUnique({
       where: { email: session.user.email }
     })
 
-    if (!user || user.role !== 'MainAdmin') {
+    if (!admin || admin.role !== 'MAIN_ADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     // Get team admin with team info
-    const teamAdmin = await prisma.user.findUnique({
+    const teamAdmin = await prisma.admin.findUnique({
       where: { id },
       include: {
         team: {
@@ -36,7 +36,7 @@ export async function GET(
       }
     })
 
-    if (!teamAdmin || teamAdmin.role !== 'TeamAdmin') {
+    if (!teamAdmin || teamAdmin.role !== 'TEAM_ADMIN') {
       return NextResponse.json({ error: 'Team Admin not found' }, { status: 404 })
     }
 

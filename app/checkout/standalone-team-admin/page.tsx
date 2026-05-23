@@ -1,9 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function StandaloneTeamAdminCheckout() {
   const [loading, setLoading] = useState(false);
@@ -22,11 +19,13 @@ export default function StandaloneTeamAdminCheckout() {
         body: JSON.stringify({ email, firstName, lastName })
       });
 
-      const { sessionId } = await response.json();
-      const stripe = await stripePromise;
+      const data = await response.json();
       
-      if (stripe) {
-        await stripe.redirectToCheckout({ sessionId });
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('Failed to create checkout session');
+        setLoading(false);
       }
     } catch (error) {
       console.error('Checkout error:', error);

@@ -33,6 +33,9 @@ async function getDashboardData(userId: string, role: string, type: string) {
     })
 
     const partners = await prisma.strategicPartner.findMany({
+      include: {
+        team: true
+      },
       orderBy: { createdDate: 'desc' }
     })
 

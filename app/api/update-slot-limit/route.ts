@@ -1,21 +1,22 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { prisma } from '@/lib/prisma'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import prisma from '@/lib/prisma'
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Verify Main Admin
-    const admin = await prisma.admin.findUnique({
+    // Verify Main Admin or Team Admin
+    const user = await prisma.user.findUnique({
       where: { email: session.user.email }
     })
 
-    if (!admin || admin.role !== 'MAIN_ADMIN') {
-      return NextResponse.json({ error: 'Only Main Admin can update slot limits' }, { status: 403 })
+    if (!user || (user.role !== 'MainAdmin' && user.role !== 'TeamAdmin')) {
+      return NextResponse.json({ error: 'Only admins can update slot limits' }, { status: 403 })
     }
 
     const { partnerId, customSlotLimit } = await req.json()

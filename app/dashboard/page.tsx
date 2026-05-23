@@ -33,8 +33,7 @@ async function getDashboardData(userId: string, role: string, type: string) {
     })
 
     const partners = await prisma.strategicPartner.findMany({
-      orderBy: { createdDate: 'desc' },
-      take: 10
+      orderBy: { createdDate: 'desc' }
     })
 
     return {

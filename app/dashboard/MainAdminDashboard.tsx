@@ -579,8 +579,6 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
           partner={updatingSlots}
           onClose={() => setUpdatingSlots(null)}
           onUpdate={() => window.location.reload()}
-            window.location.reload()
-          }}
         />
       )}
     </div>

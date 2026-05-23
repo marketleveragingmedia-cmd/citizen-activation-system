@@ -21,9 +21,25 @@ export async function POST(req: Request) {
 
     const { partnerId, customSlotLimit } = await req.json()
 
+    // Get current partner to check slots
+    const partner = await prisma.strategicPartner.findUnique({
+      where: { id: partnerId }
+    })
+
+    if (!partner) {
+      return NextResponse.json({ error: 'Partner not found' }, { status: 404 })
+    }
+
+    // Calculate new status based on updated slot limit
+    const newLimit = customSlotLimit || 3
+    const newStatus = partner.slotsUsed >= newLimit ? 'Full' : 'Active'
+
     const updated = await prisma.strategicPartner.update({
       where: { id: partnerId },
-      data: { customSlotLimit: customSlotLimit || null }
+      data: { 
+        customSlotLimit: customSlotLimit || null,
+        status: newStatus
+      }
     })
 
     return NextResponse.json({ 

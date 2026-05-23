@@ -4,11 +4,13 @@ import { stripe } from '@/lib/stripe'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, name } = body
+    const { email, firstName, lastName } = body
+    
+    const fullName = `${firstName} ${lastName}`
 
-    if (!email || !name) {
+    if (!email || !firstName || !lastName) {
       return NextResponse.json(
-        { error: 'Email and name are required' },
+        { error: 'Email, first name and last name are required' },
         { status: 400 }
       )
     }
@@ -36,7 +38,9 @@ export async function POST(request: NextRequest) {
       customer_email: email,
       metadata: {
         type: 'organization_admin_purchase',
-        customerName: name,
+        customerName: fullName,
+        firstName: firstName,
+        lastName: lastName,
         option: '2',
         setupFee: '997',
         recurringFee: '497',

@@ -4,14 +4,16 @@ import { stripe } from '@/lib/stripe'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, name } = body
+    const { email, firstName, lastName } = body
 
-    if (!email || !name) {
+    if (!email || !firstName || !lastName) {
       return NextResponse.json(
-        { error: 'Email and name are required' },
+        { error: 'Email, first name and last name are required' },
         { status: 400 }
       )
     }
+
+    const fullName = `${firstName} ${lastName}`
 
     // Create Stripe Checkout Session for Option 1: Team Admin Access
     const session = await stripe.checkout.sessions.create({
@@ -38,7 +40,9 @@ export async function POST(request: NextRequest) {
       customer_email: email,
       metadata: {
         type: 'team_admin_purchase',
-        customerName: name,
+        customerName: fullName,
+        firstName: firstName,
+        lastName: lastName,
         option: '1',
       },
     })

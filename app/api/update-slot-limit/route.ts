@@ -11,11 +11,11 @@ export async function POST(req: Request) {
     }
 
     // Verify Main Admin or Team Admin
-    const user = await prisma.user.findUnique({
+    const admin = await prisma.admin.findUnique({
       where: { email: session.user.email }
     })
 
-    if (!user || (user.role !== 'MainAdmin' && user.role !== 'TeamAdmin')) {
+    if (!admin || (admin.role !== 'MAIN_ADMIN' && admin.role !== 'TEAM_ADMIN')) {
       return NextResponse.json({ error: 'Only admins can update slot limits' }, { status: 403 })
     }
 

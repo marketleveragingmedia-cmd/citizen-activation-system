@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 
 export default function WhiteLabelCheckout() {
   const router = useRouter()
-  const [fullName, setFullName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [tier, setTier] = useState<'promo' | 'regular'>('promo')
   const [loading, setLoading] = useState(false)
@@ -18,7 +19,7 @@ export default function WhiteLabelCheckout() {
       const response = await fetch('/api/checkout/white-label', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName, email, tier })
+        body: JSON.stringify({ firstName, lastName, email, tier })
       })
 
       const data = await response.json()
@@ -125,18 +126,33 @@ export default function WhiteLabelCheckout() {
         </div>
 
         <form onSubmit={handleCheckout} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name *
-            </label>
-            <input
-              type="text"
-              required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E8E5A]"
-              placeholder="Your full name"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                First Name *
+              </label>
+              <input
+                type="text"
+                required
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E8E5A]"
+                placeholder="First name"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Last Name *
+              </label>
+              <input
+                type="text"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E8E5A]"
+                placeholder="Last name"
+              />
+            </div>
           </div>
 
           <div>

@@ -15,12 +15,10 @@ export async function POST(request: NextRequest) {
       mode: 'subscription',
       customer_email: email,
       line_items: [
-      line_items: [
         {
           price: 'price_1TaIUODZhlh84GPrOcYpH61P', // Standalone Team Admin: $497/year
           quantity: 1
         }
-      ],
       ],
       metadata: {
         productType: 'standalone_team_admin',

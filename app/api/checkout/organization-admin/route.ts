@@ -21,14 +21,7 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'Citizen Activation System - Organization Admin (Year 1)',
-              description: 'Year 1: $997 (one-time setup) | Year 2+: $497/year recurring',
-            },
-            unit_amount: 99700, // $997.00
-          },
+          price: 'price_1TaIUNDZhlh84GPrkhnpYJXa', // Organization Admin: $997 Year 1
           quantity: 1,
         },
       ],

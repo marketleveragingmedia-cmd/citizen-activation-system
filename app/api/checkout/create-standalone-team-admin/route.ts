@@ -15,20 +15,12 @@ export async function POST(request: NextRequest) {
       mode: 'subscription',
       customer_email: email,
       line_items: [
+      line_items: [
         {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'Standalone Team Admin',
-              description: 'Independent Citizen Activation System - Team Admin Access'
-            },
-            unit_amount: 49700, // $497.00
-            recurring: {
-              interval: 'year'
-            }
-          },
+          price: 'price_1TaIUODZhlh84GPrOcYpH61P', // Standalone Team Admin: $497/year
           quantity: 1
         }
+      ],
       ],
       metadata: {
         productType: 'standalone_team_admin',

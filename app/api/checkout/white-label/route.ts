@@ -19,19 +19,12 @@ export async function POST(request: NextRequest) {
     const isPromo = tier === 'promo'
     const amount = isPromo ? 199700 : 299700 // $1,997 or $2,997
 
-    // Create Stripe Checkout Session for Option 3: White-Label
+    // Create Stripe Checkout Session for White-Label
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: `Citizen Activation System - White-Label ${isPromo ? '(Promotional)' : '(Regular)'}`,
-              description: `Year 1: $${isPromo ? '1,997' : '2,997'} (one-time setup) | Year 2+: $497/year recurring`,
-            },
-            unit_amount: amount,
-          },
+          price: 'price_1TaIUODZhlh84GPrhYqUu2Mq', // White Label: $1,997
           quantity: 1,
         },
       ],

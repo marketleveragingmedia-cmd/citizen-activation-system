@@ -15,22 +15,12 @@ export async function POST(request: NextRequest) {
 
     const fullName = `${firstName} ${lastName}`
 
-    // Create Stripe Checkout Session for Option 1: Team Admin Access
+    // Create Stripe Checkout Session for Team Admin Access
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'Citizen Activation System - Team Admin Access',
-              description: 'Year 1: $497 | Ongoing: $497/year recurring',
-            },
-            unit_amount: 49700, // $497.00
-            recurring: {
-              interval: 'year',
-            },
-          },
+          price: 'price_1TaIUNDZhlh84GPr3jQXmUtW', // Team Admin: $497/year
           quantity: 1,
         },
       ],

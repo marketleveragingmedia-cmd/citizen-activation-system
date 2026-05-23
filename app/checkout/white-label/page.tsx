@@ -8,7 +8,6 @@ export default function WhiteLabelCheckout() {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
-  const [tier, setTier] = useState<'promo' | 'regular'>('promo')
   const [loading, setLoading] = useState(false)
 
   const handleCheckout = async (e: React.FormEvent) => {
@@ -19,7 +18,7 @@ export default function WhiteLabelCheckout() {
       const response = await fetch('/api/checkout/white-label', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstName, lastName, email, tier })
+        body: JSON.stringify({ firstName, lastName, email, tier: 'promo' })
       })
 
       const data = await response.json()
@@ -48,50 +47,24 @@ export default function WhiteLabelCheckout() {
           </p>
         </div>
 
-        <div className="space-y-3 mb-4">
-          <div 
-            onClick={() => setTier('promo')}
-            className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-              tier === 'promo' 
-                ? 'border-[#1E8E5A] bg-green-50' 
-                : 'border-gray-300 hover:border-[#1E8E5A]'
-            }`}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <div className="inline-block bg-[#C9A441] text-white px-2 py-1 rounded text-xs font-semibold mb-2">
-                  PROMOTIONAL
-                </div>
-                <h2 className="text-lg font-bold text-gray-900">White-Label (Promo)</h2>
+        <div className="bg-gray-50 rounded-lg p-4 mb-4">
+          <div className="flex justify-between items-center mb-3">
+            <div>
+              <div className="inline-block bg-[#C9A441] text-white px-2 py-1 rounded text-xs font-semibold mb-2">
+                PROMOTIONAL PRICING
               </div>
-              <div className="text-right">
-                <div className="text-xl font-bold text-[#1E8E5A]">$1,997</div>
-                <div className="text-sm text-gray-600">Year 1</div>
-              </div>
+              <h2 className="text-lg font-bold text-gray-900">White-Label System</h2>
             </div>
-            <div className="text-sm text-gray-600">
-              <strong>Year 1:</strong> $1,997 | <strong>Year 2+:</strong> $497/year
+            <div className="text-right">
+              <div className="text-xl font-bold text-[#1E8E5A]">$1,997</div>
+              <div className="text-sm text-gray-600">Year 1</div>
             </div>
           </div>
-
-          <div 
-            onClick={() => setTier('regular')}
-            className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-              tier === 'regular' 
-                ? 'border-[#1E8E5A] bg-green-50' 
-                : 'border-gray-300 hover:border-[#1E8E5A]'
-            }`}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold text-gray-900">White-Label (Regular)</h2>
-              <div className="text-right">
-                <div className="text-xl font-bold text-[#1E8E5A]">$2,997</div>
-                <div className="text-sm text-gray-600">Year 1</div>
-              </div>
-            </div>
-            <div className="text-sm text-gray-600">
-              <strong>Year 1:</strong> $2,997 | <strong>Year 2+:</strong> $497/year
-            </div>
+          <div className="text-sm text-gray-600 mb-2">
+            <strong>Year 1:</strong> $1,997 | <strong>Year 2+:</strong> $497/year
+          </div>
+          <div className="text-xs text-gray-500 italic">
+            Regular pricing: $2,997 Year 1 | This promotional rate is a limited-time offer.
           </div>
         </div>
 
@@ -174,7 +147,7 @@ export default function WhiteLabelCheckout() {
             disabled={loading}
             className="w-full py-3 bg-[#1E8E5A] text-white font-semibold rounded-lg hover:bg-[#155d3a] transition-colors disabled:opacity-50"
           >
-            {loading ? 'Processing...' : `Get White-Label - $${tier === 'promo' ? '1,997' : '2,997'}`}
+            {loading ? 'Processing...' : 'Get White-Label - $1,997'}
           </button>
         </form>
 

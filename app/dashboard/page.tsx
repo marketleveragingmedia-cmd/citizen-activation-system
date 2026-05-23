@@ -32,6 +32,11 @@ async function getDashboardData(userId: string, role: string, type: string) {
       }
     })
 
+    const partners = await prisma.strategicPartner.findMany({
+      orderBy: { createdDate: 'desc' },
+      take: 10
+    })
+
     return {
       type: 'main_admin',
       hasStripeAccount: !!admin?.team?.stripeAccountId,
@@ -42,7 +47,8 @@ async function getDashboardData(userId: string, role: string, type: string) {
         activations: stats[2],
         activePartners: stats[3]
       },
-      recentRequests
+      recentRequests,
+      partners
     }
   }
 
@@ -136,6 +142,7 @@ export default async function DashboardPage() {
       <MainAdminDashboard
         stats={data.stats}
         recentRequests={data.recentRequests}
+        partners={data.partners || []}
         userName={session.user.name}
         isWhiteLabel={whiteLabelMode}
         hasStripeAccount={data.hasStripeAccount}

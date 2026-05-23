@@ -7,22 +7,25 @@ import AddTeamModal from './AddTeamModal'
 import ReassignModal from './ReassignModal'
 import AddNoteModal from './AddNoteModal'
 import StripeConnectButton from './StripeConnectButton'
+import UpdateSlotLimitModal from './UpdateSlotLimitModal'
 
 interface MainAdminDashboardProps {
   stats: any
   recentRequests: any[]
+  partners?: any[]
   userName: string
   isWhiteLabel?: boolean
   hasStripeAccount?: boolean
   stripeAccountId?: string | null
 }
 
-export default function MainAdminDashboard({ stats, recentRequests, userName, isWhiteLabel = false, hasStripeAccount, stripeAccountId }: MainAdminDashboardProps) {
+export default function MainAdminDashboard({ stats, recentRequests, partners = [], userName, isWhiteLabel = false, hasStripeAccount, stripeAccountId }: MainAdminDashboardProps) {
   const [selectedRequest, setSelectedRequest] = useState<any>(null)
   const [showAddPartner, setShowAddPartner] = useState(false)
   const [showAddTeam, setShowAddTeam] = useState(false)
   const [showReassign, setShowReassign] = useState<any>(null)
   const [showAddNote, setShowAddNote] = useState<any>(null)
+  const [updatingSlots, setUpdatingSlots] = useState<any>(null)
   const [isDeleting, setIsDeleting] = useState(false)
 
   // Helper to check if request is delayed (3+ days)
@@ -463,6 +466,66 @@ export default function MainAdminDashboard({ stats, recentRequests, userName, is
         </div>
       )}
 
+      {/* Strategic Partners Section */}
+      {partners && partners.length > 0 && (
+        <div className="bg-white rounded-lg shadow mt-8">
+          <div className="p-6 border-b flex justify-between items-center">
+            <h2 className="text-xl font-bold text-gray-900">Strategic Partners</h2>
+            <Link href="/admin/partners" className="text-[#1E8E5A] hover:underline text-sm">
+              View All →
+            </Link>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slots</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {partners.map((partner: any) => (
+                  <tr key={partner.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 font-medium text-gray-900">
+                      {`${partner.firstName} ${partner.lastName}`}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{partner.email}</td>
+                    <td className="px-6 py-4">
+                      <span className={`text-sm font-semibold ${
+                        partner.status === 'Full' ? 'text-red-600' : 'text-green-600'
+                      }`}>
+                        {partner.slotsUsed} / {partner.customSlotLimit || partner.slotsAvailable}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2 py-1 text-xs rounded-full ${
+                        partner.status === 'Active' ? 'bg-green-100 text-green-800' :
+                        partner.status === 'Paused' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {partner.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => setUpdatingSlots(partner)}
+                        className="text-[#C9A441] hover:underline text-sm font-medium"
+                      >
+                        Update Slots
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+
       {/* Add Team Modal */}
       {showAddTeam && (
         <AddTeamModal
@@ -506,6 +569,16 @@ export default function MainAdminDashboard({ stats, recentRequests, userName, is
           onClose={() => setShowAddNote(null)}
           onSuccess={() => {
             setShowAddNote(null)
+          }}
+        />
+      )}
+
+      {/* Update Slot Limit Modal */}
+      {updatingSlots && (
+        <UpdateSlotLimitModal
+          partner={updatingSlots}
+          onClose={() => setUpdatingSlots(null)}
+          onUpdate={() => window.location.reload()}
             window.location.reload()
           }}
         />

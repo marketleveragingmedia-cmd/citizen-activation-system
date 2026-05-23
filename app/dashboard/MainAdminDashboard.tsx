@@ -232,10 +232,27 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                         {request.requesterEmail}
                       </a>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">{request.team?.name || 'N/A'}</td>
+                    <td className="px-6 py-4 text-sm">
+                      {request.team?.id ? (
+                        <Link href={`/admin/team-admins/${request.team.adminId}`} className="text-[#C9A441] hover:underline">
+                          {request.team.name}
+                        </Link>
+                      ) : (
+                        <span className="text-gray-900">N/A</span>
+                      )}
+                    </td>
                     <td className="px-6 py-4 text-sm text-gray-900">{request.activationLevel}</td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
-                      {`${request.assignedPartner?.firstName || ""} ${request.assignedPartner?.lastName || ""}`.trim() || 'Unassigned'}
+                    <td className="px-6 py-4 text-sm">
+                      {request.assignedPartner ? (
+                        <Link
+                          href={`/admin/partners/${request.assignedPartner.id}`}
+                          className="text-[#1E8E5A] hover:underline font-medium"
+                        >
+                          {`${request.assignedPartner.firstName} ${request.assignedPartner.lastName}`}
+                        </Link>
+                      ) : (
+                        <span className="text-gray-400">Unassigned</span>
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-2 py-1 text-xs rounded-full ${
@@ -489,8 +506,13 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
               <tbody className="divide-y">
                 {partners.map((partner: any) => (
                   <tr key={partner.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 font-medium text-gray-900">
-                      {`${partner.firstName} ${partner.lastName}`}
+                    <td className="px-6 py-4 font-medium">
+                      <Link
+                        href={`/admin/partners/${partner.id}`}
+                        className="text-[#1E8E5A] hover:underline"
+                      >
+                        {`${partner.firstName} ${partner.lastName}`}
+                      </Link>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">{partner.email}</td>
                     <td className="px-6 py-4">

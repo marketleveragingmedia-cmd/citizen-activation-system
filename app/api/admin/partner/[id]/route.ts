@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import prisma from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.email) {
@@ -24,7 +25,7 @@ export async function GET(
 
     // Get partner with team info
     const partner = await prisma.strategicPartner.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         team: {
           select: {
@@ -41,7 +42,7 @@ export async function GET(
 
     // Get all requests assigned to this partner
     const requests = await prisma.request.findMany({
-      where: { assignedPartnerId: params.id },
+      where: { assignedPartnerId: id },
       orderBy: { dateSubmitted: 'desc' }
     })
 

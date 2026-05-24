@@ -46,7 +46,7 @@ export default function PartnerDetailPage() {
     let confirmMessage = `Mark ${requesterName} as "${statusLabels[newStatus] || newStatus}"?\n\nThis will update the request status.`
     
     if (newStatus === 'Activated') {
-      confirmMessage = `⚠️ ACTIVATE ${requesterName}?\n\nThis will:\n- Create a new Strategic Partner account\n- Send them login credentials\n- Keep the slot occupied\n\nAre you sure they are fully activated?`
+      confirmMessage = `⚠️ WALLET ACTIVATED for ${requesterName}?\n\nThis will:\n- Create a new Strategic Partner account\n- Send them login credentials\n- Keep the slot occupied\n\nAre you sure their wallet is fully activated?`
     }
     
     if (!confirm(confirmMessage)) {
@@ -337,7 +337,7 @@ export default function PartnerDetailPage() {
                                 onClick={() => updateStatus(request.id, 'Activated', `${request.requesterFirstName} ${request.requesterLastName}`)}
                                 className="text-xs text-green-600 hover:underline text-left"
                               >
-                                → Mark Activated
+                                → Wallet Activated
                               </button>
                               <button
                                 onClick={() => updateStatus(request.id, 'OnboardingScheduled', `${request.requesterFirstName} ${request.requesterLastName}`)}

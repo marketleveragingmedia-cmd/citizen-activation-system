@@ -47,7 +47,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
     let confirmMessage = `Mark ${requesterName} as "${statusLabels[newStatus] || newStatus}"?\n\nThis will update the request status.`
     
     if (newStatus === 'Activated') {
-      confirmMessage = `⚠️ ACTIVATE ${requesterName}?\n\nThis will:\n- Create a new Strategic Partner account\n- Send them login credentials\n- Keep the slot occupied\n\nAre you sure they are fully activated?`
+      confirmMessage = `⚠️ WALLET ACTIVATED for ${requesterName}?\n\nThis will:\n- Create a new Strategic Partner account\n- Send them login credentials\n- Keep the slot occupied\n\nAre you sure their wallet is fully activated?`
     }
     
     if (!confirm(confirmMessage)) {
@@ -307,7 +307,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                             onClick={() => updateStatus(request.id, 'Activated', `${request.requesterFirstName} ${request.requesterLastName}`)}
                             className="text-[#1E8E5A] hover:underline text-sm font-medium"
                           >
-                            Confirm Activation
+                            → Wallet Activated
                           </button>
                         )}
                         <button
@@ -482,7 +482,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                       : 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
                   } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
-                  {selectedRequest.status === 'Activated' ? '✓ ' : ''}Activated
+                  {selectedRequest.status === 'Activated' ? '✓ ' : ''}Wallet Activated
                 </button>
               </div>
             </div>

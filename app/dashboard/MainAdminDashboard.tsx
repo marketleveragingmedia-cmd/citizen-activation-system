@@ -124,10 +124,14 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
         {/* Checkout Pages Section */}
         <div className="bg-white rounded-lg shadow p-3 mb-4">
           <h2 className="text-lg font-bold text-gray-900 mb-2">Checkout Pages</h2>
-          <div className="grid md:grid-cols-3 gap-2">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-2">
             <a href="/checkout/team-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
               <h3 className="font-semibold text-[#1E8E5A] text-sm">Team Admin</h3>
-              <p className="text-xs text-gray-600">$497/year</p>
+              <p className="text-xs text-gray-600">$497/year recurring</p>
+            </a>
+            <a href="/checkout/standalone-team-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
+              <h3 className="font-semibold text-[#1E8E5A] text-sm">Standalone Team Admin</h3>
+              <p className="text-xs text-gray-600">$497 one-time</p>
             </a>
             <a href="/checkout/organization-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
               <h3 className="font-semibold text-[#1E8E5A] text-sm">Organization Admin</h3>

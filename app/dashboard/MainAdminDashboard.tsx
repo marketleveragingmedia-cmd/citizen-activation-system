@@ -101,8 +101,8 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">Main Admin Dashboard</h1>
+        <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
+          <h1 className="text-xl font-bold text-gray-900">Main Admin Dashboard</h1>
           <div className="flex items-center gap-4">
             <Link href="/admin/partners" className="text-gray-600 hover:text-gray-900">
               Manage Strategic Partners
@@ -118,46 +118,43 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto p-4">
         {/* Stats Grid */}
 
         {/* Checkout Pages Section */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Checkout Pages</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            <a href="/checkout/team-admin" target="_blank" className="block p-4 border-2 border-[#1E8E5A] rounded-lg hover:bg-green-50 transition">
-              <h3 className="font-bold text-[#1E8E5A] mb-1">Team Admin</h3>
-              <p className="text-sm text-gray-600 mb-2">$497/year</p>
-              <span className="text-xs text-[#1E8E5A]">View Page →</span>
+        <div className="bg-white rounded-lg shadow p-3 mb-4">
+          <h2 className="text-lg font-bold text-gray-900 mb-2">Checkout Pages</h2>
+          <div className="grid md:grid-cols-3 gap-2">
+            <a href="/checkout/team-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
+              <h3 className="font-semibold text-[#1E8E5A] text-sm">Team Admin</h3>
+              <p className="text-xs text-gray-600">$497/year</p>
             </a>
-            <a href="/checkout/organization-admin" target="_blank" className="block p-4 border-2 border-[#1E8E5A] rounded-lg hover:bg-green-50 transition">
-              <h3 className="font-bold text-[#1E8E5A] mb-1">Organization Admin</h3>
-              <p className="text-sm text-gray-600 mb-2">$997 Year 1</p>
-              <span className="text-xs text-[#1E8E5A]">View Page →</span>
+            <a href="/checkout/organization-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
+              <h3 className="font-semibold text-[#1E8E5A] text-sm">Organization Admin</h3>
+              <p className="text-xs text-gray-600">$997 Year 1</p>
             </a>
-            <a href="/checkout/white-label" target="_blank" className="block p-4 border-2 border-[#1E8E5A] rounded-lg hover:bg-green-50 transition">
-              <h3 className="font-bold text-[#1E8E5A] mb-1">White-Label</h3>
-              <p className="text-sm text-gray-600 mb-2">$1,997 or $2,997</p>
-              <span className="text-xs text-[#1E8E5A]">View Page →</span>
+            <a href="/checkout/white-label" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
+              <h3 className="font-semibold text-[#1E8E5A] text-sm">White-Label</h3>
+              <p className="text-xs text-gray-600">$1,997 or $2,997</p>
             </a>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-gray-600 text-sm mb-2">Total Teams</div>
-            <div className="text-3xl font-bold text-gray-900">{stats.teams}</div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+          <div className="bg-white p-3 rounded-lg shadow">
+            <div className="text-gray-600 text-xs mb-1">Total Teams</div>
+            <div className="text-2xl font-bold text-gray-900">{stats.teams}</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-gray-600 text-sm mb-2">Total Requests</div>
-            <div className="text-3xl font-bold text-gray-900">{stats.totalRequests}</div>
+          <div className="bg-white p-3 rounded-lg shadow">
+            <div className="text-gray-600 text-xs mb-1">Total Requests</div>
+            <div className="text-2xl font-bold text-gray-900">{stats.totalRequests}</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-gray-600 text-sm mb-2">Total Activations</div>
-            <div className="text-3xl font-bold text-[#1E8E5A]">{stats.activations}</div>
+          <div className="bg-white p-3 rounded-lg shadow">
+            <div className="text-gray-600 text-xs mb-1">Total Activations</div>
+            <div className="text-2xl font-bold text-[#1E8E5A]">{stats.activations}</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-gray-600 text-sm mb-2">Active Strategic Partners</div>
-            <div className="text-3xl font-bold text-gray-900">{stats.activePartners}</div>
+          <div className="bg-white p-3 rounded-lg shadow">
+            <div className="text-gray-600 text-xs mb-1">Active Strategic Partners</div>
+            <div className="text-2xl font-bold text-gray-900">{stats.activePartners}</div>
           </div>
         </div>
 
@@ -172,9 +169,9 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
         )}
 
         {/* Quick Actions */}
-        <div className="bg-white rounded-lg shadow mb-8 p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-          <div className="flex flex-wrap gap-4">
+        <div className="bg-white rounded-lg shadow mb-4 p-3">
+          <h2 className="text-lg font-bold text-gray-900 mb-2">Quick Actions</h2>
+          <div className="flex flex-wrap gap-2">
             {!isWhiteLabel && (
               <button
                 onClick={() => setShowAddTeam(true)}

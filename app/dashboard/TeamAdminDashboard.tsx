@@ -24,6 +24,8 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
   const [showAddTeam, setShowAddTeam] = useState(false)
   const [showReassign, setShowReassign] = useState<any>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const requestsPerPage = 20
 
   // Helper to check if request is delayed (3+ days)
   const isDelayed = (request: any) => {
@@ -170,11 +172,36 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
 
         {/* Recent Requests */}
         <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b">
-            <h2 className="text-xl font-bold text-gray-900">Your Requests</h2>
-            <p className="text-gray-600 text-sm mt-1">Showing {recentRequests.length} most recent requests for your {team.tierType === 'FullSystem' ? 'team' : 'organization'}</p>
+          <div className="p-6 border-b flex justify-between items-center">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Your Requests</h2>
+              <p className="text-gray-600 text-sm mt-1">
+                Showing {Math.min((currentPage - 1) * requestsPerPage + 1, recentRequests.length)} - {Math.min(currentPage * requestsPerPage, recentRequests.length)} of {recentRequests.length} requests
+              </p>
+            </div>
+            {recentRequests.length > requestsPerPage && (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                >
+                  ← Previous
+                </button>
+                <span className="px-3 py-1 text-sm text-gray-600">
+                  Page {currentPage} of {Math.ceil(recentRequests.length / requestsPerPage)}
+                </span>
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(Math.ceil(recentRequests.length / requestsPerPage), p + 1))}
+                  disabled={currentPage >= Math.ceil(recentRequests.length / requestsPerPage)}
+                  className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                >
+                  Next →
+                </button>
+              </div>
+            )}
           </div>
-          <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+          <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
@@ -197,7 +224,7 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
                     </td>
                   </tr>
                 ) : (
-                  recentRequests.map((request: any) => (
+                  recentRequests.slice((currentPage - 1) * requestsPerPage, currentPage * requestsPerPage).map((request: any) => (
                     <tr key={request.id} className={`hover:bg-gray-50 ${isDelayed(request) ? 'bg-red-50' : ''}`}>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">

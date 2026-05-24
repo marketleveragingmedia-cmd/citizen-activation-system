@@ -37,6 +37,8 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
   const [selectedRequest, setSelectedRequest] = useState<Request | null>(null)
   const [isUpdating, setIsUpdating] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const requestsPerPage = 20
 
   const updateStatus = async (requestId: string, newStatus: string, requesterName: string) => {
     const statusLabels: any = {
@@ -147,15 +149,43 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
 
         {/* Assigned Requests */}
         <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b">
-            <h2 className="text-xl font-bold text-gray-900">Your Assigned Requests</h2>
+          <div className="p-6 border-b flex justify-between items-center">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Your Assigned Requests</h2>
+              {assignedRequests.length > 0 && (
+                <p className="text-gray-600 text-sm mt-1">
+                  Showing {Math.min((currentPage - 1) * requestsPerPage + 1, assignedRequests.length)} - {Math.min(currentPage * requestsPerPage, assignedRequests.length)} of {assignedRequests.length} requests
+                </p>
+              )}
+            </div>
+            {assignedRequests.length > requestsPerPage && (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                >
+                  ← Previous
+                </button>
+                <span className="px-3 py-1 text-sm text-gray-600">
+                  Page {currentPage} of {Math.ceil(assignedRequests.length / requestsPerPage)}
+                </span>
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(Math.ceil(assignedRequests.length / requestsPerPage), p + 1))}
+                  disabled={currentPage >= Math.ceil(assignedRequests.length / requestsPerPage)}
+                  className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                >
+                  Next →
+                </button>
+              </div>
+            )}
           </div>
           {assignedRequests.length === 0 ? (
             <div className="p-12 text-center text-gray-500">
               No requests assigned yet. You'll be notified when new requests are assigned.
             </div>
           ) : (
-            <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+            <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -171,7 +201,7 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                   </tr>
                 </thead>
                 <tbody className="divide-y">
-                  {assignedRequests.map((request) => (
+                  {assignedRequests.slice((currentPage - 1) * requestsPerPage, currentPage * requestsPerPage).map((request) => (
                     <tr key={request.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <button

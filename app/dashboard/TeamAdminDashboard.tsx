@@ -212,6 +212,7 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col gap-1">
+                          {/* Quick Status Update */}
                           {request.status === 'Assigned' && (
                             <button
                               onClick={() => updateStatus(request.id, 'Invited', `${request.requesterFirstName} ${request.requesterLastName}`)}
@@ -236,12 +237,6 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
                               → Wallet Activated
                             </button>
                           )}
-                          <button
-                            onClick={() => setShowAddNote(request)}
-                            className="text-gray-600 hover:underline text-sm font-medium text-left"
-                          >
-                            Add Note
-                          </button>
                         </div>
                       </td>
                     </tr>

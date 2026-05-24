@@ -34,6 +34,15 @@ export async function POST(req: Request) {
     const newLimit = customSlotLimit || 3
     const newStatus = partner.slotsUsed >= newLimit ? 'Full' : 'Active'
 
+    console.log('[update-slot-limit]', {
+      partnerId,
+      slotsUsed: partner.slotsUsed,
+      oldLimit: partner.customSlotLimit || partner.slotsAvailable,
+      newLimit,
+      oldStatus: partner.status,
+      newStatus
+    })
+
     const updated = await prisma.strategicPartner.update({
       where: { id: partnerId },
       data: { 
@@ -47,7 +56,9 @@ export async function POST(req: Request) {
       partner: {
         id: updated.id,
         name: `${updated.firstName} ${updated.lastName}`,
-        customSlotLimit: updated.customSlotLimit
+        slotsUsed: updated.slotsUsed,
+        customSlotLimit: updated.customSlotLimit,
+        status: updated.status
       }
     })
   } catch (error: any) {

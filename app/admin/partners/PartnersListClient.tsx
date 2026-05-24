@@ -104,7 +104,7 @@ export default function PartnersListClient({ partners, userName }: any) {
                         <span className={`text-sm font-semibold ${
                           partner.status === 'Full' ? 'text-red-600' : 'text-green-600'
                         }`}>
-                          {partner.slotsUsed} / {partner.slotsAvailable}
+                          {partner.slotsUsed} / {partner.customSlotLimit ?? partner.slotsAvailable}
                         </span>
                       </td>
                       <td className="px-6 py-4">
@@ -198,7 +198,7 @@ export default function PartnersListClient({ partners, userName }: any) {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-sm text-gray-600">Slots Used</div>
-                  <div className="font-semibold">{selectedPartner.slotsUsed} / {selectedPartner.slotsAvailable}</div>
+                  <div className="font-semibold">{selectedPartner.slotsUsed} / {selectedPartner.customSlotLimit ?? selectedPartner.slotsAvailable}</div>
                 </div>
                 <div>
                   <div className="text-sm text-gray-600">Total Assigned</div>

@@ -127,19 +127,19 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-2">
             <a href="/checkout/team-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
               <h3 className="font-semibold text-[#1E8E5A] text-sm">Team Admin</h3>
-              <p className="text-xs text-gray-600">$497/year recurring</p>
+              <p className="text-xs text-gray-600">$497/year</p>
             </a>
             <a href="/checkout/standalone-team-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
               <h3 className="font-semibold text-[#1E8E5A] text-sm">Standalone Team Admin</h3>
-              <p className="text-xs text-gray-600">$497 one-time</p>
+              <p className="text-xs text-gray-600">$497 + $497/year</p>
             </a>
             <a href="/checkout/organization-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
               <h3 className="font-semibold text-[#1E8E5A] text-sm">Organization Admin</h3>
-              <p className="text-xs text-gray-600">$997 Year 1</p>
+              <p className="text-xs text-gray-600">$997 + $497/year</p>
             </a>
             <a href="/checkout/white-label" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
               <h3 className="font-semibold text-[#1E8E5A] text-sm">White-Label</h3>
-              <p className="text-xs text-gray-600">$1,997 or $2,997</p>
+              <p className="text-xs text-gray-600">$1,997/$2,997 + $497/year</p>
             </a>
           </div>
         </div>

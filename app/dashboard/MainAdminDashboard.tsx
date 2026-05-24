@@ -431,7 +431,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                 <div className="flex flex-wrap gap-2">
                   {selectedRequest.status === 'Assigned' && (
                     <button
-                      onClick={() => updateStatus(selectedRequest.id, 'Invited')}
+                      onClick={() => updateStatus(selectedRequest.id, 'Invited', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)}
                       className="px-4 py-2 bg-[#1E8E5A] text-white rounded-lg hover:bg-[#177349]"
                     >
                       Invite Sent
@@ -439,7 +439,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                   )}
                   {selectedRequest.status === 'Invited' && (
                     <button
-                      onClick={() => updateStatus(selectedRequest.id, 'OnboardingScheduled')}
+                      onClick={() => updateStatus(selectedRequest.id, 'OnboardingScheduled', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)}
                       className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                     >
                       Onboarding Scheduled
@@ -447,7 +447,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                   )}
                   {selectedRequest.status === 'OnboardingScheduled' && (
                     <button
-                      onClick={() => updateStatus(selectedRequest.id, 'Activated')}
+                      onClick={() => updateStatus(selectedRequest.id, 'Activated', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)}
                       className="px-4 py-2 bg-[#1E8E5A] text-white rounded-lg hover:bg-[#177349]"
                     >
                       Confirm Activation

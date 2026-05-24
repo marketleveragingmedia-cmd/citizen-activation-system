@@ -9,8 +9,9 @@ export default function TeamAdminDetailPage() {
   const router = useRouter()
   const [teamAdmin, setTeamAdmin] = useState<any>(null)
   const [partners, setPartners] = useState<any[]>([])
-  const [requestCounts, setRequestCounts] = useState<any>(null)
+  const [requests, setRequests] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [statusFilter, setStatusFilter] = useState('all')
 
   useEffect(() => {
     fetchTeamAdminData()
@@ -24,8 +25,8 @@ export default function TeamAdminDetailPage() {
       if (response.ok) {
         setTeamAdmin(data.teamAdmin)
         setPartners(data.partners || [])
-        setRequestCounts(data.requestCounts || { total: 0, assigned: 0, invited: 0, onboardingScheduled: 0, activated: 0 })
-      } else {
+        setRequests(data.requests || [])
+      } else{
         alert('Failed to load team admin data')
         router.push('/dashboard')
       }
@@ -53,8 +54,16 @@ export default function TeamAdminDetailPage() {
     )
   }
 
-  if (!requestCounts) {
-    return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="text-xl text-gray-600">Loading...</div></div>
+  const filteredRequests = statusFilter === 'all' 
+    ? requests 
+    : requests.filter(r => r.status === statusFilter)
+
+  const statusCounts = {
+    all: requests.length,
+    Assigned: requests.filter(r => r.status === 'Assigned').length,
+    OnboardingScheduled: requests.filter(r => r.status === 'OnboardingScheduled').length,
+    Invited: requests.filter(r => r.status === 'Invited').length,
+    Activated: requests.filter(r => r.status === 'Activated').length,
   }
 
   return (
@@ -111,15 +120,15 @@ export default function TeamAdminDetailPage() {
               <div className="text-sm text-gray-600">Strategic Partners</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">{requestCounts.total}</div>
+              <div className="text-3xl font-bold text-gray-900">{requests.length}</div>
               <div className="text-sm text-gray-600">Total Requests</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600">{requestCounts.onboardingScheduled}</div>
+              <div className="text-3xl font-bold text-blue-600">{statusCounts.OnboardingScheduled}</div>
               <div className="text-sm text-gray-600">In Progress</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-600">{requestCounts.activated}</div>
+              <div className="text-3xl font-bold text-green-600">{statusCounts.Activated}</div>
               <div className="text-sm text-gray-600">Activated</div>
             </div>
           </div>
@@ -189,30 +198,137 @@ export default function TeamAdminDetailPage() {
           )}
         </div>
 
-        {/* Request Stats Summary - No PII */}
+        {/* Requests Section */}
         <div className="bg-white rounded-lg shadow">
           <div className="p-6 border-b">
-            <h3 className="text-xl font-bold text-gray-900">Team Request Summary</h3>
-            <p className="text-sm text-gray-600 mt-1">Aggregated counts (no contact details shown for privacy)</p>
+            <div className="flex justify-between items-center">
+              <h3 className="text-xl font-bold text-gray-900">Team Requests</h3>
+              
+              {/* Status Filter */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setStatusFilter('all')}
+                  className={`px-3 py-1 rounded-lg text-sm font-medium ${
+                    statusFilter === 'all' 
+                      ? 'bg-[#1E8E5A] text-white' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  All ({statusCounts.all})
+                </button>
+                <button
+                  onClick={() => setStatusFilter('Assigned')}
+                  className={`px-3 py-1 rounded-lg text-sm font-medium ${
+                    statusFilter === 'Assigned' 
+                      ? 'bg-yellow-600 text-white' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Assigned ({statusCounts.Assigned})
+                </button>
+                <button
+                  onClick={() => setStatusFilter('OnboardingScheduled')}
+                  className={`px-3 py-1 rounded-lg text-sm font-medium ${
+                    statusFilter === 'OnboardingScheduled' 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Scheduled ({statusCounts.OnboardingScheduled})
+                </button>
+                <button
+                  onClick={() => setStatusFilter('Invited')}
+                  className={`px-3 py-1 rounded-lg text-sm font-medium ${
+                    statusFilter === 'Invited' 
+                      ? 'bg-purple-600 text-white' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Invited ({statusCounts.Invited})
+                </button>
+                <button
+                  onClick={() => setStatusFilter('Activated')}
+                  className={`px-3 py-1 rounded-lg text-sm font-medium ${
+                    statusFilter === 'Activated' 
+                      ? 'bg-green-600 text-white' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Activated ({statusCounts.Activated})
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="grid grid-cols-4 gap-6 p-6">
-            <div className="bg-yellow-50 p-4 rounded-lg">
-              <div className="text-2xl font-bold text-yellow-700">{requestCounts.assigned}</div>
-              <div className="text-sm text-gray-600">Assigned</div>
+
+          {filteredRequests.length === 0 ? (
+            <div className="p-12 text-center text-gray-500">
+              No requests found for this filter
             </div>
-            <div className="bg-purple-50 p-4 rounded-lg">
-              <div className="text-2xl font-bold text-purple-700">{requestCounts.invited}</div>
-              <div className="text-sm text-gray-600">Invited</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requester</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Contact</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned To</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Submitted</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  {filteredRequests.map((request: any) => (
+                    <tr key={request.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4">
+                        <div className="font-medium text-gray-900">
+                          {request.requesterFirstName} {request.requesterLastName}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm">
+                          <a href={`mailto:${request.requesterEmail}`} className="text-[#1E8E5A] hover:underline block">
+                            {request.requesterEmail}
+                          </a>
+                          <a href={`tel:${request.requesterPhone}`} className="text-gray-600 hover:underline">
+                            {request.requesterPhone}
+                          </a>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        {request.assignedPartner ? (
+                          <Link
+                            href={`/admin/partners/${request.assignedPartner.id}`}
+                            className="text-[#1E8E5A] hover:underline"
+                          >
+                            {request.assignedPartner.firstName} {request.assignedPartner.lastName}
+                          </Link>
+                        ) : (
+                          'Unassigned'
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        {request.activationLevel}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`px-2 py-1 text-xs rounded-full ${
+                          request.status === 'Activated' ? 'bg-green-100 text-green-800' :
+                          request.status === 'OnboardingScheduled' ? 'bg-blue-100 text-blue-800' :
+                          request.status === 'Invited' ? 'bg-purple-100 text-purple-800' :
+                          'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {request.status.replace(/([A-Z])/g, ' $1').trim()}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-500">
+                        {new Date(request.dateSubmitted).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <div className="text-2xl font-bold text-blue-700">{requestCounts.onboardingScheduled}</div>
-              <div className="text-sm text-gray-600">Onboarding Scheduled</div>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg">
-              <div className="text-2xl font-bold text-green-700">{requestCounts.activated}</div>
-              <div className="text-sm text-gray-600">Activated</div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

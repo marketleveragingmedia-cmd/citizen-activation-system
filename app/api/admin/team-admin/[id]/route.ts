@@ -46,14 +46,20 @@ export async function GET(
       orderBy: { lastName: 'asc' }
     })
 
-    // Get request counts only (no PII) for this team
-    const requestCounts = {
-      total: await prisma.request.count({ where: { teamId: teamAdmin.teamId || undefined } }),
-      assigned: await prisma.request.count({ where: { teamId: teamAdmin.teamId || undefined, status: 'Assigned' } }),
-      invited: await prisma.request.count({ where: { teamId: teamAdmin.teamId || undefined, status: 'Invited' } }),
-      onboardingScheduled: await prisma.request.count({ where: { teamId: teamAdmin.teamId || undefined, status: 'OnboardingScheduled' } }),
-      activated: await prisma.request.count({ where: { teamId: teamAdmin.teamId || undefined, status: 'Activated' } })
-    }
+    // Get all requests for this team
+    const requests = await prisma.request.findMany({
+      where: { teamId: teamAdmin.teamId || undefined },
+      include: {
+        assignedPartner: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true
+          }
+        }
+      },
+      orderBy: { dateSubmitted: 'desc' }
+    })
 
     return NextResponse.json({
       teamAdmin: {
@@ -65,7 +71,7 @@ export async function GET(
         team: teamAdmin.team
       },
       partners,
-      requestCounts
+      requests
     })
   } catch (error) {
     console.error('Error fetching team admin data:', error)

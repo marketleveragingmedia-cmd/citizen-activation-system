@@ -38,6 +38,7 @@ export default function TeamAdminsListClient({ teams, userName }: TeamAdminsList
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Partners</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -52,9 +53,29 @@ export default function TeamAdminsListClient({ teams, userName }: TeamAdminsList
                     const admin = team.admins.find((a: any) => a.role === 'TEAM_ADMIN')
                     return (
                       <tr key={team.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 font-medium text-gray-900">{team.name}</td>
                         <td className="px-6 py-4">
-                          {admin ? `${admin.firstName} ${admin.lastName}` : 'N/A'}
+                          {admin ? (
+                            <Link
+                              href={`/admin/team-admins/${admin.id}`}
+                              className="font-medium text-[#1E8E5A] hover:underline"
+                            >
+                              {team.name}
+                            </Link>
+                          ) : (
+                            <span className="font-medium text-gray-900">{team.name}</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          {admin ? (
+                            <Link
+                              href={`/admin/team-admins/${admin.id}`}
+                              className="text-[#1E8E5A] hover:underline"
+                            >
+                              {admin.firstName} {admin.lastName}
+                            </Link>
+                          ) : (
+                            'N/A'
+                          )}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-600">{admin?.email || 'N/A'}</td>
                         <td className="px-6 py-4 text-center">
@@ -74,6 +95,18 @@ export default function TeamAdminsListClient({ teams, userName }: TeamAdminsList
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-600">
                           {new Date(team.createdDate).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4">
+                          {admin ? (
+                            <Link
+                              href={`/admin/team-admins/${admin.id}`}
+                              className="text-[#1E8E5A] hover:underline text-sm font-medium"
+                            >
+                              View Details →
+                            </Link>
+                          ) : (
+                            <span className="text-gray-400 text-sm">N/A</span>
+                          )}
                         </td>
                       </tr>
                     )

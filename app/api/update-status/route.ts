@@ -38,12 +38,13 @@ export async function POST(request: NextRequest) {
     // Update status
     const now = new Date()
     const updateData: any = { status }
+    const oldStatus = req.status
 
     if (status === 'Invited' && !req.dateInvited) {
       updateData.dateInvited = now
     } else if (status === 'OnboardingScheduled' && !req.dateOnboardingScheduled) {
       updateData.dateOnboardingScheduled = now
-    } else if (status === 'Activated' && !req.dateActivated) {
+    } else if (status === 'Activated' && oldStatus !== 'Activated') {
       updateData.dateActivated = now
 
       // Create new Strategic Partner account
@@ -84,7 +85,7 @@ export async function POST(request: NextRequest) {
         html: welcomeEmail.html
       })
 
-      // Free up slot from Strategic Partner
+      // Free up slot from Strategic Partner (moving TO Activated)
       if (req.assignedPartnerId) {
         const partner = await prisma.strategicPartner.findUnique({
           where: { id: req.assignedPartnerId }
@@ -92,11 +93,31 @@ export async function POST(request: NextRequest) {
 
         if (partner && partner.slotsUsed > 0) {
           const newSlotsUsed = partner.slotsUsed - 1
+          const totalCapacity = partner.customSlotLimit ?? partner.slotsAvailable
           await prisma.strategicPartner.update({
             where: { id: req.assignedPartnerId },
             data: {
               slotsUsed: newSlotsUsed,
-              status: newSlotsUsed < 3 ? 'Active' : 'Full'
+              status: newSlotsUsed >= totalCapacity ? 'Full' : 'Active'
+            }
+          })
+        }
+      }
+    } else if (oldStatus === 'Activated' && status !== 'Activated') {
+      // Re-occupy slot when moving BACK from Activated
+      if (req.assignedPartnerId) {
+        const partner = await prisma.strategicPartner.findUnique({
+          where: { id: req.assignedPartnerId }
+        })
+
+        if (partner) {
+          const newSlotsUsed = partner.slotsUsed + 1
+          const totalCapacity = partner.customSlotLimit ?? partner.slotsAvailable
+          await prisma.strategicPartner.update({
+            where: { id: req.assignedPartnerId },
+            data: {
+              slotsUsed: newSlotsUsed,
+              status: newSlotsUsed >= totalCapacity ? 'Full' : 'Active'
             }
           })
         }

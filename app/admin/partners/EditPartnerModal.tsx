@@ -14,7 +14,8 @@ export default function EditPartnerModal({ partner, onClose, onSuccess }: EditPa
     lastName: partner.lastName,
     phone: partner.phone,
     referralCode: partner.referralCode,
-    activationLevel: partner.activationLevel
+    activationLevel: partner.activationLevel,
+    customSlotLimit: partner.customSlotLimit || 3
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -25,18 +26,34 @@ export default function EditPartnerModal({ partner, onClose, onSuccess }: EditPa
     setError('')
 
     try {
+      // First update partner details
       const response = await fetch('/api/edit-partner', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           partnerId: partner.id,
-          ...formData
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phone: formData.phone,
+          referralCode: formData.referralCode,
+          activationLevel: formData.activationLevel
+        })
+      })
+
+      // Then update slot limit (which recalculates status)
+      const slotResponse = await fetch('/api/update-slot-limit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          partnerId: partner.id,
+          customSlotLimit: formData.customSlotLimit
         })
       })
 
       const data = await response.json()
+      const slotData = await slotResponse.json()
 
-      if (response.ok) {
+      if (response.ok && slotResponse.ok) {
         alert('Strategic Partner updated successfully!')
         onSuccess()
       } else {
@@ -174,6 +191,24 @@ export default function EditPartnerModal({ partner, onClose, onSuccess }: EditPa
                 </div>
               </label>
             </div>
+          </div>
+
+          <div>
+            <label htmlFor="customSlotLimit" className="block text-sm font-medium text-gray-700 mb-2">
+              Custom Slot Limit (default: 3)
+            </label>
+            <input
+              type="number"
+              id="customSlotLimit"
+              min="1"
+              max="100"
+              value={formData.customSlotLimit}
+              onChange={(e) => setFormData({ ...formData, customSlotLimit: parseInt(e.target.value) })}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent"
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              Currently using {partner.slotsUsed} slots. Status: {partner.status}
+            </p>
           </div>
 
           <div className="flex justify-end gap-3">

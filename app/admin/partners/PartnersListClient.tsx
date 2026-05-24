@@ -96,7 +96,6 @@ export default function PartnersListClient({ partners, userName }: any) {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slots Used</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slot Limit</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quick Actions</th>
                 </tr>
               </thead>
@@ -158,15 +157,6 @@ export default function PartnersListClient({ partners, userName }: any) {
                           disabled={updatingSlots === partner.id}
                           className="w-16 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent disabled:bg-gray-100"
                         />
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          partner.status === 'Active' ? 'bg-green-100 text-green-800' :
-                          partner.status === 'Paused' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {partner.status}
-                        </span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex gap-3">

@@ -43,7 +43,13 @@ export default function PartnerDetailPage() {
       'Activated': 'Activated'
     }
     
-    if (!confirm(`Mark ${requesterName} as "${statusLabels[newStatus] || newStatus}"?\n\nThis will update the request status.`)) {
+    let confirmMessage = `Mark ${requesterName} as "${statusLabels[newStatus] || newStatus}"?\n\nThis will update the request status.`
+    
+    if (newStatus === 'Activated') {
+      confirmMessage = `⚠️ ACTIVATE ${requesterName}?\n\nThis will:\n- Create a new Strategic Partner account\n- Send them login credentials\n- Keep the slot occupied\n\nAre you sure they are fully activated?`
+    }
+    
+    if (!confirm(confirmMessage)) {
       return
     }
 

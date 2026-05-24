@@ -97,16 +97,18 @@ export default function TeamAdminsListClient({ teams, userName }: TeamAdminsList
                           {new Date(team.createdDate).toLocaleDateString()}
                         </td>
                         <td className="px-6 py-4">
-                          {admin ? (
-                            <Link
-                              href={`/admin/team-admins/${admin.id}`}
-                              className="text-[#1E8E5A] hover:underline text-sm font-medium"
-                            >
-                              View Details →
-                            </Link>
-                          ) : (
-                            <span className="text-gray-400 text-sm">N/A</span>
-                          )}
+                          <div className="flex flex-col gap-1">
+                            {admin ? (
+                              <Link
+                                href={`/admin/team-admins/${admin.id}`}
+                                className="text-[#1E8E5A] hover:underline text-sm font-medium"
+                              >
+                                View Details
+                              </Link>
+                            ) : (
+                              <span className="text-gray-400 text-sm">N/A</span>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     )

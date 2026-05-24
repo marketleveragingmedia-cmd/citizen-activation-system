@@ -246,7 +246,7 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
                           {request.status === 'Assigned' && (
                             <button
                               onClick={() => updateStatus(request.id, 'Invited', `${request.requesterFirstName} ${request.requesterLastName}`)}
-                              className="text-[#1E8E5A] hover:underline text-sm font-medium text-left"
+                              className="text-[#1E8E5A] hover:underline text-sm font-medium"
                             >
                               Invite Sent
                             </button>
@@ -254,7 +254,7 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
                           {request.status === 'Invited' && (
                             <button
                               onClick={() => updateStatus(request.id, 'OnboardingScheduled', `${request.requesterFirstName} ${request.requesterLastName}`)}
-                              className="text-blue-600 hover:underline text-sm font-medium text-left"
+                              className="text-blue-600 hover:underline text-sm font-medium"
                             >
                               Schedule Onboarding
                             </button>
@@ -262,21 +262,21 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
                           {request.status === 'OnboardingScheduled' && (
                             <button
                               onClick={() => updateStatus(request.id, 'Activated', `${request.requesterFirstName} ${request.requesterLastName}`)}
-                              className="text-[#1E8E5A] hover:underline text-sm font-medium text-left"
+                              className="text-[#1E8E5A] hover:underline text-sm font-medium"
                             >
                               → Wallet Activated
                             </button>
                           )}
                           <button
                             onClick={() => setShowReassign(request)}
-                            className="text-gray-600 hover:underline text-sm font-medium text-left"
+                            className="text-gray-600 hover:underline text-sm font-medium"
                           >
                             Reassign
                           </button>
                           <button
                             onClick={() => deleteRequest(request.id)}
                             disabled={isDeleting}
-                            className="text-red-600 hover:underline text-sm font-medium disabled:opacity-50 text-left"
+                            className="text-red-600 hover:underline text-sm font-medium disabled:opacity-50"
                           >
                             Delete
                           </button>

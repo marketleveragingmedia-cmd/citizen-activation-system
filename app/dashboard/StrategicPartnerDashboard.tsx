@@ -209,12 +209,12 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col gap-1">
-                          {/* Quick Status Update - Same as Main Admin */}
+                          {/* Quick Status Update */}
                           {request.status === 'Assigned' && (
                             <button
                               onClick={() => updateStatus(request.id, 'Invited', `${request.requesterFirstName} ${request.requesterLastName}`)}
                               disabled={isUpdating}
-                              className="text-[#1E8E5A] hover:underline text-sm font-medium disabled:opacity-50 text-left"
+                              className="text-[#1E8E5A] hover:underline text-sm font-medium disabled:opacity-50"
                             >
                               Invite Sent
                             </button>
@@ -223,7 +223,7 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                             <button
                               onClick={() => updateStatus(request.id, 'OnboardingScheduled', `${request.requesterFirstName} ${request.requesterLastName}`)}
                               disabled={isUpdating}
-                              className="text-blue-600 hover:underline text-sm font-medium disabled:opacity-50 text-left"
+                              className="text-blue-600 hover:underline text-sm font-medium disabled:opacity-50"
                             >
                               Schedule Onboarding
                             </button>
@@ -232,7 +232,7 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                             <button
                               onClick={() => updateStatus(request.id, 'Activated', `${request.requesterFirstName} ${request.requesterLastName}`)}
                               disabled={isUpdating}
-                              className="text-[#1E8E5A] hover:underline text-sm font-medium disabled:opacity-50 text-left"
+                              className="text-[#1E8E5A] hover:underline text-sm font-medium disabled:opacity-50"
                             >
                               → Wallet Activated
                             </button>
@@ -240,7 +240,7 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                           <button
                             onClick={() => deleteRequest(request.id)}
                             disabled={isDeleting || isUpdating}
-                            className="text-red-600 hover:underline text-sm font-medium disabled:opacity-50 text-left"
+                            className="text-red-600 hover:underline text-sm font-medium disabled:opacity-50"
                           >
                             Delete
                           </button>

@@ -424,38 +424,68 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
               )}
             </div>
 
-            {/* Status Update Buttons (Main Admin can do everything) */}
-            {selectedRequest.status !== 'Activated' && (
-              <div className="mt-6 border-t pt-6">
-                <h3 className="font-semibold text-gray-900 mb-3">Update Status:</h3>
-                <div className="flex flex-wrap gap-2">
-                  {selectedRequest.status === 'Assigned' && (
-                    <button
-                      onClick={() => updateStatus(selectedRequest.id, 'Invited', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)}
-                      className="px-4 py-2 bg-[#1E8E5A] text-white rounded-lg hover:bg-[#177349]"
-                    >
-                      Invite Sent
-                    </button>
-                  )}
-                  {selectedRequest.status === 'Invited' && (
-                    <button
-                      onClick={() => updateStatus(selectedRequest.id, 'OnboardingScheduled', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                    >
-                      Onboarding Scheduled
-                    </button>
-                  )}
-                  {selectedRequest.status === 'OnboardingScheduled' && (
-                    <button
-                      onClick={() => updateStatus(selectedRequest.id, 'Activated', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)}
-                      className="px-4 py-2 bg-[#1E8E5A] text-white rounded-lg hover:bg-[#177349]"
-                    >
-                      Confirm Activation
-                    </button>
-                  )}
-                </div>
+            {/* Status Update Buttons - All Stages */}
+            <div className="mt-6 border-t pt-6">
+              <h3 className="font-semibold text-gray-900 mb-3">Update Status:</h3>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => {
+                    updateStatus(selectedRequest.id, 'Assigned', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                    setSelectedRequest(null)
+                  }}
+                  disabled={selectedRequest.status === 'Assigned'}
+                  className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                    selectedRequest.status === 'Assigned'
+                      ? 'bg-yellow-100 text-yellow-800 border-2 border-yellow-500'
+                      : 'bg-yellow-50 text-yellow-700 hover:bg-yellow-100 border border-yellow-200'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  {selectedRequest.status === 'Assigned' ? '✓ ' : ''}Assigned
+                </button>
+                <button
+                  onClick={() => {
+                    updateStatus(selectedRequest.id, 'Invited', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                    setSelectedRequest(null)
+                  }}
+                  disabled={selectedRequest.status === 'Invited'}
+                  className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                    selectedRequest.status === 'Invited'
+                      ? 'bg-purple-100 text-purple-800 border-2 border-purple-500'
+                      : 'bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  {selectedRequest.status === 'Invited' ? '✓ ' : ''}Invited
+                </button>
+                <button
+                  onClick={() => {
+                    updateStatus(selectedRequest.id, 'OnboardingScheduled', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                    setSelectedRequest(null)
+                  }}
+                  disabled={selectedRequest.status === 'OnboardingScheduled'}
+                  className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                    selectedRequest.status === 'OnboardingScheduled'
+                      ? 'bg-blue-100 text-blue-800 border-2 border-blue-500'
+                      : 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  {selectedRequest.status === 'OnboardingScheduled' ? '✓ ' : ''}Onboarding Scheduled
+                </button>
+                <button
+                  onClick={() => {
+                    updateStatus(selectedRequest.id, 'Activated', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                    setSelectedRequest(null)
+                  }}
+                  disabled={selectedRequest.status === 'Activated'}
+                  className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                    selectedRequest.status === 'Activated'
+                      ? 'bg-green-100 text-green-800 border-2 border-green-500'
+                      : 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  {selectedRequest.status === 'Activated' ? '✓ ' : ''}Activated
+                </button>
               </div>
-            )}
+            </div>
 
             <div className="mt-6 flex justify-between">
               <button

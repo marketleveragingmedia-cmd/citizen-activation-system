@@ -85,43 +85,7 @@ export async function POST(request: NextRequest) {
         html: welcomeEmail.html
       })
 
-      // Free up slot from Strategic Partner (moving TO Activated)
-      if (req.assignedPartnerId) {
-        const partner = await prisma.strategicPartner.findUnique({
-          where: { id: req.assignedPartnerId }
-        })
-
-        if (partner && partner.slotsUsed > 0) {
-          const newSlotsUsed = partner.slotsUsed - 1
-          const totalCapacity = partner.customSlotLimit ?? partner.slotsAvailable
-          await prisma.strategicPartner.update({
-            where: { id: req.assignedPartnerId },
-            data: {
-              slotsUsed: newSlotsUsed,
-              status: newSlotsUsed >= totalCapacity ? 'Full' : 'Active'
-            }
-          })
-        }
-      }
-    } else if (oldStatus === 'Activated' && status !== 'Activated') {
-      // Re-occupy slot when moving BACK from Activated
-      if (req.assignedPartnerId) {
-        const partner = await prisma.strategicPartner.findUnique({
-          where: { id: req.assignedPartnerId }
-        })
-
-        if (partner) {
-          const newSlotsUsed = partner.slotsUsed + 1
-          const totalCapacity = partner.customSlotLimit ?? partner.slotsAvailable
-          await prisma.strategicPartner.update({
-            where: { id: req.assignedPartnerId },
-            data: {
-              slotsUsed: newSlotsUsed,
-              status: newSlotsUsed >= totalCapacity ? 'Full' : 'Active'
-            }
-          })
-        }
-      }
+      // NOTE: Slot remains occupied when Activated - partner still owns this relationship
     }
 
     await prisma.request.update({

@@ -37,7 +37,23 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
   const [selectedRequest, setSelectedRequest] = useState<Request | null>(null)
   const [isUpdating, setIsUpdating] = useState(false)
 
-  const updateStatus = async (requestId: string, newStatus: string) => {
+  const updateStatus = async (requestId: string, newStatus: string, requesterName: string) => {
+    const statusLabels: any = {
+      'Invited': 'Invited',
+      'OnboardingScheduled': 'Onboarding Scheduled',
+      'Activated': 'Activated'
+    }
+    
+    let confirmMessage = `Mark ${requesterName} as "${statusLabels[newStatus] || newStatus}"?\n\nThis will update the request status.`
+    
+    if (newStatus === 'Activated') {
+      confirmMessage = `⚠️ ACTIVATE ${requesterName}?\n\nThis will:\n- Create a new Strategic Partner account\n- Send them login credentials\n- Keep the slot occupied\n\nAre you sure they are fully activated?`
+    }
+    
+    if (!confirm(confirmMessage)) {
+      return
+    }
+
     setIsUpdating(true)
     try {
       const response = await fetch('/api/update-status', {
@@ -163,31 +179,59 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col gap-1">
+                          {/* Forward actions */}
                           {request.status === 'Assigned' && (
                             <button
-                              onClick={() => updateStatus(request.id, 'Invited')}
+                              onClick={() => updateStatus(request.id, 'OnboardingScheduled', `${request.requesterFirstName} ${request.requesterLastName}`)}
                               disabled={isUpdating}
-                              className="text-xs text-[#1E8E5A] hover:underline font-medium disabled:opacity-50"
+                              className="text-xs text-blue-600 hover:underline font-medium disabled:opacity-50 text-left"
                             >
-                              Invite Sent
-                            </button>
-                          )}
-                          {request.status === 'Invited' && (
-                            <button
-                              onClick={() => updateStatus(request.id, 'OnboardingScheduled')}
-                              disabled={isUpdating}
-                              className="text-xs text-[#1E8E5A] hover:underline font-medium disabled:opacity-50"
-                            >
-                              Onboarding Scheduled
+                              → Schedule Onboarding
                             </button>
                           )}
                           {request.status === 'OnboardingScheduled' && (
+                            <>
+                              <button
+                                onClick={() => updateStatus(request.id, 'Invited', `${request.requesterFirstName} ${request.requesterLastName}`)}
+                                disabled={isUpdating}
+                                className="text-xs text-purple-600 hover:underline font-medium disabled:opacity-50 text-left"
+                              >
+                                → Mark Invited
+                              </button>
+                              <button
+                                onClick={() => updateStatus(request.id, 'Assigned', `${request.requesterFirstName} ${request.requesterLastName}`)}
+                                disabled={isUpdating}
+                                className="text-xs text-gray-500 hover:underline font-medium disabled:opacity-50 text-left"
+                              >
+                                ← Back to Assigned
+                              </button>
+                            </>
+                          )}
+                          {request.status === 'Invited' && (
+                            <>
+                              <button
+                                onClick={() => updateStatus(request.id, 'Activated', `${request.requesterFirstName} ${request.requesterLastName}`)}
+                                disabled={isUpdating}
+                                className="text-xs text-green-600 hover:underline font-medium disabled:opacity-50 text-left"
+                              >
+                                → Mark Activated
+                              </button>
+                              <button
+                                onClick={() => updateStatus(request.id, 'OnboardingScheduled', `${request.requesterFirstName} ${request.requesterLastName}`)}
+                                disabled={isUpdating}
+                                className="text-xs text-gray-500 hover:underline font-medium disabled:opacity-50 text-left"
+                              >
+                                ← Back to Scheduled
+                              </button>
+                            </>
+                          )}
+                          {request.status === 'Activated' && (
                             <button
-                              onClick={() => updateStatus(request.id, 'Activated')}
+                              onClick={() => updateStatus(request.id, 'Invited', `${request.requesterFirstName} ${request.requesterLastName}`)}
                               disabled={isUpdating}
-                              className="text-xs text-[#1E8E5A] hover:underline font-medium disabled:opacity-50"
+                              className="text-xs text-gray-500 hover:underline font-medium disabled:opacity-50 text-left"
                             >
-                              Confirm Activation
+                              ← Back to Invited
                             </button>
                           )}
                         </div>

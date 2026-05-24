@@ -31,6 +31,40 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
     return daysSince >= 3
   }
 
+  const updateStatus = async (requestId: string, newStatus: string, requesterName: string) => {
+    const statusLabels: any = {
+      'Invited': 'Invited',
+      'OnboardingScheduled': 'Onboarding Scheduled',
+      'Activated': 'Wallet Activated'
+    }
+    
+    let confirmMessage = `Mark ${requesterName} as "${statusLabels[newStatus] || newStatus}"?\n\nThis will update the request status.`
+    
+    if (newStatus === 'Activated') {
+      confirmMessage = `⚠️ WALLET ACTIVATED for ${requesterName}?\n\nThis will:\n- Create a new Strategic Partner account\n- Send them login credentials\n- Keep the slot occupied\n\nAre you sure their wallet is fully activated?`
+    }
+    
+    if (!confirm(confirmMessage)) {
+      return
+    }
+
+    try {
+      const response = await fetch('/api/update-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requestId, status: newStatus })
+      })
+      
+      if (response.ok) {
+        window.location.reload()
+      } else {
+        alert('Failed to update status')
+      }
+    } catch (error) {
+      alert('Error updating status')
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white border-b">
@@ -123,12 +157,13 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned To</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
                 {recentRequests.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
                       No requests yet. Share your request form link to start receiving requests!
                     </td>
                   </tr>
@@ -174,6 +209,40 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">
                         {new Date(request.dateSubmitted).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col gap-1">
+                          {request.status === 'Assigned' && (
+                            <button
+                              onClick={() => updateStatus(request.id, 'Invited', `${request.requesterFirstName} ${request.requesterLastName}`)}
+                              className="text-[#1E8E5A] hover:underline text-sm font-medium text-left"
+                            >
+                              Invite Sent
+                            </button>
+                          )}
+                          {request.status === 'Invited' && (
+                            <button
+                              onClick={() => updateStatus(request.id, 'OnboardingScheduled', `${request.requesterFirstName} ${request.requesterLastName}`)}
+                              className="text-blue-600 hover:underline text-sm font-medium text-left"
+                            >
+                              Schedule Onboarding
+                            </button>
+                          )}
+                          {request.status === 'OnboardingScheduled' && (
+                            <button
+                              onClick={() => updateStatus(request.id, 'Activated', `${request.requesterFirstName} ${request.requesterLastName}`)}
+                              className="text-[#1E8E5A] hover:underline text-sm font-medium text-left"
+                            >
+                              → Wallet Activated
+                            </button>
+                          )}
+                          <button
+                            onClick={() => setShowAddNote(request)}
+                            className="text-gray-600 hover:underline text-sm font-medium text-left"
+                          >
+                            Add Note
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))

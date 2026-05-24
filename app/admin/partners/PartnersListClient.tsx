@@ -7,6 +7,7 @@ import EditPartnerModal from './EditPartnerModal'
 export default function PartnersListClient({ partners, userName }: any) {
   const [selectedPartner, setSelectedPartner] = useState<any>(null)
   const [editingPartner, setEditingPartner] = useState<any>(null)
+  const [updatingSlots, setUpdatingSlots] = useState<string | null>(null)
 
   const toggleStatus = async (partnerId: string, currentStatus: string) => {
     const newStatus = currentStatus === 'Active' ? 'Paused' : 'Active'
@@ -29,6 +30,34 @@ export default function PartnersListClient({ partners, userName }: any) {
       }
     } catch (error) {
       alert('Error updating status')
+    }
+  }
+
+  const updateSlotLimit = async (partnerId: string, newLimit: number) => {
+    if (newLimit < 1 || newLimit > 100) {
+      alert('Slot limit must be between 1 and 100')
+      return
+    }
+
+    setUpdatingSlots(partnerId)
+
+    try {
+      const response = await fetch('/api/update-slot-limit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ partnerId, customSlotLimit: newLimit })
+      })
+
+      if (response.ok) {
+        window.location.reload()
+      } else {
+        const data = await response.json()
+        alert(data.error || 'Failed to update slot limit')
+      }
+    } catch (error) {
+      alert('Error updating slot limit')
+    } finally {
+      setUpdatingSlots(null)
     }
   }
 
@@ -65,7 +94,8 @@ export default function PartnersListClient({ partners, userName }: any) {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Referral Code</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slots</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slots Used</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slot Limit</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
@@ -104,8 +134,30 @@ export default function PartnersListClient({ partners, userName }: any) {
                         <span className={`text-sm font-semibold ${
                           partner.status === 'Full' ? 'text-red-600' : 'text-green-600'
                         }`}>
-                          {partner.slotsUsed} / {partner.customSlotLimit ?? partner.slotsAvailable}
+                          {partner.slotsUsed}
                         </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <input
+                          type="number"
+                          min="1"
+                          max="100"
+                          defaultValue={partner.customSlotLimit ?? partner.slotsAvailable}
+                          onBlur={(e) => {
+                            const newLimit = parseInt(e.target.value)
+                            const currentLimit = partner.customSlotLimit ?? partner.slotsAvailable
+                            if (newLimit !== currentLimit) {
+                              updateSlotLimit(partner.id, newLimit)
+                            }
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.currentTarget.blur()
+                            }
+                          }}
+                          disabled={updatingSlots === partner.id}
+                          className="w-16 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent disabled:bg-gray-100"
+                        />
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-2 py-1 text-xs rounded-full ${

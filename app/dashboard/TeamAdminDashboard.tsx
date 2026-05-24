@@ -6,6 +6,7 @@ import AddNoteModal from './AddNoteModal'
 import AddPartnerModal from './AddPartnerModal'
 import AddTeamModal from './AddTeamModal'
 import StripeConnectButton from './StripeConnectButton'
+import ReassignModal from './ReassignModal'
 
 interface TeamAdminDashboardProps {
   team: any
@@ -21,6 +22,8 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
   const [showAddNote, setShowAddNote] = useState<any>(null)
   const [showAddPartner, setShowAddPartner] = useState(false)
   const [showAddTeam, setShowAddTeam] = useState(false)
+  const [showReassign, setShowReassign] = useState<any>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   // Helper to check if request is delayed (3+ days)
   const isDelayed = (request: any) => {
@@ -62,6 +65,31 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
       }
     } catch (error) {
       alert('Error updating status')
+    }
+  }
+
+  const deleteRequest = async (requestId: string) => {
+    if (!confirm('Are you sure you want to delete this request? This cannot be undone.')) {
+      return
+    }
+    
+    setIsDeleting(true)
+    try {
+      const response = await fetch('/api/delete-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requestId })
+      })
+      
+      if (response.ok) {
+        window.location.reload()
+      } else {
+        alert('Failed to delete request')
+      }
+    } catch (error) {
+      alert('Error deleting request')
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -237,6 +265,19 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
                               → Wallet Activated
                             </button>
                           )}
+                          <button
+                            onClick={() => setShowReassign(request)}
+                            className="text-gray-600 hover:underline text-sm font-medium text-left"
+                          >
+                            Reassign
+                          </button>
+                          <button
+                            onClick={() => deleteRequest(request.id)}
+                            disabled={isDeleting}
+                            className="text-red-600 hover:underline text-sm font-medium disabled:opacity-50 text-left"
+                          >
+                            Delete
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -362,6 +403,18 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
           onClose={() => setShowAddTeam(false)}
           onSuccess={() => {
             setShowAddTeam(false)
+            window.location.reload()
+          }}
+        />
+      )}
+
+      {/* Reassign Modal */}
+      {showReassign && (
+        <ReassignModal
+          request={showReassign}
+          onClose={() => setShowReassign(null)}
+          onSuccess={() => {
+            setShowReassign(null)
             window.location.reload()
           }}
         />

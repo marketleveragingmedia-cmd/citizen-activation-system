@@ -36,6 +36,7 @@ interface Props {
 export default function StrategicPartnerDashboard({ partner, assignedRequests, userName }: Props) {
   const [selectedRequest, setSelectedRequest] = useState<Request | null>(null)
   const [isUpdating, setIsUpdating] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const updateStatus = async (requestId: string, newStatus: string, requesterName: string) => {
     const statusLabels: any = {
@@ -71,6 +72,31 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
       alert('Error updating status')
     } finally {
       setIsUpdating(false)
+    }
+  }
+
+  const deleteRequest = async (requestId: string) => {
+    if (!confirm('Are you sure you want to delete this request? This cannot be undone.')) {
+      return
+    }
+    
+    setIsDeleting(true)
+    try {
+      const response = await fetch('/api/delete-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requestId })
+      })
+      
+      if (response.ok) {
+        window.location.reload()
+      } else {
+        alert('Failed to delete request')
+      }
+    } catch (error) {
+      alert('Error deleting request')
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -207,6 +233,13 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                               → Wallet Activated
                             </button>
                           )}
+                          <button
+                            onClick={() => deleteRequest(request.id)}
+                            disabled={isDeleting || isUpdating}
+                            className="text-red-600 hover:underline text-sm font-medium disabled:opacity-50 text-left"
+                          >
+                            Delete
+                          </button>
                         </div>
                       </td>
                     </tr>

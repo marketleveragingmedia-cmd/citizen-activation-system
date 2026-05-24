@@ -207,7 +207,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
           <div className="p-6 border-b">
             <h2 className="text-xl font-bold text-gray-900">All Requests</h2>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>

@@ -144,7 +144,7 @@ export default function TeamAdminDetailPage() {
               No strategic partners assigned yet
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -265,7 +265,7 @@ export default function TeamAdminDetailPage() {
               No requests found for this filter
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>

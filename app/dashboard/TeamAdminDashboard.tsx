@@ -174,7 +174,7 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
             <h2 className="text-xl font-bold text-gray-900">Your Requests</h2>
             <p className="text-gray-600 text-sm mt-1">Showing {recentRequests.length} most recent requests for your {team.tierType === 'FullSystem' ? 'team' : 'organization'}</p>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>

@@ -36,7 +36,17 @@ export default function PartnerDetailPage() {
     }
   }
 
-  const updateStatus = async (requestId: string, newStatus: string) => {
+  const updateStatus = async (requestId: string, newStatus: string, requesterName: string) => {
+    const statusLabels: any = {
+      'Invited': 'Invited',
+      'OnboardingScheduled': 'Onboarding Scheduled',
+      'Activated': 'Activated'
+    }
+    
+    if (!confirm(`Mark ${requesterName} as "${statusLabels[newStatus] || newStatus}"?\n\nThis will update the request status.`)) {
+      return
+    }
+
     try {
       const response = await fetch('/api/update-status', {
         method: 'POST',
@@ -292,7 +302,7 @@ export default function PartnerDetailPage() {
                         <div className="flex flex-col gap-1">
                           {request.status === 'Assigned' && (
                             <button
-                              onClick={() => updateStatus(request.id, 'OnboardingScheduled')}
+                              onClick={() => updateStatus(request.id, 'OnboardingScheduled', `${request.requesterFirstName} ${request.requesterLastName}`)}
                               className="text-xs text-blue-600 hover:underline text-left"
                             >
                               → Schedule Onboarding
@@ -300,7 +310,7 @@ export default function PartnerDetailPage() {
                           )}
                           {request.status === 'OnboardingScheduled' && (
                             <button
-                              onClick={() => updateStatus(request.id, 'Invited')}
+                              onClick={() => updateStatus(request.id, 'Invited', `${request.requesterFirstName} ${request.requesterLastName}`)}
                               className="text-xs text-purple-600 hover:underline text-left"
                             >
                               → Mark Invited
@@ -308,7 +318,7 @@ export default function PartnerDetailPage() {
                           )}
                           {request.status === 'Invited' && (
                             <button
-                              onClick={() => updateStatus(request.id, 'Activated')}
+                              onClick={() => updateStatus(request.id, 'Activated', `${request.requesterFirstName} ${request.requesterLastName}`)}
                               className="text-xs text-green-600 hover:underline text-left"
                             >
                               → Mark Activated

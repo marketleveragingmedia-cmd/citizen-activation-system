@@ -37,7 +37,17 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
     return daysSince >= 3
   }
 
-  const updateStatus = async (requestId: string, newStatus: string) => {
+  const updateStatus = async (requestId: string, newStatus: string, requesterName: string) => {
+    const statusLabels: any = {
+      'Invited': 'Invited',
+      'OnboardingScheduled': 'Onboarding Scheduled',
+      'Activated': 'Activated'
+    }
+    
+    if (!confirm(`Mark ${requesterName} as "${statusLabels[newStatus] || newStatus}"?\n\nThis will update the request status.`)) {
+      return
+    }
+
     try {
       const response = await fetch('/api/update-status', {
         method: 'POST',
@@ -272,7 +282,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                         {/* Quick Status Update */}
                         {request.status === 'Assigned' && (
                           <button
-                            onClick={() => updateStatus(request.id, 'Invited')}
+                            onClick={() => updateStatus(request.id, 'Invited', `${request.requesterFirstName} ${request.requesterLastName}`)}
                             className="text-[#1E8E5A] hover:underline text-sm font-medium"
                           >
                             Invite Sent
@@ -280,7 +290,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                         )}
                         {request.status === 'Invited' && (
                           <button
-                            onClick={() => updateStatus(request.id, 'OnboardingScheduled')}
+                            onClick={() => updateStatus(request.id, 'OnboardingScheduled', `${request.requesterFirstName} ${request.requesterLastName}`)}
                             className="text-blue-600 hover:underline text-sm font-medium"
                           >
                             Schedule Onboarding
@@ -288,7 +298,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                         )}
                         {request.status === 'OnboardingScheduled' && (
                           <button
-                            onClick={() => updateStatus(request.id, 'Activated')}
+                            onClick={() => updateStatus(request.id, 'Activated', `${request.requesterFirstName} ${request.requesterLastName}`)}
                             className="text-[#1E8E5A] hover:underline text-sm font-medium"
                           >
                             Confirm Activation

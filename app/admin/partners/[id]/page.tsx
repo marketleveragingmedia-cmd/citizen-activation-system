@@ -11,6 +11,7 @@ export default function PartnerDetailPage() {
   const [requests, setRequests] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState('all')
+  const [selectedRequest, setSelectedRequest] = useState<any>(null)
 
   useEffect(() => {
     fetchPartnerData()
@@ -274,9 +275,12 @@ export default function PartnerDetailPage() {
                   {filteredRequests.map((request: any) => (
                     <tr key={request.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
-                        <div className="font-medium text-gray-900">
+                        <button
+                          onClick={() => setSelectedRequest(request)}
+                          className="font-medium text-[#1E8E5A] hover:underline text-left"
+                        >
                           {request.requesterFirstName} {request.requesterLastName}
-                        </div>
+                        </button>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm">
@@ -341,6 +345,147 @@ export default function PartnerDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Request Detail Modal */}
+      {selectedRequest && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-3xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-start mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Request Details</h2>
+              <button
+                onClick={() => setSelectedRequest(null)}
+                className="text-gray-400 hover:text-gray-600 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm text-gray-600">Name</div>
+                  <div className="font-semibold text-lg">{`${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600">Activation Level</div>
+                  <div className="font-semibold text-lg">{selectedRequest.activationLevel}</div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm text-gray-600">Phone Number</div>
+                  <a href={`tel:${selectedRequest.requesterPhone}`} className="font-semibold text-lg text-[#1E8E5A] hover:underline">
+                    {selectedRequest.requesterPhone}
+                  </a>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600">Email</div>
+                  <a href={`mailto:${selectedRequest.requesterEmail}`} className="font-semibold text-lg text-[#1E8E5A] hover:underline break-all">
+                    {selectedRequest.requesterEmail}
+                  </a>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm text-gray-600">Status</div>
+                  <div className="font-semibold text-lg">
+                    {selectedRequest.status.replace(/([A-Z])/g, ' $1').trim()}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600">Date Submitted</div>
+                  <div className="font-semibold text-lg">
+                    {new Date(selectedRequest.dateSubmitted).toLocaleDateString()}
+                  </div>
+                </div>
+              </div>
+
+              {selectedRequest.notes && (
+                <div>
+                  <div className="text-sm text-gray-600">Notes</div>
+                  <div className="text-gray-900 bg-gray-50 p-3 rounded">
+                    {selectedRequest.notes}
+                  </div>
+                </div>
+              )}
+
+              {/* Status Update Buttons - All Stages */}
+              <div className="mt-6 border-t pt-6">
+                <h3 className="font-semibold text-gray-900 mb-3">Update Status:</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      updateStatus(selectedRequest.id, 'Assigned', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                      setSelectedRequest(null)
+                    }}
+                    disabled={selectedRequest.status === 'Assigned'}
+                    className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                      selectedRequest.status === 'Assigned'
+                        ? 'bg-yellow-100 text-yellow-800 border-2 border-yellow-500'
+                        : 'bg-yellow-50 text-yellow-700 hover:bg-yellow-100 border border-yellow-200'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {selectedRequest.status === 'Assigned' ? '✓ ' : ''}Assigned
+                  </button>
+                  <button
+                    onClick={() => {
+                      updateStatus(selectedRequest.id, 'Invited', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                      setSelectedRequest(null)
+                    }}
+                    disabled={selectedRequest.status === 'Invited'}
+                    className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                      selectedRequest.status === 'Invited'
+                        ? 'bg-purple-100 text-purple-800 border-2 border-purple-500'
+                        : 'bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {selectedRequest.status === 'Invited' ? '✓ ' : ''}Invited
+                  </button>
+                  <button
+                    onClick={() => {
+                      updateStatus(selectedRequest.id, 'OnboardingScheduled', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                      setSelectedRequest(null)
+                    }}
+                    disabled={selectedRequest.status === 'OnboardingScheduled'}
+                    className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                      selectedRequest.status === 'OnboardingScheduled'
+                        ? 'bg-blue-100 text-blue-800 border-2 border-blue-500'
+                        : 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {selectedRequest.status === 'OnboardingScheduled' ? '✓ ' : ''}Onboarding Scheduled
+                  </button>
+                  <button
+                    onClick={() => {
+                      updateStatus(selectedRequest.id, 'Activated', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                      setSelectedRequest(null)
+                    }}
+                    disabled={selectedRequest.status === 'Activated'}
+                    className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                      selectedRequest.status === 'Activated'
+                        ? 'bg-green-100 text-green-800 border-2 border-green-500'
+                        : 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {selectedRequest.status === 'Activated' ? '✓ ' : ''}Wallet Activated
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => setSelectedRequest(null)}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

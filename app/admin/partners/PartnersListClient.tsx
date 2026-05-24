@@ -97,7 +97,7 @@ export default function PartnersListClient({ partners, userName }: any) {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slots Used</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slot Limit</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quick Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -111,12 +111,12 @@ export default function PartnersListClient({ partners, userName }: any) {
                   partners.map((partner: any) => (
                     <tr key={partner.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
-                        <button
-                          onClick={() => setSelectedPartner(partner)}
+                        <Link
+                          href={`/admin/partners/${partner.id}`}
                           className="font-medium text-[#1E8E5A] hover:underline"
                         >
                           {`${partner.firstName} ${partner.lastName}`}
-                        </button>
+                        </Link>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">{partner.email}</td>
                       <td className="px-6 py-4">
@@ -169,10 +169,16 @@ export default function PartnersListClient({ partners, userName }: any) {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex flex-col gap-1">
+                        <div className="flex gap-3">
+                          <Link
+                            href={`/admin/partners/${partner.id}`}
+                            className="text-sm text-[#1E8E5A] hover:underline font-medium"
+                          >
+                            View Details →
+                          </Link>
                           <button
                             onClick={() => setEditingPartner(partner)}
-                            className="text-sm text-[#1E8E5A] hover:underline font-medium"
+                            className="text-sm text-blue-600 hover:underline font-medium"
                           >
                             Edit
                           </button>

@@ -50,7 +50,7 @@ export default function TeamAdminsListClient({ teams, userName }: TeamAdminsList
                   </tr>
                 ) : (
                   teams.map((team) => {
-                    const admin = team.admins.find((a: any) => a.role === 'TEAM_ADMIN')
+                    const admin = team.admins.find((a: any) => a.role === 'TEAM_ADMIN' || a.role === 'MAIN_ADMIN')
                     return (
                       <tr key={team.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">

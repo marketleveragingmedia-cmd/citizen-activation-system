@@ -94,10 +94,17 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <div className="mt-6 text-center">
-              <a href="/" className="text-[#1E8E5A] hover:underline">
-                ← Back to Request Form
-              </a>
+            <div className="mt-6 space-y-2 text-center">
+              <div>
+                <a href="/forgot-password" className="text-[#1E8E5A] hover:underline">
+                  Forgot Password?
+                </a>
+              </div>
+              <div>
+                <a href="/" className="text-gray-600 hover:underline text-sm">
+                  ← Back to Request Form
+                </a>
+              </div>
             </div>
           </div>
         </div>

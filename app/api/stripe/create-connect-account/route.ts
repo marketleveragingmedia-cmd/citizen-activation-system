@@ -22,8 +22,15 @@ export async function POST(request: NextRequest) {
       include: { team: true }
     })
 
-    if (!admin || !admin.team) {
-      return NextResponse.json({ error: 'Team not found' }, { status: 404 })
+    if (!admin) {
+      return NextResponse.json({ error: 'Admin account not found' }, { status: 404 })
+    }
+
+    if (!admin.teamId || !admin.team) {
+      return NextResponse.json({ 
+        error: 'No team associated with this admin account',
+        debug: { adminId: admin.id, teamId: admin.teamId }
+      }, { status: 404 })
     }
 
     // Check if team already has a Stripe account
@@ -70,8 +77,11 @@ export async function POST(request: NextRequest) {
       onboardingUrl: accountLink.url
     })
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Create Stripe Connect account error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ 
+      error: error.message || 'Internal server error',
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    }, { status: 500 })
   }
 }

@@ -181,6 +181,7 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requester</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Team</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned To</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
@@ -191,7 +192,7 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
               <tbody className="divide-y">
                 {recentRequests.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={9} className="px-6 py-12 text-center text-gray-500">
                       No requests yet. Share your request form link to start receiving requests!
                     </td>
                   </tr>
@@ -221,6 +222,7 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
                           {request.requesterEmail}
                         </a>
                       </td>
+                      <td className="px-6 py-4 text-sm text-gray-900">{team.name}</td>
                       <td className="px-6 py-4 text-sm text-gray-900">{request.activationLevel}</td>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         {`${request.assignedPartner?.firstName || ""} ${request.assignedPartner?.lastName || ""}`.trim() || 'Unassigned'}

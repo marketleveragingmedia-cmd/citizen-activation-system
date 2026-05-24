@@ -162,7 +162,9 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requester</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Team</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned To</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
@@ -189,7 +191,9 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                           {request.requesterEmail}
                         </a>
                       </td>
+                      <td className="px-6 py-4 text-sm text-gray-900">{request.referralCodeUsed || 'Direct'}</td>
                       <td className="px-6 py-4 text-sm text-gray-900">{request.activationLevel}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">{partner.firstName} {partner.lastName}</td>
                       <td className="px-6 py-4">
                         <span className={`px-2 py-1 text-xs rounded-full ${
                           request.status === 'Activated' ? 'bg-green-100 text-green-800' :

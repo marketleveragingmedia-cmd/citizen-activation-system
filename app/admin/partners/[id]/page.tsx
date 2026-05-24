@@ -306,53 +306,29 @@ export default function PartnerDetailPage() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col gap-1">
-                          {/* Forward actions */}
+                          {/* Quick Status Update */}
                           {request.status === 'Assigned' && (
                             <button
-                              onClick={() => updateStatus(request.id, 'OnboardingScheduled', `${request.requesterFirstName} ${request.requesterLastName}`)}
-                              className="text-xs text-blue-600 hover:underline text-left"
+                              onClick={() => updateStatus(request.id, 'Invited', `${request.requesterFirstName} ${request.requesterLastName}`)}
+                              className="text-[#1E8E5A] hover:underline text-sm font-medium"
                             >
-                              → Schedule Onboarding
+                              Invite Sent
+                            </button>
+                          )}
+                          {request.status === 'Invited' && (
+                            <button
+                              onClick={() => updateStatus(request.id, 'OnboardingScheduled', `${request.requesterFirstName} ${request.requesterLastName}`)}
+                              className="text-blue-600 hover:underline text-sm font-medium"
+                            >
+                              Schedule Onboarding
                             </button>
                           )}
                           {request.status === 'OnboardingScheduled' && (
-                            <>
-                              <button
-                                onClick={() => updateStatus(request.id, 'Invited', `${request.requesterFirstName} ${request.requesterLastName}`)}
-                                className="text-xs text-purple-600 hover:underline text-left"
-                              >
-                                → Mark Invited
-                              </button>
-                              <button
-                                onClick={() => updateStatus(request.id, 'Assigned', `${request.requesterFirstName} ${request.requesterLastName}`)}
-                                className="text-xs text-gray-500 hover:underline text-left"
-                              >
-                                ← Back to Assigned
-                              </button>
-                            </>
-                          )}
-                          {request.status === 'Invited' && (
-                            <>
-                              <button
-                                onClick={() => updateStatus(request.id, 'Activated', `${request.requesterFirstName} ${request.requesterLastName}`)}
-                                className="text-xs text-green-600 hover:underline text-left"
-                              >
-                                → Wallet Activated
-                              </button>
-                              <button
-                                onClick={() => updateStatus(request.id, 'OnboardingScheduled', `${request.requesterFirstName} ${request.requesterLastName}`)}
-                                className="text-xs text-gray-500 hover:underline text-left"
-                              >
-                                ← Back to Scheduled
-                              </button>
-                            </>
-                          )}
-                          {request.status === 'Activated' && (
                             <button
-                              onClick={() => updateStatus(request.id, 'Invited', `${request.requesterFirstName} ${request.requesterLastName}`)}
-                              className="text-xs text-gray-500 hover:underline text-left"
+                              onClick={() => updateStatus(request.id, 'Activated', `${request.requesterFirstName} ${request.requesterLastName}`)}
+                              className="text-[#1E8E5A] hover:underline text-sm font-medium"
                             >
-                              ← Back to Invited
+                              → Wallet Activated
                             </button>
                           )}
                         </div>

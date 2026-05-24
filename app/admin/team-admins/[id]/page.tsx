@@ -275,6 +275,7 @@ export default function TeamAdminDetailPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Submitted</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
@@ -322,6 +323,11 @@ export default function TeamAdminDetailPage() {
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">
                         {new Date(request.dateSubmitted).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-gray-400 text-sm">View Only</span>
+                        </div>
                       </td>
                     </tr>
                   ))}

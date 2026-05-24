@@ -236,24 +236,24 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
             )}
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full text-sm">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requester</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Team</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned To</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Requester</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Team</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Assigned To</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
                 {recentRequests.slice((currentPage - 1) * requestsPerPage, currentPage * requestsPerPage).map((request: any) => (
                   <tr key={request.id} className={`hover:bg-gray-50 ${isDelayed(request) ? 'bg-red-50' : ''}`}>
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-2">
                       <div className="flex items-center gap-2">
                         {isDelayed(request) && (
                           <span className="text-red-600 font-bold" title="Delayed 3+ days">⚠️</span>
@@ -266,17 +266,17 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                         </button>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-2">
                       <a href={`tel:${request.requesterPhone}`} className="text-[#1E8E5A] hover:underline">
                         {request.requesterPhone}
                       </a>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-2">
                       <a href={`mailto:${request.requesterEmail}`} className="text-gray-600 hover:underline text-sm">
                         {request.requesterEmail}
                       </a>
                     </td>
-                    <td className="px-6 py-4 text-sm">
+                    <td className="px-3 py-2 text-sm">
                       {request.team?.id ? (
                         <Link href={`/admin/team-admins/${request.team.adminId}`} className="text-[#C9A441] hover:underline">
                           {request.team.name}
@@ -285,8 +285,8 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                         <span className="text-gray-900">N/A</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">{request.activationLevel}</td>
-                    <td className="px-6 py-4 text-sm">
+                    <td className="px-3 py-2 text-sm text-gray-900">{request.activationLevel}</td>
+                    <td className="px-3 py-2 text-sm">
                       {request.assignedPartner ? (
                         <Link
                           href={`/admin/partners/${request.assignedPartner.id}`}
@@ -298,7 +298,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                         <span className="text-gray-400">Unassigned</span>
                       )}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-2">
                       <span className={`px-2 py-1 text-xs rounded-full ${
                         request.status === 'Activated' ? 'bg-green-100 text-green-800' :
                         request.status === 'OnboardingScheduled' ? 'bg-blue-100 text-blue-800' :
@@ -308,10 +308,10 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                         {request.status.replace(/([A-Z])/g, ' $1').trim()}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
+                    <td className="px-3 py-2 text-sm text-gray-500">
                       {new Date(request.dateSubmitted).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-2">
                       <div className="flex flex-col gap-1">
                         {/* Quick Status Update */}
                         {request.status === 'Assigned' && (

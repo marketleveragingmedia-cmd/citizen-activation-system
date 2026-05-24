@@ -186,7 +186,7 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full text-sm">
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requester</th>
@@ -203,7 +203,7 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                 <tbody className="divide-y">
                   {assignedRequests.slice((currentPage - 1) * requestsPerPage, currentPage * requestsPerPage).map((request) => (
                     <tr key={request.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2">
                         <button
                           onClick={() => setSelectedRequest(request)}
                           className="font-medium text-[#1E8E5A] hover:underline text-left"
@@ -211,20 +211,20 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                           {`${request.requesterFirstName} ${request.requesterLastName}`}
                         </button>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2">
                         <a href={`tel:${request.requesterPhone}`} className="text-[#1E8E5A] hover:underline font-medium">
                           {request.requesterPhone}
                         </a>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2">
                         <a href={`mailto:${request.requesterEmail}`} className="text-gray-600 hover:underline text-sm">
                           {request.requesterEmail}
                         </a>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">{request.referralCodeUsed || 'Direct'}</td>
-                      <td className="px-6 py-4 text-sm text-gray-900">{request.activationLevel}</td>
-                      <td className="px-6 py-4 text-sm text-gray-900">{partner.firstName} {partner.lastName}</td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2 text-sm text-gray-900">{request.referralCodeUsed || 'Direct'}</td>
+                      <td className="px-3 py-2 text-sm text-gray-900">{request.activationLevel}</td>
+                      <td className="px-3 py-2 text-sm text-gray-900">{partner.firstName} {partner.lastName}</td>
+                      <td className="px-3 py-2">
                         <span className={`px-2 py-1 text-xs rounded-full ${
                           request.status === 'Activated' ? 'bg-green-100 text-green-800' :
                           request.status === 'OnboardingScheduled' ? 'bg-blue-100 text-blue-800' :
@@ -234,10 +234,10 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                           {request.status.replace(/([A-Z])/g, ' $1').trim()}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
+                      <td className="px-3 py-2 text-sm text-gray-500">
                         {new Date(request.dateSubmitted).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2">
                         <div className="flex flex-col gap-1">
                           {/* Quick Status Update */}
                           {request.status === 'Assigned' && (

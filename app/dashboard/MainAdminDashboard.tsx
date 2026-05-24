@@ -139,7 +139,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
             </a>
             <a href="/checkout/white-label" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
               <h3 className="font-semibold text-[#1E8E5A] text-sm">White-Label</h3>
-              <p className="text-xs text-gray-600">$1,997/$2,997 + $497/year</p>
+              <p className="text-xs text-gray-600">$1,997/$2,997 + $997/year</p>
             </a>
           </div>
         </div>

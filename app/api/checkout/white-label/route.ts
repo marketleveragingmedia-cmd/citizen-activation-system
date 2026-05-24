@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
         option: '3',
         tier: tier || 'regular',
         setupFee: isPromo ? '1997' : '2997',
-        recurringFee: '497',
+        recurringFee: '997',
       },
     })
 

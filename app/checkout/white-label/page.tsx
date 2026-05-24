@@ -61,7 +61,7 @@ export default function WhiteLabelCheckout() {
             </div>
           </div>
           <div className="text-sm text-gray-600 mb-2">
-            <strong>Year 1:</strong> $1,997 | <strong>Year 2+:</strong> $497/year
+            <strong>Year 1:</strong> $1,997 | <strong>Year 2+:</strong> $997/year
           </div>
           <div className="text-xs text-gray-500 italic">
             Regular pricing: $2,997 Year 1 | This promotional rate is a limited-time offer.

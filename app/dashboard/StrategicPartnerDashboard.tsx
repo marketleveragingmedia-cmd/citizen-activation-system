@@ -318,6 +318,69 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
                   </div>
                 </div>
               )}
+
+              {/* Status Change Section */}
+              <div className="border-t pt-4 mt-4">
+                <h3 className="font-semibold text-gray-900 mb-3">Update Status:</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      updateStatus(selectedRequest.id, 'Assigned', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                      setSelectedRequest(null)
+                    }}
+                    disabled={isUpdating || selectedRequest.status === 'Assigned'}
+                    className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                      selectedRequest.status === 'Assigned'
+                        ? 'bg-yellow-100 text-yellow-800 border-2 border-yellow-500'
+                        : 'bg-yellow-50 text-yellow-700 hover:bg-yellow-100 border border-yellow-200'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {selectedRequest.status === 'Assigned' ? '✓ ' : ''}Assigned
+                  </button>
+                  <button
+                    onClick={() => {
+                      updateStatus(selectedRequest.id, 'Invited', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                      setSelectedRequest(null)
+                    }}
+                    disabled={isUpdating || selectedRequest.status === 'Invited'}
+                    className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                      selectedRequest.status === 'Invited'
+                        ? 'bg-purple-100 text-purple-800 border-2 border-purple-500'
+                        : 'bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {selectedRequest.status === 'Invited' ? '✓ ' : ''}Invited
+                  </button>
+                  <button
+                    onClick={() => {
+                      updateStatus(selectedRequest.id, 'OnboardingScheduled', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                      setSelectedRequest(null)
+                    }}
+                    disabled={isUpdating || selectedRequest.status === 'OnboardingScheduled'}
+                    className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                      selectedRequest.status === 'OnboardingScheduled'
+                        ? 'bg-blue-100 text-blue-800 border-2 border-blue-500'
+                        : 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {selectedRequest.status === 'OnboardingScheduled' ? '✓ ' : ''}Onboarding Scheduled
+                  </button>
+                  <button
+                    onClick={() => {
+                      updateStatus(selectedRequest.id, 'Activated', `${selectedRequest.requesterFirstName} ${selectedRequest.requesterLastName}`)
+                      setSelectedRequest(null)
+                    }}
+                    disabled={isUpdating || selectedRequest.status === 'Activated'}
+                    className={`px-4 py-2 rounded-lg font-medium text-sm ${
+                      selectedRequest.status === 'Activated'
+                        ? 'bg-green-100 text-green-800 border-2 border-green-500'
+                        : 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {selectedRequest.status === 'Activated' ? '✓ ' : ''}Activated
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div className="mt-6 flex justify-end gap-3">

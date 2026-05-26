@@ -131,6 +131,30 @@ export async function POST(request: NextRequest) {
             const hasStripe = !!recruiter.team?.stripeAccountId
             const earnedCommission = recruiterWantsCommission && hasStripe
 
+            // Process commission transfer if earned
+            if (earnedCommission) {
+              try {
+                await stripe.transfers.create({
+                  amount: 29700, // $297 in cents
+                  currency: 'usd',
+                  destination: recruiter.team.stripeAccountId!,
+                  description: `Commission for Team Admin: ${adminFullName}`,
+                  metadata: {
+                    type: 'team_admin_commission',
+                    recruiterId: recruiter.id,
+                    recruiterName: recruiterFullName,
+                    teamAdminId: newAdmin.id,
+                    teamAdminName: adminFullName,
+                    teamAdminEmail: teamAdminData.adminEmail,
+                  }
+                });
+                console.log(`✅ Commission transfer successful: $297 to ${recruiterFullName}`);
+              } catch (transferError) {
+                console.error('❌ Commission transfer failed:', transferError);
+                // Continue execution - send email with note about transfer failure
+              }
+            }
+
             await sendEmail({
               to: recruiter.email,
               subject: '✅ Team Admin Activated - Payment Received',

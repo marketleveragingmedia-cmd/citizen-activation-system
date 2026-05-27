@@ -19,7 +19,7 @@ export async function GET(
       where: { email: session.user.email }
     })
 
-    if (!admin || (admin.role !== 'MAIN_ADMIN' && admin.role !== 'TEAM_ADMIN')) {
+    if (!admin || (admin.role !== 'MAIN_ADMIN' && admin.role !== 'TEAM_ADMIN' && admin.role !== 'MASTER_ADMIN')) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 

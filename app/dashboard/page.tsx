@@ -66,14 +66,45 @@ async function getDashboardData(userId: string, role: string, type: string) {
       include: { team: true }
     })
 
+    if (!admin?.teamId) {
+      throw new Error('Main Admin must have a team')
+    }
+
+    // Get all Team Admins under this Main Admin
+    const teamAdmins = await prisma.admin.findMany({
+      where: {
+        role: 'TEAM_ADMIN',
+        teamId: admin.teamId,
+        status: 'Active'
+      },
+      select: { id: true }
+    })
+
+    const teamAdminIds = teamAdmins.map(ta => ta.id)
+
+    // Get all teams under this Main Admin's network
+    const networkTeams = await prisma.team.findMany({
+      where: {
+        OR: [
+          { adminId: admin.id }, // Teams owned by this Main Admin
+          { adminId: { in: teamAdminIds } } // Teams owned by their Team Admins
+        ],
+        status: 'Active'
+      },
+      select: { id: true }
+    })
+
+    const networkTeamIds = networkTeams.map(t => t.id)
+
     const stats = await prisma.$transaction([
-      prisma.team.count({ where: { status: 'Active' } }),
-      prisma.request.count(),
-      prisma.request.count({ where: { status: 'Activated' } }),
-      prisma.strategicPartner.count({ where: { status: 'Active' } })
+      prisma.team.count({ where: { id: { in: networkTeamIds } } }), // Only THEIR teams
+      prisma.request.count({ where: { teamId: { in: networkTeamIds } } }), // Only THEIR requests
+      prisma.request.count({ where: { teamId: { in: networkTeamIds }, status: 'Activated' } }), // Only THEIR activations
+      prisma.strategicPartner.count({ where: { teamId: { in: networkTeamIds }, status: 'Active' } }) // Only THEIR partners
     ])
 
     const recentRequests = await prisma.request.findMany({
+      where: { teamId: { in: networkTeamIds } }, // Only THEIR requests
       take: 50,
       orderBy: { dateSubmitted: 'desc' },
       include: {
@@ -83,6 +114,7 @@ async function getDashboardData(userId: string, role: string, type: string) {
     })
 
     const partners = await prisma.strategicPartner.findMany({
+      where: { teamId: { in: networkTeamIds } }, // Only THEIR partners
       include: {
         team: true
       },

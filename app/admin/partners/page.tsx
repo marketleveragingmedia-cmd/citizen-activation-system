@@ -11,8 +11,8 @@ export default async function PartnersPage() {
     redirect('/login')
   }
 
-  // Only Main Admin
-  if (session.user.role !== 'MAIN_ADMIN') {
+  // Only Main Admin or Master Admin
+  if (session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'MASTER_ADMIN') {
     redirect('/dashboard')
   }
 

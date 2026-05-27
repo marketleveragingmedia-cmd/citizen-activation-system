@@ -11,8 +11,8 @@ export default async function TeamAdminsPage() {
     redirect('/login')
   }
 
-  // Only Main Admin can see all Team Admins
-  if (session.user.role !== 'MAIN_ADMIN') {
+  // Only Main Admin or Master Admin can see all Team Admins
+  if (session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'MASTER_ADMIN') {
     redirect('/dashboard')
   }
 

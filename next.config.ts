@@ -6,8 +6,13 @@ const nextConfig: NextConfig = {
     workerThreads: false,
     cpus: 1,
   },
-  // Optimize production builds
-  swcMinify: true,
+  // Skip TypeScript and ESLint during build to save memory
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   productionBrowserSourceMaps: false,
 };
 

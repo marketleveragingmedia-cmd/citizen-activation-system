@@ -21,7 +21,14 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: 'price_MAIN_ADMIN_1497_NEEDS_CREATION', // TODO: Create in Stripe Dashboard
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Main Admin Access - Year 1',
+              description: 'Full network control, add Team Admins & Org Admins, see entire network',
+            },
+            unit_amount: 149700, // $1,497
+          },
           quantity: 1,
         },
       ],

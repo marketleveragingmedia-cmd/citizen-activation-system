@@ -6,11 +6,9 @@ interface AddTeamModalProps {
   onClose: () => void
   onSuccess: () => void
   isMainAdmin?: boolean
-  hasStripeAccount?: boolean
-  stripeAccountId?: string
 }
 
-export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, hasStripeAccount = false, stripeAccountId }: AddTeamModalProps) {
+export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false }: AddTeamModalProps) {
   const [formData, setFormData] = useState({
     teamName: '',
     adminFirstName: '',
@@ -20,27 +18,17 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
     tierType: 'full-system',
     customDomain: '',
     logoUrl: '',
-    wantsCommission: true
+    wantsCommission: true // Default: wants to earn commission
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [hasStripe, setHasStripe] = useState(false)
 
-  const handleConnectStripe = async () => {
-    try {
-      const response = await fetch('/api/stripe/create-connect-account', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      })
-      const data = await response.json()
-      if (response.ok && data.onboardingUrl) {
-        window.location.href = data.onboardingUrl
-      } else {
-        alert('Failed to create Stripe account')
-      }
-    } catch (err) {
-      alert('Network error. Please try again.')
-    }
-  }
+  // Check if current user has Stripe connected (client-side hint)
+  useState(() => {
+    // This will be passed from parent or fetched
+    // For now, we'll let the API handle it
+  })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -48,6 +36,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
     setError('')
 
     try {
+      // Main Admin can add directly (no payment required)
       if (isMainAdmin) {
         const response = await fetch('/api/add-team', {
           method: 'POST',
@@ -66,6 +55,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
         return
       }
 
+      // Team Admins: Create pending Team Admin + send payment link
       const response = await fetch('/api/create-pending-team-admin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -78,7 +68,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
       const data = await response.json()
 
       if (response.ok) {
-        alert(`Payment link sent!\n\nA payment link has been sent to ${formData.adminEmail}.\n\nOnce they complete payment ($497), their Team Admin account will be activated and you'll ${formData.wantsCommission ? 'earn your $200 commission' : 'forfeit commission (goes to system owner)'}.`)
+        alert(`Payment link sent!\n\nA payment link has been sent to ${formData.adminEmail}.\n\nOnce they complete payment ($497), their Team Admin account will be activated and you'll ${formData.wantsCommission ? 'earn your $297 commission' : 'forfeit commission (goes to system owner)'}.`)
         onSuccess()
       } else {
         setError(data.error || 'Failed to create Team Admin')
@@ -100,43 +90,10 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
           </div>
           <button
             onClick={onClose}
-            type="button"
             className="text-gray-400 hover:text-gray-600 text-2xl"
           >
             ×
           </button>
-        </div>
-
-        {/* Stripe Connect Section */}
-        <div className="mb-6 p-4 rounded-lg" style={{backgroundColor: hasStripeAccount ? '#f0fdf4' : '#fef3c7', borderColor: hasStripeAccount ? '#86efac' : '#fbbf24', borderWidth: '1px'}}>
-          {hasStripeAccount ? (
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-green-600 text-xl">✓</span>
-                <div className="font-semibold" style={{color: '#166534'}}>Stripe Connected - Earn Commissions</div>
-              </div>
-              <div className="text-sm" style={{color: '#15803d'}}>
-                <p className="mb-2"><strong>Team Admins ($497/year):</strong> You'll receive $200 per signup. We handle the platform fee ($297).</p>
-                <p><strong>Organization Admins ($997 Year 1, then $497/year):</strong> You'll receive $297 Year 1, then $200/year after. We handle the platform fee ($700 Year 1, then $297/year).</p>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <div className="font-semibold mb-3" style={{color: '#92400e'}}>Connect Stripe to Receive Payments</div>
-              <div className="text-sm mb-3" style={{color: '#92400e'}}>
-                <p className="mb-2"><strong>Team Admins ($497/year):</strong> You'll automatically receive $200 per signup. We handle the platform fee ($297).</p>
-                <p><strong>Organization Admins ($997 Year 1, then $497/year):</strong> You'll automatically receive $297 Year 1, then $200/year after. We handle the platform fee ($700 Year 1, then $297/year).</p>
-              </div>
-              <button
-                onClick={handleConnectStripe}
-                type="button"
-                className="bg-[#635BFF] hover:bg-[#5248E6] text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2"
-              >
-                <span>🔗</span>
-                Connect Stripe Account
-              </button>
-            </div>
-          )}
         </div>
 
         {error && (
@@ -314,7 +271,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                       className="mt-1"
                     />
                     <div className="flex-1">
-                      <div className="font-semibold text-gray-900">💰 I want to earn $200 commission</div>
+                      <div className="font-semibold text-gray-900">💰 I want to earn $297 commission</div>
                       <div className="text-sm text-gray-600 mt-1">
                         Requires Stripe Connect. If you don't have Stripe connected yet, you'll be prompted to connect after submitting.
                       </div>
@@ -334,7 +291,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                     <div className="flex-1">
                       <div className="font-semibold text-gray-900">🎁 I want to forfeit my commission</div>
                       <div className="text-sm text-gray-600 mt-1">
-                        The $200 commission will go to the system owner. You still grow your network.
+                        The $297 commission will go to the system owner. You still grow your network.
                       </div>
                     </div>
                   </label>

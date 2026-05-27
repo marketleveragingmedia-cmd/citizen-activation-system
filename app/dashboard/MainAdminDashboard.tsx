@@ -183,14 +183,6 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
           )}
         </div>
 
-        {/* Stripe Connect Section */}
-        <div className="mb-8">
-          <StripeConnectButton 
-            hasStripeAccount={!!hasStripeAccount} 
-            stripeAccountId={stripeAccountId || undefined}
-          />
-        </div>
-
         {/* Quick Actions */}
         <div className="bg-white rounded-lg shadow mb-4 p-3">
           <h2 className="text-lg font-bold text-gray-900 mb-2">Quick Actions</h2>
@@ -582,6 +574,8 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
       {showAddTeam && (
         <AddTeamModal
           isMainAdmin={true}
+          hasStripeAccount={!!hasStripeAccount}
+          stripeAccountId={stripeAccountId || undefined}
           onClose={() => setShowAddTeam(false)}
           onSuccess={() => {
             setShowAddTeam(false)

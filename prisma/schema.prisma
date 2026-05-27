@@ -18,7 +18,7 @@ model Admin {
   email         String      @unique
   phone         String?
   passwordHash  String
-  referralCode  String      @unique // MOSCA-issued referral code (REQUIRED - identifies them as activated MOSCA Citizen with activated wallet)
+  referralCode  String?     @unique // MOSCA-issued referral code (identifies them as activated MOSCA Citizen with activated wallet)
   teamId        String?
   team          Team?       @relation(fields: [teamId], references: [id])
   createdDate   DateTime    @default(now())

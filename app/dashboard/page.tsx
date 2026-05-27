@@ -6,7 +6,7 @@ import Link from 'next/link'
 import StrategicPartnerDashboard from './StrategicPartnerDashboard'
 import MainAdminDashboard from './MainAdminDashboard'
 import TeamAdminDashboard from './TeamAdminDashboard'
-import { isWhiteLabelMode } from '@/lib/white-label'
+
 
 async function getDashboardData(userId: string, role: string, type: string) {
   // MASTER ADMIN - Sees everything across all networks
@@ -230,14 +230,12 @@ export default async function DashboardPage() {
 
   // Master Admin Dashboard
   if (data.type === 'master_admin' && 'stats' in data) {
-    const whiteLabelMode = isWhiteLabelMode()
     return (
       <MainAdminDashboard
         stats={data.stats}
         recentRequests={data.recentRequests}
         partners={data.partners || []}
         userName={session.user.name}
-        isWhiteLabel={whiteLabelMode}
         hasStripeAccount={data.hasStripeAccount}
         stripeAccountId={data.stripeAccountId}
         isMasterAdmin={true}
@@ -247,14 +245,12 @@ export default async function DashboardPage() {
 
   // Main Admin Dashboard
   if (data.type === 'main_admin' && 'stats' in data) {
-    const whiteLabelMode = isWhiteLabelMode()
     return (
       <MainAdminDashboard
         stats={data.stats}
         recentRequests={data.recentRequests}
         partners={data.partners || []}
         userName={session.user.name}
-        isWhiteLabel={whiteLabelMode}
         hasStripeAccount={data.hasStripeAccount}
         stripeAccountId={data.stripeAccountId}
         isMasterAdmin={false}

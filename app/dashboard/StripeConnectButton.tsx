@@ -44,7 +44,7 @@ export default function StripeConnectButton({ hasStripeAccount, stripeAccountId 
           <div>
             <div className="font-semibold text-green-800">Stripe Connected</div>
             <div className="text-sm text-green-700">
-              You'll receive $297 per Team Admin added to your system
+              You'll receive $200 per Team Admin and $297/$200 per Organization Admin added to your system
             </div>
           </div>
         </div>
@@ -57,7 +57,8 @@ export default function StripeConnectButton({ hasStripeAccount, stripeAccountId 
       <div className="mb-3">
         <div className="font-semibold text-yellow-800 mb-1">Connect Stripe to Receive Payments</div>
         <div className="text-sm text-yellow-700">
-          When you add Team Admins ($497/year each), you'll automatically receive $297 and we'll handle the platform fee ($200).
+          When you add Team Admins ($497/year each), you'll automatically receive $200 and we'll handle the platform fee ($297).<br/>
+          When you add Organization Admins ($997 Year 1), you'll automatically receive $297 and we'll handle the platform fee ($700). You will automatically receive $200 year 2+ and we'll handle the platform fee ($297) when the Organization Admin renews at $497/yr.
         </div>
       </div>
 

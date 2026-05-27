@@ -199,7 +199,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
               onClick={() => setShowAddTeam(true)}
               className="bg-[#C9A441] hover:bg-[#B8932F] text-white font-bold py-3 px-6 rounded-lg"
             >
-              + Add Admin
+              + Add Team / Organization Admin
             </button>
             <button
               onClick={() => setShowAddPartner(true)}

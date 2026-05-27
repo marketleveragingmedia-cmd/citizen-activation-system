@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
             if (earnedCommission) {
               try {
                 await stripe.transfers.create({
-                  amount: 29700, // $297 in cents
+                  amount: 20000, // $200 in cents
                   currency: 'usd',
                   destination: recruiter.team.stripeAccountId!,
                   description: `Commission for Team Admin: ${adminFullName}`,
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
                     teamAdminEmail: teamAdminData.adminEmail,
                   }
                 });
-                console.log(`✅ Commission transfer successful: $297 to ${recruiterFullName}`);
+                console.log(`✅ Commission transfer successful: $200 to ${recruiterFullName}`);
               } catch (transferError) {
                 console.error('❌ Commission transfer failed:', transferError);
                 // Continue execution - send email with note about transfer failure
@@ -178,7 +178,7 @@ export async function POST(request: NextRequest) {
                     <div style="background: #D1FAE5; border: 2px solid #1E8E5A; padding: 15px; border-radius: 5px; margin: 20px 0;">
                       <h4 style="color: #065F46; margin-top: 0;">💰 Commission Earned!</h4>
                       <p style="color: #065F46; margin-bottom: 0;">
-                        <strong>$297</strong> has been transferred to your Stripe account.
+                        <strong>$200</strong> has been transferred to your Stripe account.
                       </p>
                     </div>
                   ` : !recruiterWantsCommission ? `
@@ -494,7 +494,7 @@ export async function POST(request: NextRequest) {
       // ORG ADMIN PURCHASE (Option 4)
       if (paymentType === 'org_admin_purchase') {
         try {
-          const { firstName, lastName, email, phone, organizationName } = session.metadata
+          const { firstName, lastName, email, phone, organizationName, recruiterId, recruiterWantsCommission } = session.metadata
           
           // Generate temp password
           const tempPassword = Math.random().toString(36).slice(-10) + 'A1!'
@@ -529,6 +529,60 @@ export async function POST(request: NextRequest) {
             where: { id: orgTeam.id },
             data: { adminId: orgAdmin.id }
           })
+
+          // Handle commission if recruiter wants it and has Stripe Connect
+          if (recruiterId && recruiterWantsCommission === 'true') {
+            const recruiter = await prisma.admin.findUnique({
+              where: { id: recruiterId },
+              include: { team: true }
+            })
+
+            if (recruiter?.team?.stripeAccountId) {
+              // Year 1: Transfer $297 to recruiter (Platform keeps $700)
+              const isFirstYear = true // Determine from subscription metadata if needed
+              const commissionAmount = isFirstYear ? 29700 : 20000 // $297 Y1, $200 Y2+
+
+              try {
+                await stripe.transfers.create({
+                  amount: commissionAmount,
+                  currency: 'usd',
+                  destination: recruiter.team.stripeAccountId,
+                  description: `Commission for Org Admin: ${firstName} ${lastName}`,
+                  metadata: {
+                    orgAdminEmail: email,
+                    recruiterEmail: recruiter.email,
+                    organizationName
+                  }
+                })
+
+                const recruiterFullName = `${recruiter.firstName} ${recruiter.lastName}`
+                const amountDisplay = isFirstYear ? '$297' : '$200'
+                console.log(`✅ Org Admin commission transfer successful: ${amountDisplay} to ${recruiterFullName}`)
+
+                // Notify recruiter
+                await sendEmail({
+                  to: recruiter.email,
+                  subject: `💰 Commission Earned - Organization Admin Added`,
+                  html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                      <h2 style="color: #1E8E5A;">💰 Commission Payment Received!</h2>
+                      <p>Hello ${recruiterFullName},</p>
+                      <p>Great news! A new Organization Admin has been added to your network:</p>
+                      <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                        <p><strong>Organization:</strong> ${organizationName}</p>
+                        <p><strong>Admin:</strong> ${firstName} ${lastName}</p>
+                        <p><strong>Your Commission:</strong> <strong>${amountDisplay}</strong></p>
+                      </div>
+                      <p><strong>${amountDisplay}</strong> has been transferred to your Stripe account.</p>
+                      <p>Keep growing your network to earn more commissions!</p>
+                    </div>
+                  `
+                })
+              } catch (transferError) {
+                console.error('Org Admin commission transfer failed:', transferError)
+              }
+            }
+          }
 
           // Send welcome email
           await sendEmail({

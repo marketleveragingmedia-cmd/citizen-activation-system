@@ -36,8 +36,8 @@ export async function GET(
       }
     })
 
-    if (!teamAdmin || teamAdmin.role !== 'TEAM_ADMIN') {
-      return NextResponse.json({ error: 'Team Admin not found' }, { status: 404 })
+    if (!teamAdmin || (teamAdmin.role !== 'TEAM_ADMIN' && teamAdmin.role !== 'MAIN_ADMIN')) {
+      return NextResponse.json({ error: 'Admin not found' }, { status: 404 })
     }
 
     // Get all strategic partners under this team admin

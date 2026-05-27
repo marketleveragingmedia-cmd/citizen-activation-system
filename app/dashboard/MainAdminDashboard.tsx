@@ -14,13 +14,12 @@ interface MainAdminDashboardProps {
   recentRequests: any[]
   partners?: any[]
   userName: string
-  isWhiteLabel?: boolean
   hasStripeAccount?: boolean
   stripeAccountId?: string | null
   isMasterAdmin?: boolean
 }
 
-export default function MainAdminDashboard({ stats, recentRequests, partners = [], userName, isWhiteLabel = false, hasStripeAccount, stripeAccountId, isMasterAdmin = false }: MainAdminDashboardProps) {
+export default function MainAdminDashboard({ stats, recentRequests, partners = [], userName, hasStripeAccount, stripeAccountId, isMasterAdmin = false }: MainAdminDashboardProps) {
   const [selectedRequest, setSelectedRequest] = useState<any>(null)
   const [showAddPartner, setShowAddPartner] = useState(false)
   const [showAddTeam, setShowAddTeam] = useState(false)
@@ -184,28 +183,24 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
           )}
         </div>
 
-        {/* Stripe Connect Section - ONLY for White-Label owners */}
-        {isWhiteLabel && (
-          <div className="mb-8">
-            <StripeConnectButton 
-              hasStripeAccount={!!hasStripeAccount} 
-              stripeAccountId={stripeAccountId || undefined}
-            />
-          </div>
-        )}
+        {/* Stripe Connect Section */}
+        <div className="mb-8">
+          <StripeConnectButton 
+            hasStripeAccount={!!hasStripeAccount} 
+            stripeAccountId={stripeAccountId || undefined}
+          />
+        </div>
 
         {/* Quick Actions */}
         <div className="bg-white rounded-lg shadow mb-4 p-3">
           <h2 className="text-lg font-bold text-gray-900 mb-2">Quick Actions</h2>
           <div className="flex flex-wrap gap-2">
-            {!isWhiteLabel && (
-              <button
-                onClick={() => setShowAddTeam(true)}
-                className="bg-[#C9A441] hover:bg-[#B8932F] text-white font-bold py-3 px-6 rounded-lg"
-              >
-                + Add Admin
-              </button>
-            )}
+            <button
+              onClick={() => setShowAddTeam(true)}
+              className="bg-[#C9A441] hover:bg-[#B8932F] text-white font-bold py-3 px-6 rounded-lg"
+            >
+              + Add Admin
+            </button>
             <button
               onClick={() => setShowAddPartner(true)}
               className="bg-[#1E8E5A] hover:bg-[#177349] text-white font-bold py-3 px-6 rounded-lg"

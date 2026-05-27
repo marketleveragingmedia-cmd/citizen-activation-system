@@ -15,9 +15,10 @@ interface TeamAdminDashboardProps {
   stats: any
   recentRequests: any[]
   userName: string
+  isOrgAdmin?: boolean
 }
 
-export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccountId, stats, recentRequests, userName }: TeamAdminDashboardProps) {
+export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccountId, stats, recentRequests, userName, isOrgAdmin = false }: TeamAdminDashboardProps) {
   const [selectedRequest, setSelectedRequest] = useState<any>(null)
   const [showAddNote, setShowAddNote] = useState<any>(null)
   const [showAddPartner, setShowAddPartner] = useState(false)

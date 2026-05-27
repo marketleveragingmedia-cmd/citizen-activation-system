@@ -17,9 +17,10 @@ interface MainAdminDashboardProps {
   isWhiteLabel?: boolean
   hasStripeAccount?: boolean
   stripeAccountId?: string | null
+  isMasterAdmin?: boolean
 }
 
-export default function MainAdminDashboard({ stats, recentRequests, partners = [], userName, isWhiteLabel = false, hasStripeAccount, stripeAccountId }: MainAdminDashboardProps) {
+export default function MainAdminDashboard({ stats, recentRequests, partners = [], userName, isWhiteLabel = false, hasStripeAccount, stripeAccountId, isMasterAdmin = false }: MainAdminDashboardProps) {
   const [selectedRequest, setSelectedRequest] = useState<any>(null)
   const [showAddPartner, setShowAddPartner] = useState(false)
   const [showAddTeam, setShowAddTeam] = useState(false)
@@ -121,44 +122,63 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
       <div className="max-w-7xl mx-auto p-4">
         {/* Stats Grid */}
 
-        {/* Checkout Pages Section */}
-        <div className="bg-white rounded-lg shadow p-3 mb-4">
-          <h2 className="text-lg font-bold text-gray-900 mb-2">Checkout Pages</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-2">
-            <a href="/checkout/team-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
-              <h3 className="font-semibold text-[#1E8E5A] text-sm">Team Admin</h3>
-              <p className="text-xs text-gray-600">$497/year</p>
-            </a>
-            <a href="/checkout/standalone-team-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
-              <h3 className="font-semibold text-[#1E8E5A] text-sm">Standalone Team Admin</h3>
-              <p className="text-xs text-gray-600">$497 + $497/year</p>
-            </a>
-            <a href="/checkout/organization-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
-              <h3 className="font-semibold text-[#1E8E5A] text-sm">Organization Admin</h3>
-              <p className="text-xs text-gray-600">$997 + $497/year</p>
-            </a>
-            <a href="/checkout/white-label" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
-              <h3 className="font-semibold text-[#1E8E5A] text-sm">White-Label</h3>
-              <p className="text-xs text-gray-600">$1,997/$2,997 + $997/year</p>
-            </a>
+        {/* Checkout Pages Section - Master Admin Only */}
+        {isMasterAdmin && (
+          <div className="bg-white rounded-lg shadow p-3 mb-4">
+            <h2 className="text-lg font-bold text-gray-900 mb-2">Checkout Pages</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
+              <a href="/checkout/main-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
+                <h3 className="font-semibold text-[#1E8E5A] text-sm">Main Admin</h3>
+                <p className="text-xs text-gray-600">$1,497 → $997/year</p>
+              </a>
+              <a href="/checkout/team-admin-direct" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
+                <h3 className="font-semibold text-[#1E8E5A] text-sm">Team Admin Direct</h3>
+                <p className="text-xs text-gray-600">$497 → $497/year</p>
+              </a>
+              <a href="/checkout/org-admin" target="_blank" className="block p-2 border border-[#1E8E5A] rounded hover:bg-green-50 transition">
+                <h3 className="font-semibold text-[#1E8E5A] text-sm">Organization Admin</h3>
+                <p className="text-xs text-gray-600">$997 → $497/year</p>
+              </a>
+            </div>
           </div>
-        </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
-          <div className="bg-white p-3 rounded-lg shadow">
-            <div className="text-gray-600 text-xs mb-1">Total Teams</div>
-            <div className="text-2xl font-bold text-gray-900">{stats.teams}</div>
-          </div>
-          <div className="bg-white p-3 rounded-lg shadow">
-            <div className="text-gray-600 text-xs mb-1">Total Requests</div>
-            <div className="text-2xl font-bold text-gray-900">{stats.totalRequests}</div>
-          </div>
-          <div className="bg-white p-3 rounded-lg shadow">
-            <div className="text-gray-600 text-xs mb-1">Total Activations</div>
-            <div className="text-2xl font-bold text-[#1E8E5A]">{stats.activations}</div>
-          </div>
-          <div className="bg-white p-3 rounded-lg shadow">
-            <div className="text-gray-600 text-xs mb-1">Active Strategic Partners</div>
-            <div className="text-2xl font-bold text-gray-900">{stats.activePartners}</div>
+          {isMasterAdmin ? (
+            <>
+              <div className="bg-white p-3 rounded-lg shadow">
+                <div className="text-gray-600 text-xs mb-1">Main Admins</div>
+                <div className="text-2xl font-bold text-gray-900">{stats.mainAdmins || 0}</div>
+              </div>
+              <div className="bg-white p-3 rounded-lg shadow">
+                <div className="text-gray-600 text-xs mb-1">Team Admins</div>
+                <div className="text-2xl font-bold text-gray-900">{stats.teamAdmins || 0}</div>
+              </div>
+              <div className="bg-white p-3 rounded-lg shadow">
+                <div className="text-gray-600 text-xs mb-1">Org Admins</div>
+                <div className="text-2xl font-bold text-gray-900">{stats.orgAdmins || 0}</div>
+              </div>
+              <div className="bg-white p-3 rounded-lg shadow">
+                <div className="text-gray-600 text-xs mb-1">Strategic Partners</div>
+                <div className="text-2xl font-bold text-[#1E8E5A]">{stats.activePartners}</div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="bg-white p-3 rounded-lg shadow">
+                <div className="text-gray-600 text-xs mb-1">Total Teams</div>
+                <div className="text-2xl font-bold text-gray-900">{stats.teams}</div>
+              </div>
+              <div className="bg-white p-3 rounded-lg shadow">
+                <div className="text-gray-600 text-xs mb-1">Total Requests</div>
+                <div className="text-2xl font-bold text-gray-900">{stats.totalRequests}</div>
+              </div>
+              <div className="bg-white p-3 rounded-lg shadow">
+                <div className="text-gray-600 text-xs mb-1">Total Activations</div>
+                <div className="text-2xl font-bold text-[#1E8E5A]">{stats.activations}</div>
+              </div>
+              <div className="bg-white p-3 rounded-lg shadow">
+                <div className="text-gray-600 text-xs mb-1">Active Strategic Partners</div>
+                <div className="text-2xl font-bold text-gray-900">{stats.activePartners}</div>
           </div>
         </div>
 

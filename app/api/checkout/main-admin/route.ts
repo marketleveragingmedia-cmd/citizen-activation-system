@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: 'MAIN_ADMIN_YEAR1_PRICE_ID', // Replace with actual Stripe Price ID
+          price: 'price_MAIN_ADMIN_1497_NEEDS_CREATION', // TODO: Create in Stripe Dashboard
           quantity: 1,
         },
       ],

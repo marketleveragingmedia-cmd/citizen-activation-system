@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: 'ORG_ADMIN_YEAR1_PRICE_ID', // Replace with actual Stripe Price ID
+          price: 'price_1TaIUNDZhlh84GPrkhnpYJXa', // Org Admin: $997
           quantity: 1,
         },
       ],

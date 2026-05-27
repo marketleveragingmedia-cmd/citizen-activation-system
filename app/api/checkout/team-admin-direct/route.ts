@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: 'TEAM_ADMIN_DIRECT_YEAR1_PRICE_ID', // Replace with actual Stripe Price ID
+          price: 'price_1TaIUNDZhlh84GPr3jQXmUtW', // Team Admin Direct: $497
           quantity: 1,
         },
       ],

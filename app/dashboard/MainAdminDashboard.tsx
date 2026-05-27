@@ -179,7 +179,9 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
               <div className="bg-white p-3 rounded-lg shadow">
                 <div className="text-gray-600 text-xs mb-1">Active Strategic Partners</div>
                 <div className="text-2xl font-bold text-gray-900">{stats.activePartners}</div>
-          </div>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Stripe Connect Section - ONLY for White-Label owners */}

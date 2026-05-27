@@ -9,6 +9,56 @@ import TeamAdminDashboard from './TeamAdminDashboard'
 import { isWhiteLabelMode } from '@/lib/white-label'
 
 async function getDashboardData(userId: string, role: string, type: string) {
+  // MASTER ADMIN - Sees everything across all networks
+  if (type === 'admin' && role === 'MASTER_ADMIN') {
+    const admin = await prisma.admin.findUnique({
+      where: { id: userId },
+      include: { team: true }
+    })
+
+    const stats = await prisma.$transaction([
+      prisma.admin.count({ where: { role: 'MAIN_ADMIN', status: 'Active' } }), // Main Admins
+      prisma.admin.count({ where: { role: 'TEAM_ADMIN', status: 'Active' } }), // Team Admins
+      prisma.admin.count({ where: { role: 'ORG_ADMIN', status: 'Active' } }), // Org Admins
+      prisma.request.count(),
+      prisma.request.count({ where: { status: 'Activated' } }),
+      prisma.strategicPartner.count({ where: { status: 'Active' } })
+    ])
+
+    const recentRequests = await prisma.request.findMany({
+      take: 50,
+      orderBy: { dateSubmitted: 'desc' },
+      include: {
+        assignedPartner: true,
+        team: true
+      }
+    })
+
+    const partners = await prisma.strategicPartner.findMany({
+      include: {
+        team: true
+      },
+      orderBy: { createdDate: 'desc' }
+    })
+
+    return {
+      type: 'master_admin',
+      hasStripeAccount: !!admin?.team?.stripeAccountId,
+      stripeAccountId: admin?.team?.stripeAccountId,
+      stats: {
+        mainAdmins: stats[0],
+        teamAdmins: stats[1],
+        orgAdmins: stats[2],
+        totalRequests: stats[3],
+        activations: stats[4],
+        activePartners: stats[5]
+      },
+      recentRequests,
+      partners
+    }
+  }
+
+  // MAIN ADMIN - Sees only their network
   if (type === 'admin' && role === 'MAIN_ADMIN') {
     // Main Admin Dashboard
     const admin = await prisma.admin.findUnique({
@@ -54,6 +104,47 @@ async function getDashboardData(userId: string, role: string, type: string) {
     }
   }
 
+  // ORG ADMIN - Sees only their organization/network
+  if (type === 'admin' && role === 'ORG_ADMIN') {
+    const admin = await prisma.admin.findUnique({
+      where: { id: userId },
+      include: { team: true }
+    })
+
+    if (!admin || !admin.teamId) {
+      return null
+    }
+
+    const stats = await prisma.$transaction([
+      prisma.request.count({ where: { teamId: admin.teamId } }),
+      prisma.request.count({ where: { teamId: admin.teamId, status: 'Assigned' } }),
+      prisma.request.count({ where: { teamId: admin.teamId, status: 'Activated' } }),
+      prisma.strategicPartner.count({ where: { teamId: admin.teamId, status: 'Active' } })
+    ])
+
+    const recentRequests = await prisma.request.findMany({
+      where: { teamId: admin.teamId },
+      take: 10,
+      orderBy: { dateSubmitted: 'desc' },
+      include: { assignedPartner: true }
+    })
+
+    return {
+      type: 'org_admin',
+      team: admin.team,
+      hasStripeAccount: !!admin.team.stripeAccountId,
+      stripeAccountId: admin.team.stripeAccountId,
+      stats: {
+        totalRequests: stats[0],
+        pending: stats[1],
+        activations: stats[2],
+        activePartners: stats[3]
+      },
+      recentRequests
+    }
+  }
+
+  // TEAM ADMIN - Manages Strategic Partners and requests
   if (type === 'admin' && role === 'TEAM_ADMIN') {
     // Team Admin Dashboard
     const admin = await prisma.admin.findUnique({
@@ -137,6 +228,23 @@ export default async function DashboardPage() {
     return <div>Error loading dashboard</div>
   }
 
+  // Master Admin Dashboard
+  if (data.type === 'master_admin' && 'stats' in data) {
+    const whiteLabelMode = isWhiteLabelMode()
+    return (
+      <MainAdminDashboard
+        stats={data.stats}
+        recentRequests={data.recentRequests}
+        partners={data.partners || []}
+        userName={session.user.name}
+        isWhiteLabel={whiteLabelMode}
+        hasStripeAccount={data.hasStripeAccount}
+        stripeAccountId={data.stripeAccountId}
+        isMasterAdmin={true}
+      />
+    )
+  }
+
   // Main Admin Dashboard
   if (data.type === 'main_admin' && 'stats' in data) {
     const whiteLabelMode = isWhiteLabelMode()
@@ -149,6 +257,22 @@ export default async function DashboardPage() {
         isWhiteLabel={whiteLabelMode}
         hasStripeAccount={data.hasStripeAccount}
         stripeAccountId={data.stripeAccountId}
+        isMasterAdmin={false}
+      />
+    )
+  }
+
+  // Org Admin Dashboard
+  if (data.type === 'org_admin' && 'team' in data) {
+    return (
+      <TeamAdminDashboard
+        team={data.team}
+        hasStripeAccount={data.hasStripeAccount}
+        stripeAccountId={data.stripeAccountId}
+        stats={data.stats}
+        recentRequests={data.recentRequests}
+        userName={session.user.name}
+        isOrgAdmin={true}
       />
     )
   }

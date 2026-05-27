@@ -4,27 +4,24 @@ import { stripe } from '@/lib/stripe'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, firstName, lastName, tier } = body
-    
-    const fullName = `${firstName} ${lastName}`
+    const { email, firstName, lastName, phone, organizationName } = body
 
-    if (!email || !firstName || !lastName) {
+    if (!email || !firstName || !lastName || !organizationName) {
       return NextResponse.json(
-        { error: 'Email, first name, last name and tier are required' },
+        { error: 'Email, first name, last name, and organization name are required' },
         { status: 400 }
       )
     }
 
-    // Determine price based on tier (promo or regular)
-    const isPromo = tier === 'promo'
-    const amount = isPromo ? 199700 : 299700 // $1,997 or $2,997
+    const fullName = `${firstName} ${lastName}`
 
-    // Create Stripe Checkout Session for White-Label
+    // Create Stripe Checkout Session for Organization Admin
+    // Year 1: $997, Year 2+: $497/year
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
-          price: 'price_1TaIUODZhlh84GPrhYqUu2Mq', // White Label: $1,997
+          price: 'ORG_ADMIN_YEAR1_PRICE_ID', // Replace with actual Stripe Price ID
           quantity: 1,
         },
       ],
@@ -33,20 +30,21 @@ export async function POST(request: NextRequest) {
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/cancelled`,
       customer_email: email,
       metadata: {
-        type: 'white_label_purchase',
+        type: 'org_admin_purchase',
         customerName: fullName,
         firstName: firstName,
         lastName: lastName,
-        option: '3',
-        tier: tier || 'regular',
-        setupFee: isPromo ? '1997' : '2997',
-        recurringFee: '997',
+        phone: phone || '',
+        organizationName: organizationName,
+        option: '4',
+        setupFee: '997',
+        recurringFee: '497',
       },
     })
 
     return NextResponse.json({ url: session.url })
   } catch (error: any) {
-    console.error('Checkout error:', error)
+    console.error('Org Admin checkout error:', error)
     return NextResponse.json(
       { error: error.message || 'Failed to create checkout session' },
       { status: 500 }

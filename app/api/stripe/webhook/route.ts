@@ -305,6 +305,282 @@ export async function POST(request: NextRequest) {
           console.error('Error creating Team Admin after payment:', err)
         }
       }
+
+      // MAIN ADMIN PURCHASE (Option 1)
+      if (paymentType === 'main_admin_purchase') {
+        try {
+          const { firstName, lastName, email, phone } = session.metadata
+          
+          // Generate temp password
+          const tempPassword = Math.random().toString(36).slice(-10) + 'A1!'
+          const hashedPassword = await bcrypt.hash(tempPassword, 10)
+
+          // Create Main Admin Team
+          const team = await prisma.team.create({
+            data: {
+              name: `${firstName} ${lastName}'s Network`,
+              adminId: '', // Will be updated after admin creation
+              tierType: 'FullSystem',
+              status: 'Active'
+            }
+          })
+
+          // Create Main Admin
+          const mainAdmin = await prisma.admin.create({
+            data: {
+              firstName,
+              lastName,
+              email,
+              phone: phone || null,
+              passwordHash: hashedPassword,
+              role: 'MAIN_ADMIN',
+              status: 'Active',
+              teamId: team.id
+            }
+          })
+
+          // Update team adminId
+          await prisma.team.update({
+            where: { id: team.id },
+            data: { adminId: mainAdmin.id }
+          })
+
+          // Send welcome email
+          await sendEmail({
+            to: email,
+            subject: 'Welcome to Citizen Activation System - Main Admin Account',
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #1E8E5A;">🎉 Main Admin Account Activated!</h2>
+                
+                <p>Hello ${firstName} ${lastName},</p>
+                
+                <p>Your Main Admin account is now active! You have full network control.</p>
+
+                <h3>Login Credentials:</h3>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                  <p><strong>URL:</strong> <a href="${process.env.NEXTAUTH_URL}/login">${process.env.NEXTAUTH_URL}/login</a></p>
+                  <p><strong>Email:</strong> ${email}</p>
+                  <p><strong>Temporary Password:</strong> ${tempPassword}</p>
+                </div>
+
+                <p><strong>Please change your password after your first login.</strong></p>
+
+                <h3>What You Can Do:</h3>
+                <ul>
+                  <li>Add Team Admins & Organization Admins</li>
+                  <li>See your entire network including all requests & Strategic Partners</li>
+                  <li>Earn commissions when your Team Admins recruit</li>
+                </ul>
+
+                <p style="margin: 30px 0;">
+                  <a href="${process.env.NEXTAUTH_URL}/login" 
+                     style="background: #1E8E5A; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                    Login Now
+                  </a>
+                </p>
+
+                <hr>
+                <p style="font-size: 12px; color: #666;">
+                  Strategic Partner Hub<br>
+                  citizenactivation.com<br>
+                  Annual Renewal: $997/year
+                </p>
+              </div>
+            `
+          })
+
+          console.log('Main Admin created successfully:', mainAdmin.email)
+        } catch (err) {
+          console.error('Error creating Main Admin after payment:', err)
+        }
+      }
+
+      // TEAM ADMIN DIRECT PURCHASE (Option 2)
+      if (paymentType === 'team_admin_direct_purchase') {
+        try {
+          const { firstName, lastName, email, phone } = session.metadata
+          
+          // Generate temp password
+          const tempPassword = Math.random().toString(36).slice(-10) + 'A1!'
+          const hashedPassword = await bcrypt.hash(tempPassword, 10)
+
+          // Find Master Admin's team (or create default team)
+          let masterTeam = await prisma.team.findFirst({
+            where: {
+              admins: {
+                some: { role: 'MASTER_ADMIN' }
+              }
+            }
+          })
+
+          if (!masterTeam) {
+            // Create default team if none exists
+            masterTeam = await prisma.team.create({
+              data: {
+                name: 'Main Team',
+                adminId: '',
+                tierType: 'FullSystem',
+                status: 'Active'
+              }
+            })
+          }
+
+          // Create Team Admin
+          const teamAdmin = await prisma.admin.create({
+            data: {
+              firstName,
+              lastName,
+              email,
+              phone: phone || null,
+              passwordHash: hashedPassword,
+              role: 'TEAM_ADMIN',
+              status: 'Active',
+              teamId: masterTeam.id
+            }
+          })
+
+          // Send welcome email
+          await sendEmail({
+            to: email,
+            subject: 'Welcome to Citizen Activation System - Team Admin Account',
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #1E8E5A;">🎉 Team Admin Account Activated!</h2>
+                
+                <p>Hello ${firstName} ${lastName},</p>
+                
+                <p>Your Team Admin account is now active!</p>
+
+                <h3>Login Credentials:</h3>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                  <p><strong>URL:</strong> <a href="${process.env.NEXTAUTH_URL}/login">${process.env.NEXTAUTH_URL}/login</a></p>
+                  <p><strong>Email:</strong> ${email}</p>
+                  <p><strong>Temporary Password:</strong> ${tempPassword}</p>
+                </div>
+
+                <p><strong>Please change your password after your first login.</strong></p>
+
+                <h3>What You Can Do:</h3>
+                <ul>
+                  <li>Manage Strategic Partners</li>
+                  <li>Oversee invitation requests</li>
+                  <li>Add Team Admins & Organization Admins (earn commission)</li>
+                </ul>
+
+                <p style="margin: 30px 0;">
+                  <a href="${process.env.NEXTAUTH_URL}/login" 
+                     style="background: #1E8E5A; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                    Login Now
+                  </a>
+                </p>
+
+                <hr>
+                <p style="font-size: 12px; color: #666;">
+                  Strategic Partner Hub<br>
+                  citizenactivation.com<br>
+                  Annual Renewal: $497/year
+                </p>
+              </div>
+            `
+          })
+
+          console.log('Team Admin (Direct) created successfully:', teamAdmin.email)
+        } catch (err) {
+          console.error('Error creating Team Admin (Direct) after payment:', err)
+        }
+      }
+
+      // ORG ADMIN PURCHASE (Option 4)
+      if (paymentType === 'org_admin_purchase') {
+        try {
+          const { firstName, lastName, email, phone, organizationName } = session.metadata
+          
+          // Generate temp password
+          const tempPassword = Math.random().toString(36).slice(-10) + 'A1!'
+          const hashedPassword = await bcrypt.hash(tempPassword, 10)
+
+          // Create Organization Team
+          const orgTeam = await prisma.team.create({
+            data: {
+              name: organizationName,
+              adminId: '', // Will be updated
+              tierType: 'SoloOrg',
+              status: 'Active'
+            }
+          })
+
+          // Create Org Admin
+          const orgAdmin = await prisma.admin.create({
+            data: {
+              firstName,
+              lastName,
+              email,
+              phone: phone || null,
+              passwordHash: hashedPassword,
+              role: 'ORG_ADMIN',
+              status: 'Active',
+              teamId: orgTeam.id
+            }
+          })
+
+          // Update team adminId
+          await prisma.team.update({
+            where: { id: orgTeam.id },
+            data: { adminId: orgAdmin.id }
+          })
+
+          // Send welcome email
+          await sendEmail({
+            to: email,
+            subject: 'Welcome to Citizen Activation System - Organization Admin Account',
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #1E8E5A;">🎉 Organization Admin Account Activated!</h2>
+                
+                <p>Hello ${firstName} ${lastName},</p>
+                
+                <p>Your Organization Admin account for <strong>${organizationName}</strong> is now active!</p>
+
+                <h3>Login Credentials:</h3>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                  <p><strong>URL:</strong> <a href="${process.env.NEXTAUTH_URL}/login">${process.env.NEXTAUTH_URL}/login</a></p>
+                  <p><strong>Email:</strong> ${email}</p>
+                  <p><strong>Temporary Password:</strong> ${tempPassword}</p>
+                </div>
+
+                <p><strong>Please change your password after your first login.</strong></p>
+
+                <h3>What You Can Do:</h3>
+                <ul>
+                  <li>Organization branding & customization</li>
+                  <li>See only YOUR network/members</li>
+                  <li>Bulk onboarding tools for large groups</li>
+                  <li>Add Team Admins (earn commission)</li>
+                </ul>
+
+                <p style="margin: 30px 0;">
+                  <a href="${process.env.NEXTAUTH_URL}/login" 
+                     style="background: #1E8E5A; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                    Login Now
+                  </a>
+                </p>
+
+                <hr>
+                <p style="font-size: 12px; color: #666;">
+                  Strategic Partner Hub<br>
+                  citizenactivation.com<br>
+                  Annual Renewal: $497/year
+                </p>
+              </div>
+            `
+          })
+
+          console.log('Org Admin created successfully:', orgAdmin.email)
+        } catch (err) {
+          console.error('Error creating Org Admin after payment:', err)
+        }
+      }
     }
 
     return NextResponse.json({ received: true })

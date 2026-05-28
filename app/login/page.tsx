@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -42,9 +43,16 @@ export default function LoginPage() {
         <div className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
           {/* Header Section */}
           <div className="bg-white border-b border-gray-200 px-8 py-6 text-center">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Citizen Activation System
-            </h1>
+            <div className="flex justify-center mb-4">
+              <Image
+                src="/citizen-activation-logo.jpg"
+                alt="Citizen Activation System Logo"
+                width={300}
+                height={120}
+                priority
+                className="object-contain"
+              />
+            </div>
             <p className="text-gray-600 mt-2">Strategic Partner Hub</p>
           </div>
 

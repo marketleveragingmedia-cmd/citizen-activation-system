@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 export default function CheckoutCancelledPage() {
   return (
     <div style={{ 
@@ -20,6 +22,16 @@ export default function CheckoutCancelledPage() {
         textAlign: 'center',
         boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
       }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '30px' }}>
+          <Image
+            src="/citizen-activation-logo.jpg"
+            alt="Citizen Activation System"
+            width={280}
+            height={110}
+            priority
+            style={{ objectFit: 'contain' }}
+          />
+        </div>
         <div style={{ fontSize: '64px', marginBottom: '20px' }}>❌</div>
         <h1 style={{ color: '#c00', fontSize: '32px', marginBottom: '20px' }}>
           Payment Cancelled

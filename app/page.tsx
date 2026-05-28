@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 
 export default function RequestForm() {
   const [formData, setFormData] = useState({
@@ -76,6 +77,16 @@ export default function RequestForm() {
     <div className="min-h-screen bg-white">
       <div className="max-w-2xl mx-auto p-6 py-12">
         <div className="text-center mb-8">
+          <div className="flex justify-center mb-6">
+            <Image
+              src="/citizen-activation-logo.jpg"
+              alt="Citizen Activation System"
+              width={320}
+              height={125}
+              priority
+              className="object-contain"
+            />
+          </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-3">
             Request Private Invitation
           </h1>

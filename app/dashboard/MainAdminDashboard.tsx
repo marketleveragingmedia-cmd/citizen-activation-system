@@ -187,6 +187,14 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
         <div className="bg-white rounded-lg shadow mb-4 p-3">
           <h2 className="text-lg font-bold text-gray-900 mb-2">Quick Actions</h2>
           <div className="flex flex-wrap gap-2">
+            {isMasterAdmin && (
+              <Link
+                href="/master-admin/create-account"
+                className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg inline-block"
+              >
+                🔑 Create Account (No Payment)
+              </Link>
+            )}
             <button
               onClick={() => setShowAddTeam(true)}
               className="bg-[#C9A441] hover:bg-[#B8932F] text-white font-bold py-3 px-6 rounded-lg"

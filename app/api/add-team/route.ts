@@ -13,8 +13,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Main Admin OR Team Admin can add teams
-    if (session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'TEAM_ADMIN') {
+    // Master Admin, Main Admin, OR Team Admin can add teams
+    if (session.user.role !== 'MASTER_ADMIN' && session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'TEAM_ADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -51,8 +51,8 @@ export async function POST(request: NextRequest) {
     let team
     let admin
 
-    // Check if this is Main Admin or Team Admin
-    if (session.user.role === 'MAIN_ADMIN') {
+    // Check if this is Master Admin or Main Admin (creates new team) vs Team Admin (adds to existing)
+    if (session.user.role === 'MASTER_ADMIN' || session.user.role === 'MAIN_ADMIN') {
       // Main Admin: Create NEW team with new admin as owner
       team = await prisma.team.create({
         data: {

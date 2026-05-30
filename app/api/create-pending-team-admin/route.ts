@@ -13,9 +13,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Only Team Admins can use this endpoint (Main Admin adds directly without payment)
-    if (session.user.role !== 'TEAM_ADMIN') {
-      return NextResponse.json({ error: 'Forbidden - Use direct add-team endpoint' }, { status: 403 })
+    // Master Admin, Main Admin, Team Admin, or Org Admin can use this endpoint
+    const allowedRoles = ['MASTER_ADMIN', 'MAIN_ADMIN', 'TEAM_ADMIN', 'ORG_ADMIN']
+    if (!allowedRoles.includes(session.user.role)) {
+      return NextResponse.json({ error: 'Forbidden - Insufficient permissions' }, { status: 403 })
     }
 
     const body = await request.json()

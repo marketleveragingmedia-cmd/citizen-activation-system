@@ -81,10 +81,7 @@ export default function MainAdminCheckout() {
               <span className="text-green-500 mr-2">✓</span>
               <span>See entire network including all requests & Strategic Partners</span>
             </li>
-            <li className="flex items-start">
-              <span className="text-green-500 mr-2">✓</span>
-              <span>Earn commissions when your Team Admins recruit</span>
-            </li>
+
           </ul>
         </div>
 

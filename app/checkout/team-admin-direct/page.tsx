@@ -79,7 +79,7 @@ export default function TeamAdminDirectCheckout() {
             </li>
             <li className="flex items-start">
               <span className="text-green-500 mr-2">✓</span>
-              <span>Add Team Admins & Organization Admins (earn commission)</span>
+              <span>Add Team Admins & Organization Admins</span>
             </li>
             <li className="flex items-start">
               <span className="text-green-500 mr-2">✓</span>

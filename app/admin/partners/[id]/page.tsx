@@ -133,6 +133,12 @@ export default function PartnerDetailPage() {
                   <p className="text-gray-600">
                     <span className="font-medium">Team:</span> {partner.team?.name || 'N/A'}
                   </p>
+                  <p className="text-gray-600">
+                    <span className="font-medium">MOSCA Referral Code:</span>{' '}
+                    <span className="font-mono bg-gray-100 px-2 py-1 rounded">
+                      {partner.referralCode}
+                    </span>
+                  </p>
                 </div>
               </div>
               <div className="text-right">

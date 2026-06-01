@@ -6,6 +6,7 @@ import Link from 'next/link'
 import StrategicPartnerDashboard from './StrategicPartnerDashboard'
 import MainAdminDashboard from './MainAdminDashboard'
 import TeamAdminDashboard from './TeamAdminDashboard'
+import OrganizationAdminDashboard from './OrganizationAdminDashboard'
 
 
 async function getDashboardData(userId: string, role: string, type: string) {
@@ -267,14 +268,13 @@ export default async function DashboardPage() {
   // Org Admin Dashboard
   if (data.type === 'org_admin' && 'team' in data) {
     return (
-      <TeamAdminDashboard
+      <OrganizationAdminDashboard
         team={data.team}
         hasStripeAccount={data.hasStripeAccount}
         stripeAccountId={data.stripeAccountId}
         stats={data.stats}
         recentRequests={data.recentRequests}
         userName={session.user.name}
-        isOrgAdmin={true}
       />
     )
   }

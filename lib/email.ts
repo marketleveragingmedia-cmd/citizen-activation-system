@@ -6,12 +6,13 @@ interface EmailOptions {
   to: string
   subject: string
   html: string
+  from?: string // Optional custom from name
 }
 
-export async function sendEmail({ to, subject, html }: EmailOptions) {
+export async function sendEmail({ to, subject, html, from }: EmailOptions) {
   try {
     const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'Strategic Partner Hub <notifications@m.citizenactivation.com>',
+      from: from || process.env.RESEND_FROM_EMAIL || 'Strategic Partner Hub <notifications@m.citizenactivation.com>',
       to,
       subject,
       html,
@@ -30,14 +31,63 @@ export async function sendEmail({ to, subject, html }: EmailOptions) {
   }
 }
 
+// Generate branded email header
+function getBrandedEmailHeader(logoUrl?: string | null, organizationName?: string | null) {
+  if (!logoUrl && !organizationName) {
+    return '' // Use platform branding
+  }
+
+  return `
+    <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f9fafb; border-bottom: 3px solid #1E8E5A;">
+      ${logoUrl ? `<img src="${logoUrl}" alt="${organizationName || 'Organization'}" style="max-height: 60px; margin-bottom: 10px;" />` : ''}
+      ${organizationName ? `<h1 style="margin: 0; color: #1f2937; font-size: 24px;">${organizationName}</h1>` : ''}
+    </div>
+  `
+}
+
+// Generate branded email footer
+function getBrandedEmailFooter(organizationName?: string | null, hidePlatformBranding?: boolean) {
+  if (hidePlatformBranding) {
+    return `
+      <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
+      <p style="font-size: 12px; color: #6b7280; text-align: center;">
+        ${organizationName || 'Strategic Partner Hub'}
+      </p>
+    `
+  }
+
+  return `
+    <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
+    <p style="font-size: 12px; color: #6b7280; text-align: center;">
+      ${organizationName ? `${organizationName}<br>` : ''}
+      Powered by Strategic Partner Hub<br>
+      citizenactivation.com
+    </p>
+  `
+}
+
 // Email Templates
 
-export function getRequesterConfirmationEmail(name: string, level: string) {
+export function getRequesterConfirmationEmail(
+  name: string, 
+  level: string,
+  branding?: {
+    logoUrl?: string | null
+    organizationName?: string | null
+    primaryColor?: string | null
+    hidePlatformBranding?: boolean
+  }
+) {
+  const header = getBrandedEmailHeader(branding?.logoUrl, branding?.organizationName)
+  const footer = getBrandedEmailFooter(branding?.organizationName, branding?.hidePlatformBranding)
+  const buttonColor = branding?.primaryColor || '#1E8E5A'
+
   return {
     subject: `MOSCA Invitation Request Received - ${level} Activation`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2>Thank you, ${name}!</h2>
+        ${header}
+        <h2 style="color: #1f2937;">Thank you, ${name}!</h2>
         <p>Your MOSCA invitation request has been received and assigned to a Strategic Partner.</p>
         <p><strong>Requested Activation Level:</strong> ${level}</p>
         <p>Your assigned Strategic Partner will contact you within 24-48 hours with your official MOSCA invitation and onboarding details.</p>
@@ -49,11 +99,7 @@ export function getRequesterConfirmationEmail(name: string, level: string) {
           <li>Join the MOSCA Community as an Activated ${level} Member</li>
         </ol>
         <p>Welcome to the Movement!</p>
-        <hr>
-        <p style="font-size: 12px; color: #666;">
-          Strategic Partner Hub<br>
-          citizenactivation.com
-        </p>
+        ${footer}
       </div>
     `
   }
@@ -66,13 +112,24 @@ export function getStrategicPartnerAssignmentEmail(
   requesterPhone: string | null,
   level: string,
   referralCode: string | null,
-  dashboardUrl: string
+  dashboardUrl: string,
+  branding?: {
+    logoUrl?: string | null
+    organizationName?: string | null
+    primaryColor?: string | null
+    hidePlatformBranding?: boolean
+  }
 ) {
+  const header = getBrandedEmailHeader(branding?.logoUrl, branding?.organizationName)
+  const footer = getBrandedEmailFooter(branding?.organizationName, branding?.hidePlatformBranding)
+  const buttonColor = branding?.primaryColor || '#1E8E5A'
+
   return {
     subject: `New MOSCA Invitation Request - ${requesterName} - ${level}`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2>New Request Assigned to You</h2>
+        ${header}
+        <h2 style="color: #1f2937;">New Request Assigned to You</h2>
         <p>Hi ${partnerName},</p>
         <p>You've been automatically assigned a new MOSCA invitation request:</p>
         <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
@@ -92,16 +149,12 @@ export function getStrategicPartnerAssignmentEmail(
           <li>After Activation Complete, confirm in Hub: "Confirm Activation"</li>
         </ol>
         <p style="margin: 30px 0;">
-          <a href="${dashboardUrl}" style="background: #1E8E5A; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+          <a href="${dashboardUrl}" style="background: ${buttonColor}; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
             Go to Your Strategic Partner Hub
           </a>
         </p>
         <p><strong>Important:</strong> Please complete within 24-48 hours.</p>
-        <hr>
-        <p style="font-size: 12px; color: #666;">
-          Strategic Partner Hub<br>
-          citizenactivation.com
-        </p>
+        ${footer}
       </div>
     `
   }

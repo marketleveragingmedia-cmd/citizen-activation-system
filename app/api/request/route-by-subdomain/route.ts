@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendEmail, getRequesterConfirmationEmail, getStrategicPartnerAssignmentEmail } from '@/lib/email'
 
 /**
  * POST /api/request/route-by-subdomain
@@ -139,6 +140,53 @@ export async function POST(request: NextRequest) {
         lastAssigned: new Date(),
         totalAssigned: assignedPartner.totalAssigned + 1
       }
+    })
+
+    // Send emails with branding
+    const branding = {
+      logoUrl: admin.team.logoUrl,
+      organizationName: admin.team.organizationName || admin.team.name,
+      primaryColor: admin.team.primaryColor,
+      hidePlatformBranding: admin.team.hidePlatformBranding
+    }
+
+    const requesterName = `${requesterFirstName} ${requesterLastName}`
+    const partnerName = `${assignedPartner.firstName} ${assignedPartner.lastName}`
+
+    // Email to requester
+    const requesterEmail = getRequesterConfirmationEmail(
+      requesterName,
+      activationLevel,
+      branding
+    )
+    await sendEmail({
+      to: requesterEmail,
+      subject: requesterEmail.subject,
+      html: requesterEmail.html,
+      from: admin.team.emailFromName 
+        ? `${admin.team.emailFromName} <notifications@m.citizenactivation.com>`
+        : undefined
+    })
+
+    // Email to Strategic Partner
+    const dashboardUrl = process.env.NEXTAUTH_URL + '/dashboard'
+    const partnerEmail = getStrategicPartnerAssignmentEmail(
+      partnerName,
+      requesterName,
+      requesterEmail,
+      requesterPhone,
+      activationLevel,
+      referralCodeUsed,
+      dashboardUrl,
+      branding
+    )
+    await sendEmail({
+      to: assignedPartner.email,
+      subject: partnerEmail.subject,
+      html: partnerEmail.html,
+      from: admin.team.emailFromName 
+        ? `${admin.team.emailFromName} <notifications@m.citizenactivation.com>`
+        : undefined
     })
 
     return NextResponse.json({

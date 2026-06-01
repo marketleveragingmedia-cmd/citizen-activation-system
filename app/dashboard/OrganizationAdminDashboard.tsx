@@ -7,6 +7,7 @@ import AddPartnerModal from './AddPartnerModal'
 import AddTeamModal from './AddTeamModal'
 import StripeConnectButton from './StripeConnectButton'
 import ReassignModal from './ReassignModal'
+import BrandingSettingsModal from './BrandingSettingsModal'
 
 interface OrganizationAdminDashboardProps {
   team: any
@@ -385,33 +386,14 @@ export default function OrganizationAdminDashboard({
       )}
 
       {showBrandingSettings && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full p-6">
-            <div className="flex justify-between items-start mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">🎨 Branding Settings</h2>
-              <button
-                onClick={() => setShowBrandingSettings(false)}
-                className="text-gray-400 hover:text-gray-600 text-2xl"
-              >
-                ×
-              </button>
-            </div>
-            <div className="text-center py-12 text-gray-500">
-              <p className="text-lg mb-2">Branding Settings Coming Soon</p>
-              <p className="text-sm">
-                Logo upload, custom colors, welcome message, and more will be available here.
-              </p>
-            </div>
-            <div className="flex justify-end">
-              <button
-                onClick={() => setShowBrandingSettings(false)}
-                className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
+        <BrandingSettingsModal
+          team={team}
+          onClose={() => setShowBrandingSettings(false)}
+          onSuccess={() => {
+            setShowBrandingSettings(false)
+            window.location.reload()
+          }}
+        />
       )}
     </div>
   )

@@ -34,6 +34,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Request not found' }, { status: 404 })
     }
 
+    // Check if current admin is the initiator (owns this request)
+    // Only the initiator (admin whose link was used) can reassign
+    if (req.initiatorId && req.initiatorId !== session.user.id) {
+      return NextResponse.json({ 
+        error: 'Cannot reassign - you are not the initiator of this request',
+        message: 'This request came from another admin\'s subdomain link. Only they can reassign it.'
+      }, { status: 403 })
+    }
+
     const oldPartnerId = req.assignedPartnerId
 
     // Get new partner

@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/cron/check-delays",
+      "path": "/api/cron/check-delayed-requests",
       "schedule": "0 9 * * *"
     }
   ]

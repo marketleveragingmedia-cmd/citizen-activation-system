@@ -41,6 +41,14 @@ model Team {
   createdDate       DateTime   @default(now())
   status            TeamStatus @default(Active)
 
+  // Organization Admin Branding Fields (SoloOrg tier only)
+  organizationName      String?    // Display name (e.g., "Grace Church")
+  welcomeMessage        String?    @db.Text // Custom message on subdomain pages (max 500 chars)
+  primaryColor          String?    // Hex color: "#1E8E5A"
+  secondaryColor        String?    // Hex color: "#065F46"
+  emailFromName         String?    // Email sender name: "Grace Church Team"
+  hidePlatformBranding  Boolean    @default(false) // Hide "Powered by" footer
+
   admins            Admin[]
   strategicPartners StrategicPartner[]
   requests          Request[]

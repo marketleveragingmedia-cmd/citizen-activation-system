@@ -21,7 +21,7 @@
 3. **Organization Admin** - `/checkout/org-admin`
    - Price: $997 → $497/year
    - Stripe Price: `price_1TaIUNDZhlh84GPrkhnpYJXa`
-   - Organization branding, bulk onboarding
+   - Organization branding, subdomain link for group invitations
 
 ### ✅ 4 Complete Webhook Handlers (ACTIVE)
 1. **main_admin_purchase**
@@ -116,7 +116,7 @@ enum Role {
   - **Year 1:** Platform $700 / Recruiter $297 (if Stripe Connect)
   - **Year 2+:** Platform $200 / Recruiter $297 (if Stripe Connect)
   - Master Admin keeps 100% when they add
-- **Gets:** Organization branding, see only their network, bulk onboarding
+- **Gets:** Organization branding, see only their network, subdomain link for group invitations
 
 ---
 

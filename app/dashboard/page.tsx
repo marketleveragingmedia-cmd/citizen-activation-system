@@ -67,9 +67,13 @@ async function getDashboardData(userId: string, role: string, type: string) {
       include: { team: true }
     })
 
+    if (!admin || !admin.teamId) {
+      return null
+    }
+
     // For now, show their team's data only
     // TODO: Include Team Admins' teams when needed
-    const teamId = admin?.teamId
+    const teamId = admin.teamId
 
     const stats = await prisma.$transaction([
       prisma.team.count({ where: { id: teamId, status: 'Active' } }),

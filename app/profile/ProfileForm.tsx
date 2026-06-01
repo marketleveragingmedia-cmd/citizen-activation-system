@@ -23,6 +23,7 @@ export default function ProfileForm({ user, profileData }: Props) {
   const [isSaving, setIsSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+  const [isEditingReferralCode, setIsEditingReferralCode] = useState(false)
 
   const isPartner = user.type === 'partner'
 
@@ -41,6 +42,7 @@ export default function ProfileForm({ user, profileData }: Props) {
 
       if (response.ok) {
         setMessage('Profile updated successfully')
+        setIsEditingReferralCode(false)
         setTimeout(() => router.refresh(), 1000)
       } else {
         const data = await response.json()
@@ -186,17 +188,44 @@ export default function ProfileForm({ user, profileData }: Props) {
             </div>
 
             <div>
-              <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
-                MOSCA Referral Code
-              </label>
-              <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 font-mono text-lg">
-                {formData.referralCode || 'Not set'}
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700">
+                  MOSCA Referral Code
+                </label>
+                {!isEditingReferralCode && (
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingReferralCode(true)}
+                    className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    Edit
+                  </button>
+                )}
               </div>
-              <p className="text-sm text-gray-500 mt-1">
-                {isPartner 
-                  ? 'This code identifies you as an activated Strategic Partner in MOSCA'
-                  : 'This code confirms you are an activated Strategic Partner in MOSCA'}
-              </p>
+              {isEditingReferralCode ? (
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    id="referralCode"
+                    value={formData.referralCode}
+                    onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent font-mono text-lg"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsEditingReferralCode(false)}
+                      className="text-sm text-gray-600 hover:text-gray-800"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 font-mono text-lg">
+                  {formData.referralCode || 'Not set'}
+                </div>
+              )}
             </div>
 
             <button

@@ -25,16 +25,45 @@ export async function POST(req: Request) {
       email, 
       firstName, 
       lastName, 
-      phone, 
+      phone,
+      subdomain,
       organizationName,
       moscaReferralCode
     } = body
 
     // Validate required fields
-    if (!accountType || !email || !firstName || !lastName || !phone || !moscaReferralCode) {
+    if (!accountType || !email || !firstName || !lastName || !phone || !subdomain || !moscaReferralCode) {
       return NextResponse.json({ 
         success: false, 
-        error: 'Missing required fields (email, name, phone, MOSCA Referral Code)' 
+        error: 'Missing required fields (email, name, phone, subdomain, MOSCA Referral Code)' 
+      }, { status: 400 })
+    }
+
+    // Validate subdomain format and availability
+    const cleanSubdomain = subdomain.toLowerCase().trim()
+    const validFormat = /^[a-z0-9]+(-[a-z0-9]+)*$/
+    
+    if (!validFormat.test(cleanSubdomain) || cleanSubdomain.length < 3 || cleanSubdomain.length > 20) {
+      return NextResponse.json({ 
+        success: false, 
+        error: 'Invalid subdomain format (3-20 chars, letters, numbers, hyphens only)' 
+      }, { status: 400 })
+    }
+
+    // Check if subdomain already taken
+    const existingSubdomain = await prisma.admin.findFirst({
+      where: {
+        subdomain: {
+          equals: cleanSubdomain,
+          mode: 'insensitive'
+        }
+      }
+    })
+
+    if (existingSubdomain) {
+      return NextResponse.json({ 
+        success: false, 
+        error: 'Subdomain already taken' 
       }, { status: 400 })
     }
 
@@ -81,6 +110,7 @@ export async function POST(req: Request) {
             lastName,
             email,
             phone,
+            subdomain: cleanSubdomain,
             passwordHash: hashedPassword,
             referralCode: moscaReferralCode,
             status: 'Active',
@@ -105,6 +135,7 @@ export async function POST(req: Request) {
             lastName,
             email,
             phone,
+            subdomain: cleanSubdomain,
             passwordHash: hashedPassword,
             referralCode: moscaReferralCode,
             status: 'Active'
@@ -135,6 +166,7 @@ export async function POST(req: Request) {
             lastName,
             email,
             phone,
+            subdomain: cleanSubdomain,
             passwordHash: hashedPassword,
             referralCode: moscaReferralCode,
             status: 'Active',
@@ -169,12 +201,14 @@ export async function POST(req: Request) {
         email: newAdmin.email,
         firstName: newAdmin.firstName,
         lastName: newAdmin.lastName,
+        subdomain: cleanSubdomain,
+        subdomainUrl: `https://${cleanSubdomain}.citizenactivation.com`,
         teamId
       },
       credentials: {
         email: newAdmin.email,
         temporaryPassword: tempPassword,
-        loginUrl: 'https://hub.citizenactivation.com/login',
+        loginUrl: `https://${cleanSubdomain}.citizenactivation.com/login`,
         instructions: 'User must change password on first login'
       }
     })

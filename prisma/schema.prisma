@@ -11,19 +11,20 @@ datasource db {
 }
 
 model Admin {
-  id            String      @id @default(cuid())
-  role          Role        @default(TEAM_ADMIN)
-  firstName     String
-  lastName      String
-  email         String      @unique
-  phone         String?
-  passwordHash  String
-  referralCode  String?     @unique // MOSCA-issued referral code (identifies them as activated MOSCA Citizen with activated wallet)
-  teamId        String?
-  team          Team?       @relation(fields: [teamId], references: [id])
-  createdDate   DateTime    @default(now())
-  lastLogin     DateTime?
-  status        AdminStatus @default(Active)
+  id           String      @id @default(cuid())
+  role         Role        @default(TEAM_ADMIN)
+  firstName    String
+  lastName     String
+  email        String      @unique
+  phone        String?
+  passwordHash String
+  referralCode String?     @unique // MOSCA-issued referral code (identifies them as activated MOSCA Citizen with activated wallet)
+  subdomain    String?     @unique // Unique subdomain for routing (e.g., "john" -> john.citizenactivation.com)
+  teamId       String?
+  team         Team?       @relation(fields: [teamId], references: [id])
+  createdDate  DateTime    @default(now())
+  lastLogin    DateTime?
+  status       AdminStatus @default(Active)
 
   @@map("admins")
 }
@@ -79,6 +80,7 @@ model Request {
   id                      String            @id @default(cuid())
   teamId                  String
   team                    Team              @relation(fields: [teamId], references: [id])
+  initiatorId             String? // Admin whose link/subdomain the request came from (tracks ownership)
   requesterFirstName      String
   requesterLastName       String
   requesterEmail          String

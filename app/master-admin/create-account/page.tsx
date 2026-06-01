@@ -15,8 +15,21 @@ export default function CreateAccountPage() {
     firstName: '',
     lastName: '',
     phone: '',
+    subdomain: '',
     organizationName: '',
     moscaReferralCode: ''
+  })
+
+  const [subdomainStatus, setSubdomainStatus] = useState<{
+    checking: boolean
+    valid: boolean | null
+    error: string | null
+    warning: string | null
+  }>({
+    checking: false,
+    valid: null,
+    error: null,
+    warning: null
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,8 +60,15 @@ export default function CreateAccountPage() {
         firstName: '',
         lastName: '',
         phone: '',
+        subdomain: '',
         organizationName: '',
         moscaReferralCode: ''
+      })
+      setSubdomainStatus({
+        checking: false,
+        valid: null,
+        error: null,
+        warning: null
       })
 
     } catch (err: any) {
@@ -59,10 +79,59 @@ export default function CreateAccountPage() {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value
     }))
+
+    // Real-time subdomain validation
+    if (name === 'subdomain') {
+      validateSubdomain(value)
+    }
+  }
+
+  const validateSubdomain = async (subdomain: string) => {
+    if (!subdomain || subdomain.length < 3) {
+      setSubdomainStatus({
+        checking: false,
+        valid: null,
+        error: null,
+        warning: null
+      })
+      return
+    }
+
+    setSubdomainStatus(prev => ({ ...prev, checking: true }))
+
+    try {
+      const response = await fetch('/api/subdomain/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subdomain })
+      })
+
+      const data = await response.json()
+
+      setSubdomainStatus({
+        checking: false,
+        valid: data.valid,
+        error: data.error,
+        warning: data.warning
+      })
+
+      // Update form with cleaned subdomain if valid
+      if (data.valid && data.subdomain !== subdomain) {
+        setFormData(prev => ({ ...prev, subdomain: data.subdomain }))
+      }
+    } catch (err) {
+      setSubdomainStatus({
+        checking: false,
+        valid: false,
+        error: 'Failed to validate subdomain',
+        warning: null
+      })
+    }
   }
 
   return (
@@ -97,7 +166,7 @@ export default function CreateAccountPage() {
             </p>
             
             <div className="bg-white p-4 rounded border border-green-300 mb-4">
-              <p className="font-semibold text-gray-900 mb-2">Login Credentials:</p>
+              <p className="font-semibold text-gray-900 mb-2">Account Details:</p>
               <div className="space-y-2 text-sm">
                 <div>
                   <span className="text-gray-600">Email:</span>{' '}
@@ -115,6 +184,19 @@ export default function CreateAccountPage() {
                   <span className="text-gray-600">Role:</span>{' '}
                   <span className="font-semibold">{success.account.role}</span>
                 </div>
+                {success.account.subdomain && (
+                  <div>
+                    <span className="text-gray-600">Subdomain:</span>{' '}
+                    <a 
+                      href={success.account.subdomainUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono bg-blue-50 px-2 py-1 rounded text-blue-600 hover:text-blue-800 underline"
+                    >
+                      {success.account.subdomain}.citizenactivation.com
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -224,6 +306,54 @@ export default function CreateAccountPage() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
             />
+          </div>
+
+          {/* Subdomain */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Subdomain *
+            </label>
+            <div className="flex items-center">
+              <input
+                type="text"
+                name="subdomain"
+                value={formData.subdomain}
+                onChange={handleChange}
+                placeholder="john"
+                className={`w-full px-4 py-2 border rounded-l-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                  subdomainStatus.valid === false ? 'border-red-300' :
+                  subdomainStatus.valid === true ? 'border-green-300' :
+                  'border-gray-300'
+                }`}
+                required
+                minLength={3}
+                maxLength={20}
+                pattern="[a-z0-9]+(-[a-z0-9]+)*"
+              />
+              <span className="px-4 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-lg text-gray-600 whitespace-nowrap">
+                .citizenactivation.com
+              </span>
+            </div>
+            
+            {subdomainStatus.checking && (
+              <p className="text-sm text-blue-600 mt-1">⏳ Checking availability...</p>
+            )}
+            
+            {subdomainStatus.error && (
+              <p className="text-sm text-red-600 mt-1">❌ {subdomainStatus.error}</p>
+            )}
+            
+            {subdomainStatus.valid && (
+              <p className="text-sm text-green-600 mt-1">✅ Subdomain available!</p>
+            )}
+            
+            {subdomainStatus.warning && (
+              <p className="text-sm text-yellow-600 mt-1">{subdomainStatus.warning}</p>
+            )}
+            
+            <p className="text-sm text-gray-500 mt-1">
+              3-20 characters, lowercase letters, numbers, and hyphens only
+            </p>
           </div>
 
           {/* MOSCA Referral Code */}

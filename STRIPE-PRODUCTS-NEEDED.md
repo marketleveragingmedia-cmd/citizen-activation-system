@@ -64,7 +64,7 @@
 
 ## Product 7: Organization Admin - Year 1
 - **Name:** Organization Admin - Year 1
-- **Description:** Organization branding, bulk onboarding, see only their network
+- **Description:** Organization branding, see only their network, subdomain link for group invitations
 - **Type:** One-time payment
 - **Amount:** $997.00 USD
 - **Currency:** USD

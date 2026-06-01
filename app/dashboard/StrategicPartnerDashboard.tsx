@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import MoscaReferralCodeModal from './MoscaReferralCodeModal'
 
 interface Request {
   id: string
@@ -39,6 +40,14 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
   const [isDeleting, setIsDeleting] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const requestsPerPage = 20
+  const [showMoscaModal, setShowMoscaModal] = useState(false)
+
+  // Check if partner has temporary MOSCA code (starts with "TEMP-")
+  useEffect(() => {
+    if (partner.referralCode && partner.referralCode.startsWith('TEMP-')) {
+      setShowMoscaModal(true)
+    }
+  }, [partner.referralCode])
 
   const updateStatus = async (requestId: string, newStatus: string, requesterName: string) => {
     const statusLabels: any = {
@@ -439,6 +448,17 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
             </div>
           </div>
         </div>
+      )}
+
+      {/* MOSCA Referral Code Modal */}
+      {showMoscaModal && (
+        <MoscaReferralCodeModal
+          onClose={() => setShowMoscaModal(false)}
+          onSuccess={() => {
+            // Reload page to refresh with new MOSCA code
+            window.location.reload()
+          }}
+        />
       )}
     </div>
   )

@@ -19,30 +19,54 @@ export async function POST(request: NextRequest) {
     }
 
     if (session.user.type === 'partner') {
-      if (!referralCode) {
-        return NextResponse.json({ error: 'Referral code is required' }, { status: 400 })
-      }
+      // Prepare update data
+      const updateData: any = { firstName, lastName, phone }
 
-      // Check if referral code is already used by another partner
-      const existing = await prisma.strategicPartner.findFirst({
-        where: {
-          referralCode,
-          id: { not: session.user.id }
+      // Only update referralCode if provided (backend support for manual corrections)
+      if (referralCode) {
+        // Check if referral code is already used by another partner
+        const existing = await prisma.strategicPartner.findFirst({
+          where: {
+            referralCode,
+            id: { not: session.user.id }
+          }
+        })
+
+        if (existing) {
+          return NextResponse.json({ error: 'Referral code already in use' }, { status: 400 })
         }
-      })
 
-      if (existing) {
-        return NextResponse.json({ error: 'Referral code already in use' }, { status: 400 })
+        updateData.referralCode = referralCode
       }
 
       await prisma.strategicPartner.update({
         where: { id: session.user.id },
-        data: { firstName, lastName, phone, referralCode }
+        data: updateData
       })
     } else if (session.user.type === 'admin') {
+      // Prepare update data for admin
+      const updateData: any = { firstName, lastName, phone }
+
+      // Only update referralCode if provided (backend support for manual corrections)
+      if (referralCode) {
+        // Check if referral code is already used by another admin
+        const existing = await prisma.admin.findFirst({
+          where: {
+            referralCode,
+            id: { not: session.user.id }
+          }
+        })
+
+        if (existing) {
+          return NextResponse.json({ error: 'Referral code already in use' }, { status: 400 })
+        }
+
+        updateData.referralCode = referralCode
+      }
+
       await prisma.admin.update({
         where: { id: session.user.id },
-        data: { firstName, lastName }
+        data: updateData
       })
     }
 

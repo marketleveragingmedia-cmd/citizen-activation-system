@@ -185,25 +185,19 @@ export default function ProfileForm({ user, profileData }: Props) {
               />
             </div>
 
-            {isPartner && (
-              <div>
-                <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
-                  MOSCA Strategic Partner Referral Code *
-                </label>
-                <input
-                  type="text"
-                  id="referralCode"
-                  required
-                  value={formData.referralCode}
-                  onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent font-mono"
-                  placeholder="Enter your MOSCA-issued referral code"
-                />
-                <p className="text-sm text-gray-500 mt-1">
-                  This code identifies you as an activated Citizen in MOSCA
-                </p>
+            <div>
+              <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
+                MOSCA Referral Code
+              </label>
+              <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 font-mono text-lg">
+                {formData.referralCode || 'Not set'}
               </div>
-            )}
+              <p className="text-sm text-gray-500 mt-1">
+                {isPartner 
+                  ? 'This code identifies you as an activated Strategic Partner in MOSCA'
+                  : 'This code confirms you are an activated Strategic Partner in MOSCA'}
+              </p>
+            </div>
 
             <button
               type="submit"

@@ -145,7 +145,7 @@ export default function OrganizationAdminDashboard({
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <div className="text-gray-600 text-sm mb-2">Active (Assigned)</div>
-            <div className="text-3xl font-bold" style={{ color: primaryColor }}>{stats.assignedRequests}</div>
+            <div className="text-3xl font-bold" style={{ color: primaryColor }}>{stats.pending}</div>
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <div className="text-gray-600 text-sm mb-2">Wallet Activations</div>

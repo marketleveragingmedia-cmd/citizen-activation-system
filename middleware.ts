@@ -42,6 +42,7 @@ export function middleware(request: NextRequest) {
     }
     
     // Valid subdomain detected - add to headers for API routes to access
+    // Note: API routes must check admin status before processing requests
     const response = NextResponse.next()
     response.headers.set('x-subdomain', subdomain)
     response.headers.set('x-subdomain-detected', 'true')

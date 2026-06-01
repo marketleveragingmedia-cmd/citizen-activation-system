@@ -69,8 +69,22 @@ export async function POST(request: NextRequest) {
 
     if (!admin) {
       return NextResponse.json(
-        { error: 'Subdomain not found or admin inactive' },
+        { 
+          error: 'Subdomain not found',
+          message: 'This subdomain does not exist or has been deactivated'
+        },
         { status: 404 }
+      )
+    }
+
+    // Additional status check (should already be filtered by where clause, but double-check)
+    if (admin.status !== 'Active') {
+      return NextResponse.json(
+        { 
+          error: 'Account inactive',
+          message: 'This subdomain is no longer active. Please contact support if you believe this is an error.'
+        },
+        { status: 403 }
       )
     }
 

@@ -4,11 +4,11 @@ import { stripe } from '@/lib/stripe'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, firstName, lastName, phone, organizationName, moscaReferralCode } = body
+    const { email, firstName, lastName, phone, subdomain, organizationName, moscaReferralCode } = body
 
-    if (!email || !firstName || !lastName || !phone || !organizationName || !moscaReferralCode) {
+    if (!email || !firstName || !lastName || !phone || !subdomain || !organizationName || !moscaReferralCode) {
       return NextResponse.json(
-        { error: 'Email, first name, last name, phone number, organization name, and MOSCA Referral Code are required' },
+        { error: 'Email, first name, last name, phone number, subdomain, organization name, and MOSCA Referral Code are required' },
         { status: 400 }
       )
     }
@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
         firstName: firstName,
         lastName: lastName,
         phone: phone || '',
+        subdomain: subdomain,
         organizationName: organizationName,
         moscaReferralCode: moscaReferralCode,
         option: '4',

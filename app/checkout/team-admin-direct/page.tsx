@@ -11,10 +11,54 @@ export default function TeamAdminDirectCheckout() {
     lastName: '',
     email: '',
     phone: '',
+    subdomain: '',
     moscaReferralCode: '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [subdomainStatus, setSubdomainStatus] = useState<{
+    checking: boolean
+    valid: boolean | null
+    error: string | null
+    warning: string | null
+  }>({
+    checking: false,
+    valid: null,
+    error: null,
+    warning: null
+  })
+
+  const validateSubdomain = async (subdomain: string) => {
+    if (!subdomain || subdomain.length < 3) {
+      setSubdomainStatus({ checking: false, valid: null, error: null, warning: null })
+      return
+    }
+
+    setSubdomainStatus(prev => ({ ...prev, checking: true }))
+
+    try {
+      const response = await fetch('/api/subdomain/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subdomain })
+      })
+
+      const data = await response.json()
+
+      setSubdomainStatus({
+        checking: false,
+        valid: data.valid,
+        error: data.error,
+        warning: data.warning
+      })
+
+      if (data.valid && data.subdomain !== subdomain) {
+        setFormData(prev => ({ ...prev, subdomain: data.subdomain }))
+      }
+    } catch (err) {
+      setSubdomainStatus({ checking: false, valid: false, error: 'Failed to validate', warning: null })
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -145,6 +189,51 @@ export default function TeamAdminDirectCheckout() {
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             />
+          </div>
+
+          <div>
+            <label htmlFor="subdomain" className="block text-sm font-medium text-gray-700 mb-1">
+              Subdomain *
+            </label>
+            <div className="flex items-center">
+              <input
+                type="text"
+                id="subdomain"
+                required
+                minLength={3}
+                maxLength={20}
+                pattern="[a-z0-9]+(-[a-z0-9]+)*"
+                className={`w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
+                  subdomainStatus.valid === false ? 'border-red-300' :
+                  subdomainStatus.valid === true ? 'border-green-300' :
+                  'border-gray-300'
+                }`}
+                value={formData.subdomain}
+                onChange={(e) => {
+                  setFormData({ ...formData, subdomain: e.target.value })
+                  validateSubdomain(e.target.value)
+                }}
+                placeholder="janedoe"
+              />
+              <span className="px-3 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-md text-gray-600 text-sm whitespace-nowrap">
+                .citizenactivation.com
+              </span>
+            </div>
+            {subdomainStatus.checking && (
+              <p className="text-sm text-blue-600 mt-1">⏳ Checking...</p>
+            )}
+            {subdomainStatus.error && (
+              <p className="text-sm text-red-600 mt-1">❌ {subdomainStatus.error}</p>
+            )}
+            {subdomainStatus.valid && (
+              <p className="text-sm text-green-600 mt-1">✅ Available!</p>
+            )}
+            {subdomainStatus.warning && (
+              <p className="text-sm text-yellow-600 mt-1">{subdomainStatus.warning}</p>
+            )}
+            <p className="text-sm text-gray-500 mt-1">
+              3-20 characters, lowercase letters, numbers, hyphens only
+            </p>
           </div>
 
           <div>

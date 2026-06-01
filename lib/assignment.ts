@@ -28,16 +28,16 @@ export async function assignRequestToPartner(
     console.warn(`Invalid referral code: ${referralCode}`)
   }
 
-  // Scenario 2: Round Robin assignment
+  // Scenario 2: Round Robin assignment - EVEN ROTATION
+  // Rotate evenly across all available partners (not slot-count priority)
   const availablePartners = await prisma.strategicPartner.findMany({
     where: {
       teamId,
       status: PartnerStatus.Active,
-      slotsUsed: { lt: 3 } // Not full
+      slotsAvailable: { gt: 0 } // Has at least 1 slot available
     },
     orderBy: [
-      { slotsUsed: 'asc' },        // Priority 1: Fewest slots used
-      { lastAssigned: 'asc' }      // Priority 2: Longest time since last assignment
+      { lastAssigned: 'asc' }      // Assign to least recently assigned (even rotation)
     ]
   })
 

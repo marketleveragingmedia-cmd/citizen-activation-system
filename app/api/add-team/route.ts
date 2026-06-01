@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
       adminLastName, 
       adminEmail, 
       adminPhone,
+      subdomain,
       moscaReferralCode,
       tierType, // 'full-system' or 'solo-org'
       customDomain,
@@ -32,8 +33,8 @@ export async function POST(request: NextRequest) {
     } = body
 
     // Validation
-    if (!teamName || !adminFirstName || !adminLastName || !adminEmail || !adminPhone || !moscaReferralCode || !tierType) {
-      return NextResponse.json({ error: 'All fields are required (including MOSCA Referral Code)' }, { status: 400 })
+    if (!teamName || !adminFirstName || !adminLastName || !adminEmail || !adminPhone || !subdomain || !moscaReferralCode || !tierType) {
+      return NextResponse.json({ error: 'All fields are required (including subdomain and MOSCA Referral Code)' }, { status: 400 })
     }
 
     // Check if email already exists
@@ -70,6 +71,7 @@ export async function POST(request: NextRequest) {
           firstName: adminFirstName,
           lastName: adminLastName,
           email: adminEmail,
+          subdomain: subdomain,
           passwordHash: hashedPassword,
           referralCode: moscaReferralCode,
           role: 'TEAM_ADMIN',
@@ -100,6 +102,7 @@ export async function POST(request: NextRequest) {
           firstName: adminFirstName,
           lastName: adminLastName,
           email: adminEmail,
+          subdomain: subdomain,
           passwordHash: hashedPassword,
           referralCode: moscaReferralCode,
           role: 'TEAM_ADMIN',

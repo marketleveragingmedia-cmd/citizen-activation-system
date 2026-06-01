@@ -60,6 +60,7 @@ export async function POST(request: NextRequest) {
               lastName: teamAdminData.adminLastName,
               email: teamAdminData.adminEmail,
               phone: teamAdminData.adminPhone || null,
+              subdomain: teamAdminData.subdomain || null,
               passwordHash: hashedPassword,
               referralCode: teamAdminData.moscaReferralCode || null,
               role: 'TEAM_ADMIN',

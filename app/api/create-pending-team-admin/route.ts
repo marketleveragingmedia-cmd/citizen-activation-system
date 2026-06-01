@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
       adminLastName,
       adminEmail,
       adminPhone,
+      subdomain,
       moscaReferralCode,
       tierType,
       customDomain,
@@ -34,8 +35,8 @@ export async function POST(request: NextRequest) {
     } = body
 
     // Validate required fields
-    if (!teamName || !adminFirstName || !adminLastName || !adminEmail || !moscaReferralCode) {
-      return NextResponse.json({ error: 'Missing required fields (including MOSCA Referral Code)' }, { status: 400 })
+    if (!teamName || !adminFirstName || !adminLastName || !adminEmail || !subdomain || !moscaReferralCode) {
+      return NextResponse.json({ error: 'Missing required fields (including subdomain and MOSCA Referral Code)' }, { status: 400 })
     }
 
     // Get recruiter info
@@ -87,6 +88,7 @@ export async function POST(request: NextRequest) {
           adminLastName,
           adminEmail,
           adminPhone,
+          subdomain,
           moscaReferralCode,
           tierType,
           customDomain,

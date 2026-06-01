@@ -11,6 +11,7 @@ export default function MainAdminCheckout() {
     lastName: '',
     email: '',
     phone: '',
+    moscaReferralCode: '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -139,6 +140,21 @@ export default function MainAdminCheckout() {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="moscaReferralCode" className="block text-sm font-medium text-gray-700 mb-1">
+              MOSCA Referral Code
+            </label>
+            <input
+              type="text"
+              id="moscaReferralCode"
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              value={formData.moscaReferralCode}
+              onChange={(e) => setFormData({ ...formData, moscaReferralCode: e.target.value })}
+              placeholder="Enter your MOSCA Referral Code"
             />
           </div>
 

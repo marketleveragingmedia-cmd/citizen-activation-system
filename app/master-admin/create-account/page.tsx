@@ -15,7 +15,8 @@ export default function CreateAccountPage() {
     firstName: '',
     lastName: '',
     phone: '',
-    organizationName: ''
+    organizationName: '',
+    moscaReferralCode: ''
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,7 +47,8 @@ export default function CreateAccountPage() {
         firstName: '',
         lastName: '',
         phone: '',
-        organizationName: ''
+        organizationName: '',
+        moscaReferralCode: ''
       })
 
     } catch (err: any) {
@@ -221,6 +223,25 @@ export default function CreateAccountPage() {
               placeholder="+1 (555) 123-4567"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
+          </div>
+
+          {/* MOSCA Referral Code */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              MOSCA Referral Code *
+            </label>
+            <input
+              type="text"
+              name="moscaReferralCode"
+              value={formData.moscaReferralCode}
+              onChange={handleChange}
+              placeholder="Enter MOSCA Referral Code"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              Required - Confirms they are an activated Strategic Partner in MOSCA
+            </p>
           </div>
 
           {/* Organization Name (conditional) */}

@@ -309,7 +309,7 @@ export async function POST(request: NextRequest) {
       // MAIN ADMIN PURCHASE (Option 1)
       if (paymentType === 'main_admin_purchase') {
         try {
-          const { firstName, lastName, email, phone } = session.metadata
+          const { firstName, lastName, email, phone, moscaReferralCode } = session.metadata
           
           // Generate temp password
           const tempPassword = Math.random().toString(36).slice(-10) + 'A1!'
@@ -333,6 +333,7 @@ export async function POST(request: NextRequest) {
               email,
               phone: phone || null,
               passwordHash: hashedPassword,
+              referralCode: moscaReferralCode || null,
               role: 'MAIN_ADMIN',
               status: 'Active',
               teamId: team.id
@@ -399,7 +400,7 @@ export async function POST(request: NextRequest) {
       // TEAM ADMIN DIRECT PURCHASE (Option 2)
       if (paymentType === 'team_admin_direct_purchase') {
         try {
-          const { firstName, lastName, email, phone } = session.metadata
+          const { firstName, lastName, email, phone, moscaReferralCode } = session.metadata
           
           // Generate temp password
           const tempPassword = Math.random().toString(36).slice(-10) + 'A1!'
@@ -434,6 +435,7 @@ export async function POST(request: NextRequest) {
               email,
               phone: phone || null,
               passwordHash: hashedPassword,
+              referralCode: moscaReferralCode || null,
               role: 'TEAM_ADMIN',
               status: 'Active',
               teamId: masterTeam.id
@@ -494,7 +496,7 @@ export async function POST(request: NextRequest) {
       // ORG ADMIN PURCHASE (Option 4)
       if (paymentType === 'org_admin_purchase') {
         try {
-          const { firstName, lastName, email, phone, organizationName, recruiterId, recruiterWantsCommission } = session.metadata
+          const { firstName, lastName, email, phone, organizationName, moscaReferralCode, recruiterId, recruiterWantsCommission } = session.metadata
           
           // Generate temp password
           const tempPassword = Math.random().toString(36).slice(-10) + 'A1!'
@@ -518,6 +520,7 @@ export async function POST(request: NextRequest) {
               email,
               phone: phone || null,
               passwordHash: hashedPassword,
+              referralCode: moscaReferralCode || null,
               role: 'ORG_ADMIN',
               status: 'Active',
               teamId: orgTeam.id

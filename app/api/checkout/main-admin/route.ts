@@ -4,11 +4,11 @@ import { stripe } from '@/lib/stripe'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, firstName, lastName, phone } = body
+    const { email, firstName, lastName, phone, moscaReferralCode } = body
 
-    if (!email || !firstName || !lastName) {
+    if (!email || !firstName || !lastName || !moscaReferralCode) {
       return NextResponse.json(
-        { error: 'Email, first name, and last name are required' },
+        { error: 'Email, first name, last name, and MOSCA Referral Code are required' },
         { status: 400 }
       )
     }
@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
         firstName: firstName,
         lastName: lastName,
         phone: phone || '',
+        moscaReferralCode: moscaReferralCode,
         option: '1',
         setupFee: '1497',
         recurringFee: '997',

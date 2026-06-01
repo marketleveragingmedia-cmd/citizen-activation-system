@@ -26,14 +26,15 @@ export async function POST(req: Request) {
       firstName, 
       lastName, 
       phone, 
-      organizationName 
+      organizationName,
+      moscaReferralCode
     } = body
 
     // Validate required fields
-    if (!accountType || !email || !firstName || !lastName) {
+    if (!accountType || !email || !firstName || !lastName || !moscaReferralCode) {
       return NextResponse.json({ 
         success: false, 
-        error: 'Missing required fields' 
+        error: 'Missing required fields (including MOSCA Referral Code)' 
       }, { status: 400 })
     }
 
@@ -81,6 +82,7 @@ export async function POST(req: Request) {
             email,
             phone,
             passwordHash: hashedPassword,
+            referralCode: moscaReferralCode,
             status: 'Active',
             teamId: team.id
           }
@@ -104,6 +106,7 @@ export async function POST(req: Request) {
             email,
             phone,
             passwordHash: hashedPassword,
+            referralCode: moscaReferralCode,
             status: 'Active'
           }
         })
@@ -133,6 +136,7 @@ export async function POST(req: Request) {
             email,
             phone,
             passwordHash: hashedPassword,
+            referralCode: moscaReferralCode,
             status: 'Active',
             teamId: orgTeam.id
           }

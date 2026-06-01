@@ -123,7 +123,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
       const data = await response.json()
 
       if (response.ok) {
-        alert(`Payment link sent!\n\nA payment link has been sent to ${formData.adminEmail}.\n\nOnce they complete payment ($497), their Team Admin account will be activated and you'll ${formData.wantsCommission ? 'earn your $200 commission' : 'forfeit commission (goes to system owner)'}.`)
+        alert(`Payment link sent!\n\nA payment link has been sent to ${formData.adminEmail}.\n\nOnce they complete payment ($497), their Team Admin account will be activated and you'll ${formData.wantsCommission ? 'receive your $200 payment' : 'forfeit payment (goes to system owner)'}.`)
         onSuccess()
       } else {
         setError(data.error || 'Failed to create Team Admin')
@@ -158,7 +158,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-green-600 text-xl">✓</span>
-                <div className="font-semibold" style={{color: '#166534'}}>Stripe Connected - Earn Commissions</div>
+                <div className="font-semibold" style={{color: '#166534'}}>Stripe Connected - Receive Payments</div>
               </div>
               <div className="text-sm" style={{color: '#15803d'}}>
                 <p className="mb-2"><strong>Team Admins ($497/year):</strong> You'll receive $200 per signup. We handle the platform fee ($297).</p>
@@ -398,14 +398,14 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
             </div>
           </div>
 
-          {/* Commission Choice - Only for Team Admins */}
+          {/* Payment Split Choice - Only for Team Admins */}
           {!isMainAdmin && (
             <div className="border-t pt-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Commission Preference</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Payment Preference</h3>
               
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                 <p className="text-sm text-blue-900 mb-3">
-                  The NEW Team Admin will pay $497 for their access. You can choose to earn commission or forfeit it.
+                  The NEW Team Admin will pay $497 for their access. You can choose to receive payment or forfeit it.
                 </p>
                 
                 <div className="space-y-3">
@@ -420,7 +420,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                       className="mt-1"
                     />
                     <div className="flex-1">
-                      <div className="font-semibold text-gray-900">💰 I want to earn $200 commission</div>
+                      <div className="font-semibold text-gray-900">💰 I want to receive $200 payment</div>
                       <div className="text-sm text-gray-600 mt-1">
                         Requires Stripe Connect. If you don't have Stripe connected yet, you'll be prompted to connect after submitting.
                       </div>
@@ -438,9 +438,9 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                       className="mt-1"
                     />
                     <div className="flex-1">
-                      <div className="font-semibold text-gray-900">🎁 I want to forfeit my commission</div>
+                      <div className="font-semibold text-gray-900">🎁 I want to forfeit my payment</div>
                       <div className="text-sm text-gray-600 mt-1">
-                        The $200 commission will go to the system owner. You still grow your network.
+                        The $200 payment will go to the system owner. You still grow your network.
                       </div>
                     </div>
                   </label>

@@ -178,26 +178,26 @@ export async function POST(request: NextRequest) {
 
                   ${earnedCommission ? `
                     <div style="background: #D1FAE5; border: 2px solid #1E8E5A; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                      <h4 style="color: #065F46; margin-top: 0;">💰 Commission Earned!</h4>
+                      <h4 style="color: #065F46; margin-top: 0;">💰 Payment Received!</h4>
                       <p style="color: #065F46; margin-bottom: 0;">
                         <strong>$200</strong> has been transferred to your Stripe account.
                       </p>
                     </div>
                   ` : !recruiterWantsCommission ? `
                     <div style="background: #FEF3C7; border: 2px solid #F59E0B; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                      <h4 style="color: #92400E; margin-top: 0;">Commission Forfeited</h4>
+                      <h4 style="color: #92400E; margin-top: 0;">Payment Forfeited</h4>
                       <p style="color: #92400E; margin-bottom: 0;">
-                        You chose to forfeit commission. The $297 was allocated to the system owner.
+                        You chose to forfeit payment. The $297 was allocated to the system owner.
                       </p>
                     </div>
                   ` : `
                     <div style="background: #FEF3C7; border: 2px solid #F59E0B; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                      <h4 style="color: #92400E; margin-top: 0;">⚠️ Commission Not Received</h4>
+                      <h4 style="color: #92400E; margin-top: 0;">⚠️ Payment Not Received</h4>
                       <p style="color: #92400E; margin-bottom: 10px;">
-                        You selected to earn commission but didn't have Stripe connected at the time of payment.
+                        You selected to receive payment but didn't have Stripe connected at the time of payment.
                       </p>
                       <p style="color: #92400E; margin-bottom: 0;">
-                        The $297 was allocated to the system owner. <a href="${process.env.NEXTAUTH_URL}/dashboard" style="color: #1E8E5A; font-weight: bold;">Connect Stripe now</a> to earn commission on future Team Admin additions.
+                        The $297 was allocated to the system owner. <a href="${process.env.NEXTAUTH_URL}/dashboard" style="color: #1E8E5A; font-weight: bold;">Connect Stripe now</a> to receive payment when you add Team Admins.
                       </p>
                     </div>
                   `}
@@ -374,7 +374,7 @@ export async function POST(request: NextRequest) {
                 <ul>
                   <li>Add Team Admins & Organization Admins</li>
                   <li>See your entire network including all requests & Strategic Partners</li>
-                  <li>Earn commissions when your Team Admins recruit</li>
+                  <li>Receive payments when you add Team Admins</li>
                 </ul>
 
                 <p style="margin: 30px 0;">
@@ -582,7 +582,7 @@ export async function POST(request: NextRequest) {
                         <p><strong>Your Commission:</strong> <strong>${amountDisplay}</strong></p>
                       </div>
                       <p><strong>${amountDisplay}</strong> has been transferred to your Stripe account.</p>
-                      <p>Keep growing your network to earn more commissions!</p>
+                      <p>Keep growing your network to receive more payments!</p>
                     </div>
                   `
                 })

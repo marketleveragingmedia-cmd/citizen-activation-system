@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
             <li>${adminFirstName} receives email with payment link</li>
             <li>${adminFirstName} completes payment ($497)</li>
             <li>Team Admin account created automatically</li>
-            <li>${wantsCommission ? 'You receive $297 commission (transferred to your Stripe account)' : 'Commission forfeited - goes to system owner'}</li>
+            <li>${wantsCommission ? 'You receive $200 payment (transferred to your Stripe account)' : 'Payment forfeited - goes to system owner'}</li>
             <li>${adminFirstName} receives login credentials</li>
           </ol>
 
@@ -165,12 +165,12 @@ export async function POST(request: NextRequest) {
             <div style="background: #FEF3C7; border: 2px solid #F59E0B; padding: 15px; border-radius: 5px; margin: 20px 0;">
               <h4 style="color: #92400E; margin-top: 0;">⚠️ Action Required: Connect Stripe</h4>
               <p style="color: #92400E; margin-bottom: 10px;">
-                You selected to earn commission but haven't connected Stripe yet.
+                You selected to receive payment but haven't connected Stripe yet.
               </p>
               <p style="color: #92400E; margin-bottom: 0;">
                 <a href="${process.env.NEXTAUTH_URL}/dashboard" style="color: #1E8E5A; font-weight: bold;">
                   Connect Stripe Now
-                </a> to receive your $297 commission when payment is completed.
+                </a> to receive your $200 payment when payment is completed.
               </p>
             </div>
           ` : ''}

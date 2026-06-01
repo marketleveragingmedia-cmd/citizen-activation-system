@@ -449,42 +449,35 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
             </div>
           )}
 
-          {/* Branding (Optional) */}
-          <div className="border-t pt-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Branding (Optional)</h3>
-            
-            <div className="grid grid-cols-1 gap-4">
-              <div>
-                <label htmlFor="customDomain" className="block text-sm font-medium text-gray-700 mb-2">
-                  Subdomain (Optional)
-                </label>
-                <input
-                  type="text"
-                  id="customDomain"
-                  value={formData.customDomain}
-                  onChange={(e) => setFormData({ ...formData, customDomain: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent"
-                  placeholder="acmechurch.hub.citizenactivation.com"
-                />
-                <p className="text-xs text-gray-500 mt-1">Choose a short subdomain (e.g., acmechurch, johns-network)</p>
+          {/* Branding - Organization Admin Only */}
+          {formData.tierType === 'solo-org' && (
+            <div className="border-t pt-6">
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                <h3 className="font-semibold text-purple-900 mb-2">🎨 Organization Admin Branding</h3>
+                <p className="text-sm text-purple-800">
+                  Organization Admins get full white-label branding for their subdomain. Upload a logo to customize their login page and dashboard.
+                </p>
               </div>
-
-              <div>
-                <label htmlFor="logoUrl" className="block text-sm font-medium text-gray-700 mb-2">
-                  Logo URL (Optional)
-                </label>
-                <input
-                  type="url"
-                  id="logoUrl"
-                  value={formData.logoUrl}
-                  onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent"
-                  placeholder="https://example.com/logo.png"
-                />
-                <p className="text-xs text-gray-500 mt-1">Will be displayed on their login page</p>
+              
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <label htmlFor="logoUrl" className="block text-sm font-medium text-gray-700 mb-2">
+                    Logo URL *
+                  </label>
+                  <input
+                    type="url"
+                    id="logoUrl"
+                    value={formData.logoUrl}
+                    onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent"
+                    placeholder="https://example.com/logo.png"
+                    required={formData.tierType === 'solo-org'}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Will be displayed on their subdomain login page and dashboard</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
             <h3 className="font-semibold text-blue-900 mb-2">What Happens Next:</h3>

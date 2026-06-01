@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
               email: teamAdminData.adminEmail,
               phone: teamAdminData.adminPhone || null,
               passwordHash: hashedPassword,
+              referralCode: teamAdminData.moscaReferralCode || null,
               role: 'TEAM_ADMIN',
               status: 'Active'
             }

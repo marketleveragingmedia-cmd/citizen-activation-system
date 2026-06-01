@@ -154,15 +154,15 @@ export async function POST(request: NextRequest) {
     const partnerName = `${assignedPartner.firstName} ${assignedPartner.lastName}`
 
     // Email to requester
-    const requesterEmail = getRequesterConfirmationEmail(
+    const requesterEmailTemplate = getRequesterConfirmationEmail(
       requesterName,
       activationLevel,
       branding
     )
     await sendEmail({
-      to: requesterEmail,
-      subject: requesterEmail.subject,
-      html: requesterEmail.html,
+      to: requesterEmail, // Use the actual email address from request body
+      subject: requesterEmailTemplate.subject,
+      html: requesterEmailTemplate.html,
       from: admin.team.emailFromName 
         ? `${admin.team.emailFromName} <notifications@m.citizenactivation.com>`
         : undefined
@@ -170,10 +170,10 @@ export async function POST(request: NextRequest) {
 
     // Email to Strategic Partner
     const dashboardUrl = process.env.NEXTAUTH_URL + '/dashboard'
-    const partnerEmail = getStrategicPartnerAssignmentEmail(
+    const partnerEmailTemplate = getStrategicPartnerAssignmentEmail(
       partnerName,
       requesterName,
-      requesterEmail,
+      requesterEmail, // Use the actual email address from request body
       requesterPhone,
       activationLevel,
       referralCodeUsed,
@@ -182,8 +182,8 @@ export async function POST(request: NextRequest) {
     )
     await sendEmail({
       to: assignedPartner.email,
-      subject: partnerEmail.subject,
-      html: partnerEmail.html,
+      subject: partnerEmailTemplate.subject,
+      html: partnerEmailTemplate.html,
       from: admin.team.emailFromName 
         ? `${admin.team.emailFromName} <notifications@m.citizenactivation.com>`
         : undefined

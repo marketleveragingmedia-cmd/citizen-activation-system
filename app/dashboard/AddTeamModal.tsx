@@ -367,7 +367,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
             <div className="grid grid-cols-1 gap-4">
               <div>
                 <label htmlFor="customDomain" className="block text-sm font-medium text-gray-700 mb-2">
-                  Custom Domain (Optional)
+                  Subdomain (Optional)
                 </label>
                 <input
                   type="text"
@@ -375,8 +375,9 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                   value={formData.customDomain}
                   onChange={(e) => setFormData({ ...formData, customDomain: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent"
-                  placeholder="team.citizenactivation.com or custom.com"
+                  placeholder="acmechurch.hub.citizenactivation.com"
                 />
+                <p className="text-xs text-gray-500 mt-1">Choose a short subdomain (e.g., acmechurch, johns-network)</p>
               </div>
 
               <div>

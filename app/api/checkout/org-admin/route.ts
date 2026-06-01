@@ -6,9 +6,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { email, firstName, lastName, phone, organizationName, moscaReferralCode } = body
 
-    if (!email || !firstName || !lastName || !organizationName || !moscaReferralCode) {
+    if (!email || !firstName || !lastName || !phone || !organizationName || !moscaReferralCode) {
       return NextResponse.json(
-        { error: 'Email, first name, last name, organization name, and MOSCA Referral Code are required' },
+        { error: 'Email, first name, last name, phone number, organization name, and MOSCA Referral Code are required' },
         { status: 400 }
       )
     }

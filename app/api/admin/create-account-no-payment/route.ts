@@ -31,10 +31,10 @@ export async function POST(req: Request) {
     } = body
 
     // Validate required fields
-    if (!accountType || !email || !firstName || !lastName || !moscaReferralCode) {
+    if (!accountType || !email || !firstName || !lastName || !phone || !moscaReferralCode) {
       return NextResponse.json({ 
         success: false, 
-        error: 'Missing required fields (including MOSCA Referral Code)' 
+        error: 'Missing required fields (email, name, phone, MOSCA Referral Code)' 
       }, { status: 400 })
     }
 

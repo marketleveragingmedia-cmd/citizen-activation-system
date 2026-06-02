@@ -61,7 +61,8 @@ export async function POST(request: NextRequest) {
           name: teamName,
           adminId: 'pending',
           tierType: tierType === 'full-system' ? 'FullSystem' : 'SoloOrg',
-          status: 'Active'
+          status: 'Active',
+          createdByAdminId: session.user.id // Track who created this team
         }
       })
 

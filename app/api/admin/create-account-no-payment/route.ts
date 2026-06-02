@@ -96,7 +96,8 @@ export async function POST(req: Request) {
             adminId: 'temp',
             tierType: 'FullSystem',
             autoAssignEnabled: true,
-            status: 'Active'
+            status: 'Active',
+            createdByAdminId: session.user.id // Track Master Admin creator
           }
         })
 
@@ -152,7 +153,8 @@ export async function POST(req: Request) {
             adminId: 'temp',
             tierType: 'SoloOrg',
             autoAssignEnabled: true,
-            status: 'Active'
+            status: 'Active',
+            createdByAdminId: session.user.id // Track Master Admin creator
           }
         })
 

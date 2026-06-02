@@ -21,10 +21,12 @@ model Admin {
   referralCode String?     @unique // MOSCA-issued referral code (identifies them as activated MOSCA Citizen with activated wallet)
   subdomain    String?     @unique // Unique subdomain for routing (e.g., "john" -> john.citizenactivation.com)
   teamId       String?
-  team         Team?       @relation(fields: [teamId], references: [id])
+  team         Team?       @relation("AdminTeam", fields: [teamId], references: [id])
   createdDate  DateTime    @default(now())
   lastLogin    DateTime?
   status       AdminStatus @default(Active)
+
+  teamsCreated Team[]      @relation("TeamsCreated") // Teams this Main Admin created
 
   @@map("admins")
 }
@@ -41,6 +43,10 @@ model Team {
   createdDate       DateTime   @default(now())
   status            TeamStatus @default(Active)
 
+  // Hierarchy Tracking
+  createdByAdminId  String?    // Main Admin or Master Admin who created this team
+  createdBy         Admin?     @relation("TeamsCreated", fields: [createdByAdminId], references: [id])
+
   // Organization Admin Branding Fields (SoloOrg tier only)
   organizationName      String?    // Display name (e.g., "Grace Church")
   welcomeMessage        String?    @db.Text // Custom message on subdomain pages (max 500 chars)
@@ -49,7 +55,7 @@ model Team {
   emailFromName         String?    // Email sender name: "Grace Church Team"
   hidePlatformBranding  Boolean    @default(false) // Hide "Powered by" footer
 
-  admins            Admin[]
+  admins            Admin[]    @relation("AdminTeam")
   strategicPartners StrategicPartner[]
   requests          Request[]
 

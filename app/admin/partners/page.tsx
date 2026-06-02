@@ -26,7 +26,7 @@ export default async function PartnersPage() {
     redirect('/dashboard')
   }
 
-  // Master Admin sees ALL partners, Main Admin sees only their own network
+  // Master Admin sees ALL partners, Main Admin sees only THEIR team's partners
   const whereClause = session.user.role === 'MASTER_ADMIN'
     ? {}
     : { teamId: currentAdmin.teamId }

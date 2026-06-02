@@ -11,16 +11,35 @@ export default async function TeamAdminsPage() {
     redirect('/login')
   }
 
-  // Only Main Admin or Master Admin can see all Team Admins
+  // Only Main Admin or Master Admin can see Team Admins
   if (session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'MASTER_ADMIN') {
     redirect('/dashboard')
   }
 
+  // Get current admin's teamId
+  const currentAdmin = await prisma.admin.findUnique({
+    where: { id: session.user.id },
+    select: { teamId: true, role: true }
+  })
+
+  if (!currentAdmin) {
+    redirect('/dashboard')
+  }
+
+  // Master Admin sees ALL teams, Main Admin sees only their own network
+  const whereClause = session.user.role === 'MASTER_ADMIN'
+    ? {
+        tierType: 'FullSystem', // Team Admins (not Org Admins)
+        status: 'Active'
+      }
+    : {
+        tierType: 'FullSystem',
+        status: 'Active',
+        parentTeamId: currentAdmin.teamId // Only this Main Admin's Team Admins
+      }
+
   const teams = await prisma.team.findMany({
-    where: {
-      tierType: 'FullSystem', // Team Admins (not Org Admins)
-      status: 'Active'
-    },
+    where: whereClause,
     orderBy: { createdDate: 'desc' },
     include: {
       admins: {

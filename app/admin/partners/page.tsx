@@ -16,7 +16,23 @@ export default async function PartnersPage() {
     redirect('/dashboard')
   }
 
+  // Get current admin's teamId
+  const currentAdmin = await prisma.admin.findUnique({
+    where: { id: session.user.id },
+    select: { teamId: true, role: true }
+  })
+
+  if (!currentAdmin) {
+    redirect('/dashboard')
+  }
+
+  // Master Admin sees ALL partners, Main Admin sees only their own network
+  const whereClause = session.user.role === 'MASTER_ADMIN'
+    ? {}
+    : { teamId: currentAdmin.teamId }
+
   const partners = await prisma.strategicPartner.findMany({
+    where: whereClause,
     orderBy: { createdDate: 'desc' },
     include: {
       _count: {

@@ -209,6 +209,15 @@ export default function CreateAccountPage() {
               </ul>
             </div>
 
+            {success.account.subdomain && (
+              <div className="bg-blue-50 p-3 rounded border border-blue-300 text-sm mt-3">
+                <p className="font-semibold text-blue-800 mb-1">🔐 SSL Certificate Provisioning:</p>
+                <p className="text-blue-700">
+                  The subdomain URL may take <strong>2-5 minutes</strong> to become accessible while SSL certificates are provisioned. If you see an SSL error, please wait a few minutes and refresh.
+                </p>
+              </div>
+            )}
+
             <a
               href={success.credentials.loginUrl}
               target="_blank"

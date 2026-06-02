@@ -86,7 +86,7 @@ export default async function RequestPage() {
             <h3 className="font-semibold text-blue-900 mb-2">What happens next?</h3>
             <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
               <li>Submit your information below</li>
-              <li>You'll be assigned to a Strategic Partner via our Round Robin system</li>
+              <li>You'll be assigned to a Strategic Partner</li>
               <li>Your Strategic Partner will contact you to begin the invitation process</li>
               <li>Once approved, you'll receive your MOSCA wallet invitation</li>
             </ol>

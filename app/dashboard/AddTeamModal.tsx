@@ -484,7 +484,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
             <ul className="text-sm text-blue-800 space-y-1">
               <li>✓ {formData.tierType === 'full-system' ? 'Team Admin' : 'Organization Admin'} account created with auto-generated password</li>
               <li>✓ Welcome email sent with login instructions</li>
-              <li>✓ They can login immediately and add Strategic Partners</li>
+              <li>✓ Login credentials sent via email</li>
               <li>✓ Invitation requests automatically assigned to their network</li>
             </ul>
           </div>

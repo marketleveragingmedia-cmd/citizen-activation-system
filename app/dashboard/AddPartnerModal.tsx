@@ -34,7 +34,7 @@ export default function AddPartnerModal({ onClose, onSuccess }: AddPartnerModalP
       const data = await response.json()
 
       if (response.ok) {
-        alert(`Strategic Partner added successfully!\n\nWelcome email sent to: ${formData.email}\n\nThey can now login at hub.citizenactivation.com/login`)
+        alert(`Strategic Partner added successfully!\n\nWelcome email sent to: ${formData.email}\n\nLogin credentials sent via email.`)
         onSuccess()
       } else {
         setError(data.error || 'Failed to add Strategic Partner')
@@ -202,7 +202,7 @@ export default function AddPartnerModal({ onClose, onSuccess }: AddPartnerModalP
               <li>✓ Strategic Partner account created with 3 available slots</li>
               <li>✓ Temporary password auto-generated</li>
               <li>✓ Welcome email sent with login instructions</li>
-              <li>✓ They can login immediately at hub.citizenactivation.com/login</li>
+              <li>✓ Login credentials sent via email</li>
               <li>✓ They'll be prompted to change password on first login</li>
             </ul>
           </div>

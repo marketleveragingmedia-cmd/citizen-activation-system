@@ -216,7 +216,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                   <ul className="text-sm text-gray-600 mt-2 space-y-1">
                     <li>✓ Oversee their Team</li>
                     <li>✓ Add Strategic Partners</li>
-                    <li>✓ Receive Invite Request via Round Robin</li>
+                    <li>✓ Receive Invite Requests</li>
                   </ul>
                 </div>
               </label>
@@ -241,7 +241,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                     <ul className="text-sm text-gray-600 mt-2 space-y-1">
                       <li>✓ Oversee their Organization</li>
                       <li>✓ Add Strategic Partners</li>
-                      <li>✓ Receive Invite Request via Round Robin</li>
+                      <li>✓ Receive Invite Requests</li>
                     </ul>
                   </div>
                 </label>
@@ -455,7 +455,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
                 <h3 className="font-semibold text-purple-900 mb-2">🎨 Organization Admin Branding</h3>
                 <p className="text-sm text-purple-800">
-                  Organization Admins get full white-label branding for their subdomain. Upload a logo to customize their login page and dashboard.
+                  Organization Admins get full branding customization for their subdomain. Upload a logo to customize their login page and dashboard.
                 </p>
               </div>
               
@@ -485,7 +485,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
               <li>✓ {formData.tierType === 'full-system' ? 'Team Admin' : 'Organization Admin'} account created with auto-generated password</li>
               <li>✓ Welcome email sent with login instructions</li>
               <li>✓ They can login immediately and add Strategic Partners</li>
-              <li>✓ Invitation requests automatically assigned via Round Robin</li>
+              <li>✓ Invitation requests automatically assigned to their network</li>
             </ul>
           </div>
 

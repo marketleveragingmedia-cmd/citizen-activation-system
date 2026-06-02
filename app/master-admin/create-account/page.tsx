@@ -164,6 +164,26 @@ export default function CreateAccountPage() {
             <p className="text-green-800 font-bold text-lg mb-4">
               ✅ Account Created Successfully!
             </p>
+
+            {/* SSL PROVISIONING WARNING - PROMINENT */}
+            {success.account.subdomain && (
+              <div className="bg-orange-100 border-4 border-orange-500 p-5 rounded-lg mb-4 shadow-lg">
+                <div className="flex items-start gap-3">
+                  <div className="text-4xl">⏱️</div>
+                  <div className="flex-1">
+                    <p className="font-bold text-orange-900 text-xl mb-2">
+                      🔐 WAIT 2-5 MINUTES BEFORE ACCESSING SUBDOMAIN
+                    </p>
+                    <p className="text-orange-800 font-semibold text-base leading-relaxed">
+                      The subdomain URL <span className="font-mono bg-white px-2 py-1 rounded">{success.account.subdomain}.citizenactivation.com</span> needs time to provision SSL certificates.
+                    </p>
+                    <p className="text-orange-800 font-semibold text-base mt-2 leading-relaxed">
+                      ⚠️ If you see an SSL error or "connection not secure" warning, <strong>WAIT 3-5 MINUTES</strong> and refresh the page. This is normal for new subdomains.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
             
             <div className="bg-white p-4 rounded border border-green-300 mb-4">
               <p className="font-semibold text-gray-900 mb-2">Account Details:</p>
@@ -201,22 +221,13 @@ export default function CreateAccountPage() {
             </div>
 
             <div className="bg-yellow-50 p-3 rounded border border-yellow-300 text-sm">
-              <p className="font-semibold text-yellow-800 mb-1">⚠️ Important:</p>
+              <p className="font-semibold text-yellow-800 mb-1">⚠️ Security Reminders:</p>
               <ul className="text-yellow-700 space-y-1 ml-4 list-disc">
                 <li>User must change password on first login</li>
                 <li>Send these credentials securely to the user</li>
                 <li>Credentials will not be shown again</li>
               </ul>
             </div>
-
-            {success.account.subdomain && (
-              <div className="bg-blue-50 p-3 rounded border border-blue-300 text-sm mt-3">
-                <p className="font-semibold text-blue-800 mb-1">🔐 SSL Certificate Provisioning:</p>
-                <p className="text-blue-700">
-                  The subdomain URL may take <strong>2-5 minutes</strong> to become accessible while SSL certificates are provisioned. If you see an SSL error, please wait a few minutes and refresh.
-                </p>
-              </div>
-            )}
 
             <a
               href={success.credentials.loginUrl}

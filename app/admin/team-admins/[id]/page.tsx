@@ -104,7 +104,7 @@ export default function TeamAdminDetailPage() {
                     <span className="font-medium">Role:</span> Team Admin
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-medium">MOSCA Referral Code:</span>{' '}
+                    <span className="font-medium">Referral Code:</span>{' '}
                     <span className="font-mono bg-gray-100 px-2 py-1 rounded">
                       {teamAdmin.referralCode || 'Not set'}
                     </span>

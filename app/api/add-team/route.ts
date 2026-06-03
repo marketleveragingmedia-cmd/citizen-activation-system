@@ -26,15 +26,15 @@ export async function POST(request: NextRequest) {
       adminEmail, 
       adminPhone,
       subdomain,
-      moscaReferralCode,
+      referralCode,
       tierType, // 'full-system' or 'solo-org'
       customDomain,
       logoUrl
     } = body
 
     // Validation
-    if (!teamName || !adminFirstName || !adminLastName || !adminEmail || !adminPhone || !subdomain || !moscaReferralCode || !tierType) {
-      return NextResponse.json({ error: 'All fields are required (including subdomain and MOSCA Referral Code)' }, { status: 400 })
+    if (!teamName || !adminFirstName || !adminLastName || !adminEmail || !adminPhone || !subdomain || !referralCode || !tierType) {
+      return NextResponse.json({ error: 'All fields are required (including subdomain and Referral Code)' }, { status: 400 })
     }
 
     // Check if email already exists
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
           email: adminEmail,
           subdomain: subdomain,
           passwordHash: hashedPassword,
-          referralCode: moscaReferralCode,
+          referralCode: referralCode,
           role: 'TEAM_ADMIN',
           status: 'Active'
         }
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
           email: adminEmail,
           subdomain: subdomain,
           passwordHash: hashedPassword,
-          referralCode: moscaReferralCode,
+          referralCode: referralCode,
           role: 'TEAM_ADMIN',
           status: 'Active'
         }
@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
             <h3>Your Capabilities:</h3>
             <ul>
               <li>Add Strategic Partners to help manage requests</li>
-              <li>Manage your community's MOSCA invitation requests</li>
+              <li>Manage your community's Private Invitation requests</li>
               <li>View your organization's data</li>
               <li>Receive escalation alerts</li>
             </ul>

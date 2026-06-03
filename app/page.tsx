@@ -48,7 +48,7 @@ export default function RequestForm() {
         <div className="max-w-2xl w-full text-center">
           <div className="bg-[#1E8E5A] text-white p-8 rounded-lg mb-6">
             <h1 className="text-4xl font-bold mb-4">✓ Request Received!</h1>
-            <p className="text-xl">Thank you for your MOSCA invitation request.</p>
+            <p className="text-xl">Thank you for your Private Invitation request.</p>
           </div>
           <div className="bg-gray-50 p-8 rounded-lg text-left">
             <h2 className="text-2xl font-bold mb-4">What Happens Next:</h2>
@@ -59,11 +59,11 @@ export default function RequestForm() {
               </li>
               <li className="flex items-start">
                 <span className="font-bold mr-2">2.</span>
-                <span>You'll receive your official MOSCA Invitation</span>
+                <span>You'll receive your official Private Invitation</span>
               </li>
               <li className="flex items-start">
                 <span className="font-bold mr-2">3.</span>
-                <span>Join the MOSCA Community as an Activated Member</span>
+                <span>Join the Platform Community as an Activated Member</span>
               </li>
             </ol>
             <p className="mt-6 text-gray-600">Check your email for confirmation details.</p>

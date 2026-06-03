@@ -103,12 +103,12 @@ export async function POST(request: NextRequest) {
     // Send email to new partner
     await sendEmail({
       to: newPartner.email,
-      subject: 'New MOSCA Invitation Request Assigned (Reassigned)',
+      subject: 'New Private Invitation Request Assigned (Reassigned)',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #1E8E5A;">New Request Assigned to You</h2>
           
-          <p>A MOSCA invitation request has been reassigned to you.</p>
+          <p>A Private Invitation request has been reassigned to you.</p>
 
           <h3>Requester Details:</h3>
           <ul>

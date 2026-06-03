@@ -204,7 +204,7 @@ export default function BrandingSettingsModal({ team, onClose, onSuccess }: Bran
                   value={formData.welcomeMessage}
                   onChange={(e) => setFormData({ ...formData, welcomeMessage: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="Welcome to our MOSCA wallet invitation system. Join our community today!"
+                  placeholder="Welcome to our Private Invitation system. Join our community today!"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   {formData.welcomeMessage.length}/500 characters

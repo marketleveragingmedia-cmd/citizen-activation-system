@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
           email: req.requesterEmail,
           passwordHash: hashedPassword,
           phone: req.requesterPhone,
-          referralCode: 'TEMP-' + Date.now(), // Temporary - they'll enter their MOSCA code on first login
+          referralCode: 'TEMP-' + Date.now(), // Temporary - they'll enter their referral code on first login
           slotsUsed: 0,
           slotsAvailable: 3,
           status: 'Active',

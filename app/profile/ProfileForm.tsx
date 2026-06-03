@@ -190,7 +190,7 @@ export default function ProfileForm({ user, profileData }: Props) {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700">
-                  MOSCA Referral Code
+                  Referral Code
                 </label>
                 {!isEditingReferralCode && (
                   <button

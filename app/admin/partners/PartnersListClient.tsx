@@ -232,7 +232,7 @@ export default function PartnersListClient({ partners, userName }: any) {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <div className="text-sm text-gray-600">MOSCA Referral Code</div>
+                  <div className="text-sm text-gray-600">Referral Code</div>
                   <div className="font-mono bg-gray-100 px-3 py-1 rounded inline-block">
                     {selectedPartner.referralCode}
                   </div>

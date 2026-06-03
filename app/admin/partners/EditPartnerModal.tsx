@@ -134,7 +134,7 @@ export default function EditPartnerModal({ partner, onClose, onSuccess }: EditPa
 
           <div>
             <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
-              MOSCA Strategic Partner Referral Code *
+              Referral Code *
             </label>
             <input
               type="text"

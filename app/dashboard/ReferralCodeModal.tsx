@@ -2,21 +2,21 @@
 
 import { useState } from 'react'
 
-interface MoscaReferralCodeModalProps {
+interface ReferralCodeModalProps {
   onClose: () => void
   onSuccess: () => void
 }
 
-export default function MoscaReferralCodeModal({ onClose, onSuccess }: MoscaReferralCodeModalProps) {
-  const [moscaReferralCode, setMoscaReferralCode] = useState('')
+export default function ReferralCodeModal({ onClose, onSuccess }: ReferralCodeModalProps) {
+  const [referralCode, setReferralCode] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!moscaReferralCode.trim()) {
-      setError('MOSCA Referral Code is required')
+    if (!referralCode.trim()) {
+      setError('Referral Code is required')
       return
     }
 
@@ -24,10 +24,10 @@ export default function MoscaReferralCodeModal({ onClose, onSuccess }: MoscaRefe
     setError('')
 
     try {
-      const response = await fetch('/api/update-mosca-code', {
+      const response = await fetch('/api/update-referral-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ moscaReferralCode: moscaReferralCode.trim() })
+        body: JSON.stringify({ referralCode: referralCode.trim() })
       })
 
       const data = await response.json()
@@ -35,7 +35,7 @@ export default function MoscaReferralCodeModal({ onClose, onSuccess }: MoscaRefe
       if (response.ok) {
         onSuccess()
       } else {
-        setError(data.error || 'Failed to update MOSCA Referral Code')
+        setError(data.error || 'Failed to update Referral Code')
       }
     } catch (err) {
       setError('Network error. Please try again.')
@@ -57,9 +57,9 @@ export default function MoscaReferralCodeModal({ onClose, onSuccess }: MoscaRefe
         </div>
 
         <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h3 className="font-semibold text-blue-900 mb-2">📋 Required: Add Your MOSCA Referral Code</h3>
+          <h3 className="font-semibold text-blue-900 mb-2">📋 Required: Add Your Referral Code</h3>
           <p className="text-sm text-blue-800">
-            Please enter your MOSCA Referral Code to complete your profile setup.
+            Please enter your Referral Code to complete your profile setup.
           </p>
         </div>
 
@@ -72,21 +72,21 @@ export default function MoscaReferralCodeModal({ onClose, onSuccess }: MoscaRefe
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="moscaReferralCode" className="block text-sm font-semibold text-gray-700 mb-2">
-              MOSCA Referral Code *
+            <label htmlFor="referralCode" className="block text-sm font-semibold text-gray-700 mb-2">
+              Referral Code *
             </label>
             <input
               type="text"
-              id="moscaReferralCode"
+              id="referralCode"
               required
-              value={moscaReferralCode}
-              onChange={(e) => setMoscaReferralCode(e.target.value)}
+              value={referralCode}
+              onChange={(e) => setReferralCode(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-lg font-mono"
-              placeholder="Enter your MOSCA Referral Code"
+              placeholder="Enter your Referral Code"
               autoFocus
             />
             <p className="text-sm text-gray-500 mt-2">
-              This code confirms you are an activated Strategic Partner in MOSCA.
+              This code confirms you are an completed wallet activation.
             </p>
           </div>
 

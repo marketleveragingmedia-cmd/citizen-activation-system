@@ -52,7 +52,7 @@ export default function AddPartnerModal({ onClose, onSuccess }: AddPartnerModalP
         <div className="flex justify-between items-start mb-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Add Strategic Partner</h2>
-            <p className="text-sm text-gray-600 mt-1">Add a MOSCA-activated member to the Hub</p>
+            <p className="text-sm text-gray-600 mt-1">Add an activated Strategic Partner to the Hub</p>
           </div>
           <button
             onClick={onClose}
@@ -133,7 +133,7 @@ export default function AddPartnerModal({ onClose, onSuccess }: AddPartnerModalP
 
           <div>
             <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
-              MOSCA Strategic Partner Referral Code *
+              Referral Code *
             </label>
             <input
               type="text"
@@ -142,10 +142,10 @@ export default function AddPartnerModal({ onClose, onSuccess }: AddPartnerModalP
               value={formData.referralCode}
               onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent font-mono"
-              placeholder="MOSCA-ABC-123"
+              placeholder="REF-ABC-123"
             />
             <p className="text-sm text-gray-500 mt-1">
-              The code issued by MOSCA when they activated (identifies them as an Activated Citizen)
+              The referral code issued when they completed wallet activation
             </p>
           </div>
 

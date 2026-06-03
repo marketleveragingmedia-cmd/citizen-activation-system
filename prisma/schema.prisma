@@ -18,7 +18,7 @@ model Admin {
   email        String      @unique
   phone        String?
   passwordHash String
-  referralCode String?     @unique // MOSCA-issued referral code (identifies them as activated MOSCA Citizen with activated wallet)
+  referralCode String?     @unique // Strategic Partner referral code (identifies them as activated with wallet activation complete)
   subdomain    String?     @unique // Unique subdomain for routing (e.g., "john" -> john.citizenactivation.com)
   teamId       String?
   team         Team?       @relation("AdminTeam", fields: [teamId], references: [id])
@@ -71,7 +71,7 @@ model StrategicPartner {
   email             String          @unique
   passwordHash      String
   phone             String?
-  referralCode      String          @unique // MOSCA-issued referral code (identifies them as activated Citizen)
+  referralCode      String          @unique // Strategic Partner referral code (identifies them as activated)
   slotsUsed         Int             @default(0)
   slotsAvailable    Int             @default(3)
   customSlotLimit   Int? // Optional: Override default 3-slot limit (Main Admin can increase)
@@ -99,7 +99,7 @@ model Request {
   requesterLastName       String
   requesterEmail          String
   requesterPhone          String
-  referralCodeUsed        String? // MOSCA referral code used (if any)
+  referralCodeUsed        String? // Referral code used (if any)
   activationLevel         ActivationLevel
   assignedPartnerId       String?
   assignedPartner         StrategicPartner? @relation("AssignedPartner", fields: [assignedPartnerId], references: [id])

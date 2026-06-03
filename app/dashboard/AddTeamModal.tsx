@@ -18,7 +18,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
     adminEmail: '',
     adminPhone: '',
     subdomain: '',
-    moscaReferralCode: '',
+    referralCode: '',
     tierType: 'full-system',
     customDomain: '',
     logoUrl: '',
@@ -381,19 +381,19 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
               </div>
 
               <div>
-                <label htmlFor="moscaReferralCode" className="block text-sm font-medium text-gray-700 mb-2">
-                  MOSCA Referral Code *
+                <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
+                  Referral Code *
                 </label>
                 <input
                   type="text"
-                  id="moscaReferralCode"
+                  id="referralCode"
                   required
-                  value={formData.moscaReferralCode}
-                  onChange={(e) => setFormData({ ...formData, moscaReferralCode: e.target.value })}
+                  value={formData.referralCode}
+                  onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent"
-                  placeholder="Enter their MOSCA Referral Code"
+                  placeholder="Enter their Referral Code"
                 />
-                <p className="text-xs text-gray-500 mt-1">Confirms they are an activated Strategic Partner in MOSCA</p>
+                <p className="text-xs text-gray-500 mt-1">Confirms they have completed wallet activation</p>
               </div>
             </div>
           </div>

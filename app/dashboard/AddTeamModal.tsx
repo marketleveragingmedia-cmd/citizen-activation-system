@@ -160,17 +160,31 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                 <span className="text-green-600 text-xl">✓</span>
                 <div className="font-semibold" style={{color: '#166534'}}>Stripe Connected - Receive Payments</div>
               </div>
-              <div className="text-sm" style={{color: '#15803d'}}>
-                <p className="mb-2"><strong>Team Admins ($497/year):</strong> You'll receive $200 per signup. We handle the platform fee ($297).</p>
-                <p><strong>Organization Admins ($997 Year 1, then $497/year):</strong> You'll receive $297 Year 1, then $200/year after. We handle the platform fee ($700 Year 1, then $297/year).</p>
+              <div className="text-sm space-y-2" style={{color: '#15803d'}}>
+                <p>
+                  When you add <strong>Team Admins</strong> ($497/year each), you'll automatically receive <strong>$200</strong> and we'll handle the platform fee ($297).
+                </p>
+                <p>
+                  When you add <strong>Organization Admins</strong> ($997 Year 1), you'll automatically receive <strong>$297</strong> and we'll handle the platform fee ($700).
+                </p>
+                <p>
+                  You will automatically receive <strong>$200</strong> year 2+ and we'll handle the platform fee ($297) when the Organization Admin renews at $497/yr.
+                </p>
               </div>
             </div>
           ) : (
             <div>
               <div className="font-semibold mb-3" style={{color: '#92400e'}}>Connect Stripe to Receive Payments</div>
-              <div className="text-sm mb-3" style={{color: '#92400e'}}>
-                <p className="mb-2"><strong>Team Admins ($497/year):</strong> You'll automatically receive $200 per signup. We handle the platform fee ($297).</p>
-                <p><strong>Organization Admins ($997 Year 1, then $497/year):</strong> You'll automatically receive $297 Year 1, then $200/year after. We handle the platform fee ($700 Year 1, then $297/year).</p>
+              <div className="text-sm mb-3 space-y-3" style={{color: '#92400e'}}>
+                <p>
+                  When you add <strong>Team Admins</strong> ($497/year each), you'll automatically receive <strong>$200</strong> and we'll handle the platform fee ($297).
+                </p>
+                <p>
+                  When you add <strong>Organization Admins</strong> ($997 Year 1), you'll automatically receive <strong>$297</strong> and we'll handle the platform fee ($700).
+                </p>
+                <p>
+                  You will automatically receive <strong>$200</strong> year 2+ and we'll handle the platform fee ($297) when the Organization Admin renews at $497/yr.
+                </p>
               </div>
               <button
                 onClick={handleConnectStripe}

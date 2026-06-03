@@ -3,10 +3,6 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
 
-/**
- * Update Referral Code for Strategic Partner
- * POST /api/update-referral-code
- */
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
@@ -17,7 +13,7 @@ export async function POST(request: NextRequest) {
 
     // Only Strategic Partners can update their own referral code
     if (session.user.type !== 'partner') {
-      return NextResponse.json({ error: 'Forbidden - Strategic Partners only' }, { status: 403 })
+      return NextResponse.json({ error: 'Only Strategic Partners can update referral codes' }, { status: 403 })
     }
 
     const body = await request.json()
@@ -27,21 +23,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Referral Code is required' }, { status: 400 })
     }
 
+    const cleanCode = referralCode.trim().toUpperCase()
+
+    // Check if referral code already exists (it must be unique)
+    const existingPartner = await prisma.strategicPartner.findFirst({
+      where: {
+        referralCode: cleanCode,
+        id: { not: session.user.id } // Allow user to keep their own code
+      }
+    })
+
+    if (existingPartner) {
+      return NextResponse.json({ error: 'This Referral Code is already in use by another Strategic Partner' }, { status: 400 })
+    }
+
     // Update the Strategic Partner's referral code
     await prisma.strategicPartner.update({
       where: { id: session.user.id },
-      data: { referralCode: referralCode.trim() }
+      data: { referralCode: cleanCode }
     })
 
-    return NextResponse.json({ 
-      success: true,
-      message: 'Referral Code updated successfully'
-    })
+    return NextResponse.json({ success: true, message: 'Referral Code updated successfully' })
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Update referral code error:', error)
-    return NextResponse.json({ 
-      error: error.message || 'Failed to update Referral Code'
-    }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

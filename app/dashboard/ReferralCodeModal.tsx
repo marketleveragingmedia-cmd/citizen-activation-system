@@ -82,11 +82,11 @@ export default function ReferralCodeModal({ onClose, onSuccess }: ReferralCodeMo
               value={referralCode}
               onChange={(e) => setReferralCode(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-lg font-mono"
-              placeholder="Enter your Referral Code"
+              placeholder="Your Strategic Partner Referral Code"
               autoFocus
             />
             <p className="text-sm text-gray-500 mt-2">
-              This code confirms you are an completed wallet activation.
+              This code confirms you have an activated wallet.
             </p>
           </div>
 

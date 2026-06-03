@@ -34,8 +34,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Determine payment recipient for the $297 share
-    // YOU (platform) always get $200, this determines who gets the other $297
-    const recruiterHasStripe = !!admin.team.stripeAccountId
+    // Platform always gets $200, this determines who gets the other $297
+    const parentHasStripeConnected = !!admin.team.stripeAccountId
     
     // Find the system owner (Main Admin of this team's root)
     const systemOwner = await prisma.admin.findFirst({
@@ -46,17 +46,17 @@ export async function POST(request: NextRequest) {
       include: { team: true }
     })
 
-    // Determine who receives the $297
+    // Determine who receives the $297 payment split
     let recipientStripeAccount: string | null = null
 
-    if (recruiterHasStripe) {
-      // Direct recruiter has Stripe → They get $297
+    if (parentHasStripeConnected) {
+      // Parent admin has Stripe → They get $297
       recipientStripeAccount = admin.team.stripeAccountId
     } else if (systemOwner?.team?.stripeAccountId) {
-      // Recruiter has NO Stripe → System owner (White-Label owner) gets $297
+      // Parent admin has NO Stripe → System owner gets $297
       recipientStripeAccount = systemOwner.team.stripeAccountId
     }
-    // If NEITHER has Stripe → Full $497 stays with YOU (platform owner)
+    // If NEITHER has Stripe → Full $497 stays with platform
 
     // Base checkout config - ALL payments go to YOUR platform Stripe account
     const checkoutConfig: any = {
@@ -78,6 +78,10 @@ export async function POST(request: NextRequest) {
       cancel_url: `${process.env.NEXTAUTH_URL}/dashboard`,
       metadata: {
         teamId: admin.team.id,
+        // NEW professional field names
+        parentAdminId: admin.id,
+        parentAdminRole: admin.role,
+        // OLD field names for backward compatibility
         recruiterId: admin.id,
         recruiterRole: admin.role,
         recipientStripeAccount: recipientStripeAccount || 'none',
@@ -88,13 +92,13 @@ export async function POST(request: NextRequest) {
     // If someone should receive $297: Transfer to their Stripe Connect account
     if (recipientStripeAccount) {
       checkoutConfig.payment_intent_data = {
-        application_fee_amount: PLATFORM_FEE_AMOUNT, // YOU keep $200
+        application_fee_amount: PLATFORM_FEE_AMOUNT, // Platform keeps $200
         transfer_data: {
-          destination: recipientStripeAccount, // They get $297
+          destination: recipientStripeAccount, // Parent admin gets $297
         },
       }
     }
-    // If NO recipient: YOU keep full $497 (this only happens in YOUR main system when YOU add directly)
+    // If NO recipient: Platform keeps full $497
 
     const checkoutSession = await stripe.checkout.sessions.create(checkoutConfig)
 

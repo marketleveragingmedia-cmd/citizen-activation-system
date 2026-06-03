@@ -31,7 +31,6 @@ export async function POST(request: NextRequest) {
       primaryColor,
       secondaryColor,
       emailFromName,
-      hidePlatformBranding,
       logoUrl
     } = body
 
@@ -90,7 +89,7 @@ export async function POST(request: NextRequest) {
         primaryColor: primaryColor || null,
         secondaryColor: secondaryColor || null,
         emailFromName: emailFromName?.trim() || null,
-        hidePlatformBranding: hidePlatformBranding || false,
+        hidePlatformBranding: false, // Always show platform branding
         logoUrl: logoUrl || admin.team.logoUrl // Keep existing if not updated
       }
     })

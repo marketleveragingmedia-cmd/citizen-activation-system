@@ -14,8 +14,7 @@ export default function BrandingSettingsModal({ team, onClose, onSuccess }: Bran
     welcomeMessage: team.welcomeMessage || '',
     primaryColor: team.primaryColor || '#1E8E5A',
     secondaryColor: team.secondaryColor || '#065F46',
-    emailFromName: team.emailFromName || '',
-    hidePlatformBranding: team.hidePlatformBranding || false
+    emailFromName: team.emailFromName || ''
   })
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [logoPreview, setLogoPreview] = useState<string | null>(team.logoUrl || null)
@@ -277,21 +276,6 @@ export default function BrandingSettingsModal({ team, onClose, onSuccess }: Bran
                 <p className="text-xs text-gray-500 mt-1">Sender name for emails</p>
               </div>
 
-              {/* Hide Platform Branding */}
-              <div className="flex items-start">
-                <input
-                  type="checkbox"
-                  id="hidePlatformBranding"
-                  checked={formData.hidePlatformBranding}
-                  onChange={(e) => setFormData({ ...formData, hidePlatformBranding: e.target.checked })}
-                  className="mt-1 h-4 w-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500"
-                />
-                <label htmlFor="hidePlatformBranding" className="ml-3 block text-sm text-gray-700">
-                  Hide "Powered by CitizenActivation.com" footer
-                  <p className="text-xs text-gray-500 mt-1">Remove platform branding from subdomain pages</p>
-                </label>
-              </div>
-
               {/* Submit Buttons */}
               <div className="flex justify-end gap-3 pt-4 border-t">
                 <button
@@ -359,12 +343,10 @@ export default function BrandingSettingsModal({ team, onClose, onSuccess }: Bran
                 View Strategic Partners
               </a>
 
-              {/* Preview Footer */}
-              {!formData.hidePlatformBranding && (
-                <div className="text-xs text-gray-500 text-center pt-4 border-t">
-                  Powered by CitizenActivation.com
-                </div>
-              )}
+              {/* Preview Footer - Always shown */}
+              <div className="text-xs text-gray-500 text-center pt-4 border-t">
+                Powered by CitizenActivation.com
+              </div>
             </div>
 
             <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">

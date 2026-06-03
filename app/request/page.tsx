@@ -49,7 +49,7 @@ export default async function RequestPage() {
   const welcomeMessage = isOrgAdmin ? admin.team?.welcomeMessage : null
   const primaryColor = isOrgAdmin ? (admin.team?.primaryColor || '#1E8E5A') : '#1E8E5A'
   const secondaryColor = isOrgAdmin ? (admin.team?.secondaryColor || '#065F46') : '#065F46'
-  const hidePlatformBranding = isOrgAdmin ? (admin.team?.hidePlatformBranding || false) : false
+  // Platform branding footer is always shown
 
   return (
     <div className="min-h-screen bg-white">
@@ -113,12 +113,10 @@ export default async function RequestPage() {
           </p>
         </div>
 
-        {/* Platform footer - optional for Org Admin */}
-        {!hidePlatformBranding && (
-          <div className="mt-8 text-center text-sm text-gray-500">
-            Powered by <a href="https://citizenactivation.com" className="hover:underline" style={{ color: secondaryColor }}>CitizenActivation.com</a>
-          </div>
-        )}
+        {/* Platform footer - always shown */}
+        <div className="mt-8 text-center text-sm text-gray-500">
+          Powered by <a href="https://citizenactivation.com" className="hover:underline" style={{ color: secondaryColor }}>CitizenActivation.com</a>
+        </div>
       </div>
     </div>
   )

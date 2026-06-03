@@ -123,7 +123,11 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
       const data = await response.json()
 
       if (response.ok) {
-        alert(`Payment link sent!\n\nA payment link has been sent to ${formData.adminEmail}.\n\nOnce they complete payment ($497), their Team Admin account will be activated and you'll ${formData.wantsCommission ? 'receive your $200 payment' : 'forfeit payment (goes to system owner)'}.`)
+        const paymentMessage = formData.tierType === 'full-system'
+          ? `Once they complete payment ($497), their Team Admin account will be activated and you'll ${formData.wantsCommission ? 'receive your $200 payment' : 'forfeit payment (goes to system owner)'}.`
+          : `Once they complete payment ($997 Year 1), their Organization Admin account will be activated and you'll ${formData.wantsCommission ? 'receive your $297 payment (Year 1). Renewals at $497/yr will pay you $200' : 'forfeit payment (goes to system owner)'}.`
+        
+        alert(`Payment link sent!\n\nA payment link has been sent to ${formData.adminEmail}.\n\n${paymentMessage}`)
         onSuccess()
       } else {
         setError(data.error || 'Failed to create Team Admin')
@@ -210,7 +214,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
             <label className="block text-sm font-medium text-gray-700 mb-3">
               Admin Type *
             </label>
-            <div className={`grid ${isMainAdmin ? 'grid-cols-2' : 'grid-cols-1'} gap-4`}>
+            <div className="grid grid-cols-2 gap-4">
               <label className={`
                 relative flex flex-col p-4 border-2 rounded-lg cursor-pointer
                 ${formData.tierType === 'full-system' 

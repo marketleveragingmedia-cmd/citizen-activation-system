@@ -44,9 +44,12 @@ export async function POST(request: NextRequest) {
         // NEW FLOW: Team Admin paid for their own access
         try {
           const teamAdminData = JSON.parse(session.metadata.teamAdminData)
-          const recruiterId = session.metadata.recruiterId
-          const recruiterTeamId = session.metadata.recruiterTeamId
-          const recruiterWantsCommission = session.metadata.recruiterWantsCommission === 'true'
+          // Support both old and new field names for backward compatibility
+          const parentAdminId = session.metadata.parentAdminId || session.metadata.recruiterId
+          const parentTeamId = session.metadata.parentTeamId || session.metadata.recruiterTeamId
+          const receivesPaymentSplit = 
+            session.metadata.receivesPaymentSplit === 'true' || 
+            session.metadata.recruiterWantsCommission === 'true'
 
           // Generate temp password
           const tempPassword = Math.random().toString(36).slice(-10) + 'A1!'
@@ -55,7 +58,7 @@ export async function POST(request: NextRequest) {
           // Create Team Admin
           const newAdmin = await prisma.admin.create({
             data: {
-              teamId: recruiterTeamId,
+              teamId: parentTeamId,
               firstName: teamAdminData.adminFirstName,
               lastName: teamAdminData.adminLastName,
               email: teamAdminData.adminEmail,
@@ -122,49 +125,49 @@ export async function POST(request: NextRequest) {
             `
           })
 
-          // Send confirmation to recruiter
-          const recruiter = await prisma.admin.findUnique({
-            where: { id: recruiterId },
+          // Send confirmation to parent admin who added this account
+          const parentAdmin = await prisma.admin.findUnique({
+            where: { id: parentAdminId },
             include: { team: true }
           })
 
-          if (recruiter) {
-            const recruiterFullName = `${recruiter.firstName} ${recruiter.lastName}`
-            const hasStripe = !!recruiter.team?.stripeAccountId
-            const earnedCommission = recruiterWantsCommission && hasStripe
+          if (parentAdmin) {
+            const parentAdminFullName = `${parentAdmin.firstName} ${parentAdmin.lastName}`
+            const hasStripeConnected = !!parentAdmin.team?.stripeAccountId
+            const earnedPaymentSplit = receivesPaymentSplit && hasStripeConnected
 
             // Process commission transfer if earned
-            if (earnedCommission) {
+            if (earnedPaymentSplit) {
               try {
                 await stripe.transfers.create({
                   amount: 20000, // $200 in cents
                   currency: 'usd',
-                  destination: recruiter.team.stripeAccountId!,
-                  description: `Commission for Team Admin: ${adminFullName}`,
+                  destination: parentAdmin.team.stripeAccountId!,
+                  description: `Payment split for Team Admin: ${adminFullName}`,
                   metadata: {
-                    type: 'team_admin_commission',
-                    recruiterId: recruiter.id,
-                    recruiterName: recruiterFullName,
+                    type: 'team_admin_payment_split',
+                    parentAdminId: parentAdmin.id,
+                    parentAdminName: parentAdminFullName,
                     teamAdminId: newAdmin.id,
                     teamAdminName: adminFullName,
                     teamAdminEmail: teamAdminData.adminEmail,
                   }
                 });
-                console.log(`✅ Commission transfer successful: $200 to ${recruiterFullName}`);
+                console.log(`✅ Payment split transfer successful: $200 to ${parentAdminFullName}`);
               } catch (transferError) {
-                console.error('❌ Commission transfer failed:', transferError);
+                console.error('❌ Payment split transfer failed:', transferError);
                 // Continue execution - send email with note about transfer failure
               }
             }
 
             await sendEmail({
-              to: recruiter.email,
+              to: parentAdmin.email,
               subject: '✅ Team Admin Activated - Payment Received',
               html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                   <h2 style="color: #1E8E5A;">✅ Team Admin Successfully Added!</h2>
                   
-                  <p>Hello ${recruiterFullName},</p>
+                  <p>Hello ${parentAdminFullName},</p>
                   
                   <p><strong>${adminFullName}</strong> has completed payment and their Team Admin account is now active.</p>
 
@@ -176,14 +179,14 @@ export async function POST(request: NextRequest) {
                     <li><strong>Payment:</strong> $497 received</li>
                   </ul>
 
-                  ${earnedCommission ? `
+                  ${earnedPaymentSplit ? `
                     <div style="background: #D1FAE5; border: 2px solid #1E8E5A; padding: 15px; border-radius: 5px; margin: 20px 0;">
                       <h4 style="color: #065F46; margin-top: 0;">💰 Payment Received!</h4>
                       <p style="color: #065F46; margin-bottom: 0;">
                         <strong>$200</strong> has been transferred to your Stripe account.
                       </p>
                     </div>
-                  ` : !recruiterWantsCommission ? `
+                  ` : !receivesPaymentSplit ? `
                     <div style="background: #FEF3C7; border: 2px solid #F59E0B; padding: 15px; border-radius: 5px; margin: 20px 0;">
                       <h4 style="color: #92400E; margin-top: 0;">Payment Forfeited</h4>
                       <p style="color: #92400E; margin-bottom: 0;">
@@ -500,7 +503,12 @@ export async function POST(request: NextRequest) {
       // ORG ADMIN PURCHASE (Option 4)
       if (paymentType === 'org_admin_purchase') {
         try {
-          const { firstName, lastName, email, phone, subdomain, organizationName, referralCode, recruiterId, recruiterWantsCommission } = session.metadata
+          const { firstName, lastName, email, phone, subdomain, organizationName, referralCode } = session.metadata
+          // Support both old and new field names for backward compatibility
+          const parentAdminId = session.metadata.parentAdminId || session.metadata.recruiterId
+          const receivesPaymentSplit = 
+            session.metadata.receivesPaymentSplit === 'true' || 
+            session.metadata.recruiterWantsCommission === 'true'
           
           // Generate temp password
           const tempPassword = Math.random().toString(36).slice(-10) + 'A1!'
@@ -538,48 +546,49 @@ export async function POST(request: NextRequest) {
             data: { adminId: orgAdmin.id }
           })
 
-          // Handle commission if recruiter wants it and has Stripe Connect
-          if (recruiterId && recruiterWantsCommission === 'true') {
-            const recruiter = await prisma.admin.findUnique({
-              where: { id: recruiterId },
+          // Handle payment split if parent admin wants it and has Stripe Connect
+          if (parentAdminId && receivesPaymentSplit) {
+            const parentAdmin = await prisma.admin.findUnique({
+              where: { id: parentAdminId },
               include: { team: true }
             })
 
-            if (recruiter?.team?.stripeAccountId) {
-              // Year 1: Transfer $297 to recruiter (Platform keeps $700)
+            if (parentAdmin?.team?.stripeAccountId) {
+              // Year 1: Transfer $297 to parent admin (Platform keeps $700)
               const isFirstYear = true // Determine from subscription metadata if needed
-              const commissionAmount = isFirstYear ? 29700 : 20000 // $297 Y1, $200 Y2+
+              const paymentSplitAmount = isFirstYear ? 29700 : 20000 // $297 Y1, $200 Y2+
 
               try {
                 await stripe.transfers.create({
-                  amount: commissionAmount,
+                  amount: paymentSplitAmount,
                   currency: 'usd',
-                  destination: recruiter.team.stripeAccountId,
-                  description: `Commission for Org Admin: ${firstName} ${lastName}`,
+                  destination: parentAdmin.team.stripeAccountId,
+                  description: `Payment split for Org Admin: ${firstName} ${lastName}`,
                   metadata: {
+                    type: 'org_admin_payment_split',
                     orgAdminEmail: email,
-                    recruiterEmail: recruiter.email,
+                    parentAdminEmail: parentAdmin.email,
                     organizationName
                   }
                 })
 
-                const recruiterFullName = `${recruiter.firstName} ${recruiter.lastName}`
+                const parentAdminFullName = `${parentAdmin.firstName} ${parentAdmin.lastName}`
                 const amountDisplay = isFirstYear ? '$297' : '$200'
-                console.log(`✅ Org Admin commission transfer successful: ${amountDisplay} to ${recruiterFullName}`)
+                console.log(`✅ Org Admin payment split transfer successful: ${amountDisplay} to ${parentAdminFullName}`)
 
-                // Notify recruiter
+                // Notify parent admin
                 await sendEmail({
-                  to: recruiter.email,
-                  subject: `💰 Commission Earned - Organization Admin Added`,
+                  to: parentAdmin.email,
+                  subject: `💰 Payment Received - Organization Admin Added`,
                   html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                      <h2 style="color: #1E8E5A;">💰 Commission Payment Received!</h2>
-                      <p>Hello ${recruiterFullName},</p>
+                      <h2 style="color: #1E8E5A;">💰 Payment Received!</h2>
+                      <p>Hello ${parentAdminFullName},</p>
                       <p>Great news! A new Organization Admin has been added to your network:</p>
                       <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
                         <p><strong>Organization:</strong> ${organizationName}</p>
                         <p><strong>Admin:</strong> ${firstName} ${lastName}</p>
-                        <p><strong>Your Commission:</strong> <strong>${amountDisplay}</strong></p>
+                        <p><strong>Your Payment:</strong> <strong>${amountDisplay}</strong></p>
                       </div>
                       <p><strong>${amountDisplay}</strong> has been transferred to your Stripe account.</p>
                       <p>Keep growing your network to receive more payments!</p>
@@ -587,7 +596,7 @@ export async function POST(request: NextRequest) {
                   `
                 })
               } catch (transferError) {
-                console.error('Org Admin commission transfer failed:', transferError)
+                console.error('Org Admin payment split transfer failed:', transferError)
               }
             }
           }

@@ -133,7 +133,7 @@ export default function AddPartnerModal({ onClose, onSuccess }: AddPartnerModalP
 
           <div>
             <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
-              Referral Code *
+              Strategic Partner Referral Code *
             </label>
             <input
               type="text"

@@ -235,7 +235,7 @@ export default function MainAdminCheckout() {
 
           <div>
             <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-1">
-              Referral Code
+              Strategic Partner Referral Code
             </label>
             <input
               type="text"
@@ -244,7 +244,7 @@ export default function MainAdminCheckout() {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               value={formData.referralCode}
               onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
-              placeholder="Enter your Referral Code"
+              placeholder="Enter your Strategic Partner Referral Code"
             />
           </div>
 

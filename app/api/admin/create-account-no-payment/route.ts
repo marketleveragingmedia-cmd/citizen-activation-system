@@ -212,6 +212,24 @@ export async function POST(req: Request) {
         }, { status: 400 })
     }
 
+    // Automatically register subdomain with Vercel for immediate SSL
+    try {
+      await fetch(`https://api.vercel.com/v10/projects/${process.env.VERCEL_PROJECT_ID}/domains`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.VERCEL_API_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: `${cleanSubdomain}.citizenactivation.com`
+        })
+      })
+      console.log(`Registered subdomain: ${cleanSubdomain}.citizenactivation.com`)
+    } catch (err) {
+      console.error('Failed to register subdomain with Vercel:', err)
+      // Don't fail account creation if Vercel registration fails
+    }
+
     // TODO: Send welcome email with credentials
     // For now, return credentials in response
 

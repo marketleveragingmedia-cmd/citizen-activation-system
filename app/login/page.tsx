@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -10,6 +10,14 @@ export default function LoginPage() {
   const [formData, setFormData] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isOnSubdomain, setIsOnSubdomain] = useState(false)
+
+  useEffect(() => {
+    // Check if we're on a subdomain (not hub.citizenactivation.com)
+    const hostname = window.location.hostname
+    const isSubdomain = hostname.includes('.') && !hostname.startsWith('hub.') && !hostname.includes('localhost')
+    setIsOnSubdomain(isSubdomain)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,8 +34,13 @@ export default function LoginPage() {
       if (result?.error) {
         setError('Invalid email or password')
       } else {
-        router.push('/dashboard')
-        router.refresh()
+        // If on subdomain, redirect to hub for dashboard
+        if (isOnSubdomain) {
+          window.location.href = 'https://hub.citizenactivation.com/dashboard'
+        } else {
+          router.push('/dashboard')
+          router.refresh()
+        }
       }
     } catch (err) {
       setError('Something went wrong')

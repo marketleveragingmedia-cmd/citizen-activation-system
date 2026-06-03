@@ -155,7 +155,7 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
         {/* Quick Actions */}
         <div className="bg-white rounded-lg shadow mb-8 p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-          <div className="flex gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <button
               onClick={() => setShowAddTeam(true)}
               className="bg-[#C9A441] hover:bg-[#B8932F] text-white font-bold py-3 px-6 rounded-lg"
@@ -168,6 +168,18 @@ export default function TeamAdminDashboard({ team, hasStripeAccount, stripeAccou
             >
               + Add Strategic Partner
             </button>
+            <a
+              href="/admin/partners"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-center"
+            >
+              View Strategic Partners
+            </a>
+            <a
+              href="/admin/team-admins"
+              className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg text-center"
+            >
+              View Team Admins
+            </a>
           </div>
         </div>
 

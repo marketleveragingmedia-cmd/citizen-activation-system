@@ -414,10 +414,9 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
             </div>
           </div>
 
-          {/* Payment Split Choice - Only for Team Admins */}
-          {!isMainAdmin && (
-            <div className="border-t pt-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Payment Preference</h3>
+          {/* Payment Split Choice - All admins can choose */}
+          <div className="border-t pt-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Payment Preference</h3>
               
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                 {formData.tierType === 'full-system' ? (
@@ -490,8 +489,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                   </label>
                 </div>
               </div>
-            </div>
-          )}
+          </div>
 
           {/* Branding - Organization Admin Only */}
           {formData.tierType === 'solo-org' && (

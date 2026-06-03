@@ -11,12 +11,12 @@ export default async function TeamAdminsPage() {
     redirect('/login')
   }
 
-  // Only Main Admin or Master Admin can see Team Admins
-  if (session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'MASTER_ADMIN') {
+  // Only Main Admin, Organization Admin, or Master Admin can see Team Admins
+  if (session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'MASTER_ADMIN' && session.user.role !== 'ORG_ADMIN') {
     redirect('/dashboard')
   }
 
-  // Master Admin sees all teams, Main Admin sees only teams they created
+  // Master Admin sees all teams, Main Admin/Org Admin see only teams they created
   const whereClause = session.user.role === 'MASTER_ADMIN'
     ? {
         tierType: 'FullSystem', // Team Admins only (not Org Admins)
@@ -25,7 +25,7 @@ export default async function TeamAdminsPage() {
     : {
         tierType: 'FullSystem',
         status: 'Active',
-        createdByAdminId: session.user.id // Only teams this Main Admin created
+        createdByAdminId: session.user.id // Only teams this Main/Org Admin created
       }
 
   const teams = await prisma.team.findMany({

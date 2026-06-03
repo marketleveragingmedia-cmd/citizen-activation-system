@@ -39,14 +39,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields (including subdomain and Referral Code)' }, { status: 400 })
     }
 
-    // Get recruiter info
-    const recruiter = await prisma.admin.findUnique({
+    // Get parent admin info (admin adding the new Team Admin)
+    const parentAdmin = await prisma.admin.findUnique({
       where: { id: session.user.id },
       include: { team: true }
     })
 
-    if (!recruiter || !recruiter.team) {
-      return NextResponse.json({ error: 'Recruiter team not found' }, { status: 404 })
+    if (!parentAdmin || !parentAdmin.team) {
+      return NextResponse.json({ error: 'Parent admin team not found' }, { status: 404 })
     }
 
     // Check if email already exists
@@ -79,8 +79,13 @@ export async function POST(request: NextRequest) {
       cancel_url: `${process.env.NEXTAUTH_URL}/payment-cancelled`,
       metadata: {
         type: 'team_admin_payment',
-        recruiterId: recruiter.id,
-        recruiterTeamId: recruiter.teamId,
+        // NEW professional field names
+        parentAdminId: parentAdmin.id,
+        parentTeamId: parentAdmin.teamId,
+        receivesPaymentSplit: wantsCommission ? 'true' : 'false',
+        // OLD field names for backward compatibility
+        recruiterId: parentAdmin.id,
+        recruiterTeamId: parentAdmin.teamId,
         recruiterWantsCommission: wantsCommission ? 'true' : 'false',
         teamAdminData: JSON.stringify({
           teamName,
@@ -98,7 +103,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Send payment link email to NEW Team Admin
-    const recruiterFullName = `${recruiter.firstName} ${recruiter.lastName}`
+    const parentAdminFullName = `${parentAdmin.firstName} ${parentAdmin.lastName}`
     await sendEmail({
       to: adminEmail,
       subject: 'Complete Your Team Admin Payment - Citizen Activation System',
@@ -108,7 +113,7 @@ export async function POST(request: NextRequest) {
           
           <p>Hello ${adminFirstName},</p>
           
-          <p>${recruiterFullName} has invited you to join as a Team Admin in the Citizen Activation System.</p>
+          <p>${parentAdminFullName} has invited you to join as a Team Admin in the Citizen Activation System.</p>
 
           <h3>Your Team Admin Access Includes:</h3>
           <ul>
@@ -140,15 +145,15 @@ export async function POST(request: NextRequest) {
       `
     })
 
-    // Send confirmation to recruiter
+    // Send confirmation to parent admin
     await sendEmail({
-      to: recruiter.email,
+      to: parentAdmin.email,
       subject: 'Payment Link Sent - Team Admin Invitation',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #1E8E5A;">Payment Link Sent Successfully</h2>
           
-          <p>Hello ${recruiterFullName},</p>
+          <p>Hello ${parentAdminFullName},</p>
           
           <p>A payment link has been sent to <strong>${adminEmail}</strong> (${adminFirstName} ${adminLastName}).</p>
 
@@ -161,7 +166,7 @@ export async function POST(request: NextRequest) {
             <li>${adminFirstName} receives login credentials</li>
           </ol>
 
-          ${wantsCommission && !recruiter.team.stripeAccountId ? `
+          ${wantsCommission && !parentAdmin.team.stripeAccountId ? `
             <div style="background: #FEF3C7; border: 2px solid #F59E0B; padding: 15px; border-radius: 5px; margin: 20px 0;">
               <h4 style="color: #92400E; margin-top: 0;">⚠️ Action Required: Connect Stripe</h4>
               <p style="color: #92400E; margin-bottom: 10px;">

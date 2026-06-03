@@ -1,106 +1,78 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../../auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
 
 /**
+ * Deactivate an admin account
  * POST /api/admin/deactivate
- * 
- * Deactivates an admin account
- * - Sets status to Inactive
- * - Blocks subdomain (no new requests)
- * - Keeps Strategic Partners assigned (cannot be reassigned)
- * - Preserves request history for Main Admin visibility
  */
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions)
-
-    if (!session || !session.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    // Only Master Admin and Main Admin can deactivate others
-    if (session.user.role !== 'MASTER_ADMIN' && session.user.role !== 'MAIN_ADMIN') {
+    
+    // Only Master Admin can deactivate accounts
+    if (!session || session.user.role !== 'MASTER_ADMIN') {
       return NextResponse.json({ 
-        error: 'Forbidden - Only Master Admin or Main Admin can deactivate accounts' 
+        success: false, 
+        error: 'Unauthorized - Master Admin only' 
       }, { status: 403 })
     }
 
-    const body = await request.json()
-    const { adminId, reason } = body
+    const body = await req.json()
+    const { adminId } = body
 
     if (!adminId) {
-      return NextResponse.json({ error: 'Admin ID required' }, { status: 400 })
+      return NextResponse.json({ 
+        success: false, 
+        error: 'Admin ID required' 
+      }, { status: 400 })
     }
 
     // Get the admin to deactivate
     const admin = await prisma.admin.findUnique({
-      where: { id: adminId },
-      include: {
-        team: {
-          include: {
-            strategicPartners: {
-              where: { status: 'Active' }
-            }
-          }
-        }
-      }
+      where: { id: adminId }
     })
 
     if (!admin) {
-      return NextResponse.json({ error: 'Admin not found' }, { status: 404 })
+      return NextResponse.json({ 
+        success: false, 
+        error: 'Admin not found' 
+      }, { status: 404 })
     }
 
-    // Prevent deactivating Master Admin
+    // Cannot deactivate Master Admin
     if (admin.role === 'MASTER_ADMIN') {
       return NextResponse.json({ 
-        error: 'Cannot deactivate Master Admin' 
-      }, { status: 403 })
-    }
-
-    // Check if Main Admin trying to deactivate another Main Admin
-    if (session.user.role === 'MAIN_ADMIN' && admin.role === 'MAIN_ADMIN' && admin.id !== session.user.id) {
-      return NextResponse.json({ 
-        error: 'Main Admins cannot deactivate other Main Admins' 
-      }, { status: 403 })
+        success: false, 
+        error: 'Cannot deactivate Master Admin accounts' 
+      }, { status: 400 })
     }
 
     // Deactivate the admin
-    const deactivatedAdmin = await prisma.admin.update({
+    await prisma.admin.update({
       where: { id: adminId },
-      data: {
-        status: 'Inactive'
-        // Note: subdomain remains in database for historical tracking
-        // Middleware will block requests based on status
-      }
+      data: { status: 'Inactive' }
     })
 
-    // Count Strategic Partners that remain with deactivated admin
-    const partnerCount = admin.team?.strategicPartners?.length || 0
+    // If admin has a team, deactivate it too
+    if (admin.teamId) {
+      await prisma.team.update({
+        where: { id: admin.teamId },
+        data: { status: 'Inactive' }
+      })
+    }
 
     return NextResponse.json({
       success: true,
-      message: 'Admin deactivated successfully',
-      admin: {
-        id: deactivatedAdmin.id,
-        email: deactivatedAdmin.email,
-        name: `${deactivatedAdmin.firstName} ${deactivatedAdmin.lastName}`,
-        subdomain: deactivatedAdmin.subdomain,
-        status: deactivatedAdmin.status
-      },
-      impact: {
-        subdomainBlocked: true,
-        strategicPartnersRetained: partnerCount,
-        note: `${partnerCount} Strategic Partners remain assigned to this admin and cannot be reassigned by others.`
-      }
+      message: 'Admin account deactivated successfully'
     })
 
   } catch (error: any) {
-    console.error('Admin deactivation error:', error)
-    return NextResponse.json(
-      { error: 'Failed to deactivate admin', details: error.message },
-      { status: 500 }
-    )
+    console.error('Deactivate admin error:', error)
+    return NextResponse.json({ 
+      success: false, 
+      error: error.message 
+    }, { status: 500 })
   }
 }

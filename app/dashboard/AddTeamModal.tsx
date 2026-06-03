@@ -382,7 +382,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
 
               <div>
                 <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
-                  Referral Code *
+                  Strategic Partner Referral Code *
                 </label>
                 <input
                   type="text"
@@ -391,7 +391,7 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                   value={formData.referralCode}
                   onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent"
-                  placeholder="Enter their Referral Code"
+                  placeholder="Enter their Strategic Partner Referral Code"
                 />
                 <p className="text-xs text-gray-500 mt-1">Confirms they have completed wallet activation</p>
               </div>

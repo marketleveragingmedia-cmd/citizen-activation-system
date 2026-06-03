@@ -31,7 +31,8 @@ export const authOptions: NextAuthOptions = {
               firstName: admin.firstName,
               lastName: admin.lastName,
               role: admin.role,
-              type: 'admin'
+              type: 'admin',
+              teamId: admin.teamId
             } as any
           }
         }

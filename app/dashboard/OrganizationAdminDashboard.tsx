@@ -163,24 +163,19 @@ export default function OrganizationAdminDashboard({
           <p className="text-sm text-blue-800 mb-3">
             Share this link with your members. All requests will be assigned to your Strategic Partners.
           </p>
-          <div className="bg-white border border-blue-300 rounded-lg p-3">
-            <div className="flex items-center justify-between mb-2">
-              <code className="text-blue-900 font-mono">
-                https://{subdomain}.citizenactivation.com/request
-              </code>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(`https://${subdomain}.citizenactivation.com/request`)
-                  alert('Link copied!')
-                }}
-                className="ml-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium"
-              >
-                Copy Link
-              </button>
-            </div>
-            <p className="text-xs text-blue-700 italic">
-              💡 To refer another Organization Admin, have them replace "<strong>{subdomain}</strong>" with their own subdomain in the URL above.
-            </p>
+          <div className="bg-white border border-blue-300 rounded-lg p-3 flex items-center justify-between">
+            <code className="text-blue-900 font-mono">
+              https://{subdomain}.citizenactivation.com/request
+            </code>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(`https://${subdomain}.citizenactivation.com/request`)
+                alert('Link copied!')
+              }}
+              className="ml-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium"
+            >
+              Copy Link
+            </button>
           </div>
 
         </div>

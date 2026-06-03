@@ -11,8 +11,9 @@ export default async function PartnersPage() {
     redirect('/login')
   }
 
-  // Only Main Admin, Organization Admin, or Master Admin
-  if (session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'MASTER_ADMIN' && session.user.role !== 'ORG_ADMIN') {
+  // Only admins can view partners
+  const allowedRoles = ['MAIN_ADMIN', 'TEAM_ADMIN', 'ORG_ADMIN', 'MASTER_ADMIN']
+  if (!allowedRoles.includes(session.user.role)) {
     redirect('/dashboard')
   }
 

@@ -172,13 +172,13 @@ export default function CreateAccountPage() {
                   <div className="text-4xl">⏱️</div>
                   <div className="flex-1">
                     <p className="font-bold text-orange-900 text-xl mb-2">
-                      🔐 WAIT 2-5 MINUTES BEFORE ACCESSING SUBDOMAIN
+                      🔐 WAIT 15-20 MINUTES BEFORE ACCESSING SUBDOMAIN
                     </p>
                     <p className="text-orange-800 font-semibold text-base leading-relaxed">
                       The subdomain URL <span className="font-mono bg-white px-2 py-1 rounded">{success.account.subdomain}.citizenactivation.com</span> needs time to provision SSL certificates.
                     </p>
                     <p className="text-orange-800 font-semibold text-base mt-2 leading-relaxed">
-                      ⚠️ If you see an SSL error or "connection not secure" warning, <strong>WAIT 3-5 MINUTES</strong> and refresh the page. This is normal for new subdomains.
+                      ⚠️ If you see an SSL error or "connection not secure" warning, <strong>WAIT 15-20 MINUTES</strong> and refresh the page. This is normal for new subdomains.
                     </p>
                   </div>
                 </div>

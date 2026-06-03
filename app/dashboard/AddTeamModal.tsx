@@ -416,9 +416,15 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
               <h3 className="font-semibold text-gray-900 mb-4">Payment Preference</h3>
               
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                <p className="text-sm text-blue-900 mb-3">
-                  The NEW Team Admin will pay $497 for their access. You can choose to receive payment or forfeit it.
-                </p>
+                {formData.tierType === 'full-system' ? (
+                  <p className="text-sm text-blue-900 mb-3">
+                    The NEW Team Admin will pay $497 for their access. You can choose to receive payment or forfeit it.
+                  </p>
+                ) : (
+                  <p className="text-sm text-blue-900 mb-3">
+                    The NEW Organization Admin will pay $997 Year 1 (then $497/year renewal). You can choose to receive payment or forfeit it.
+                  </p>
+                )}
                 
                 <div className="space-y-3">
                   <label className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer ${
@@ -432,10 +438,21 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                       className="mt-1"
                     />
                     <div className="flex-1">
-                      <div className="font-semibold text-gray-900">💰 I want to receive $200 payment</div>
-                      <div className="text-sm text-gray-600 mt-1">
-                        Requires Stripe Connect. If you don't have Stripe connected yet, you'll be prompted to connect after submitting.
-                      </div>
+                      {formData.tierType === 'full-system' ? (
+                        <>
+                          <div className="font-semibold text-gray-900">💰 I want to receive $200 payment</div>
+                          <div className="text-sm text-gray-600 mt-1">
+                            Requires Stripe Connect. If you don't have Stripe connected yet, you'll be prompted to connect after submitting.
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="font-semibold text-gray-900">💰 I want to receive payment ($297 Y1, $200 Y2+)</div>
+                          <div className="text-sm text-gray-600 mt-1">
+                            Year 1: $297 from $997 payment. Year 2+: $200 from $497 renewal. Requires Stripe Connect.
+                          </div>
+                        </>
+                      )}
                     </div>
                   </label>
 
@@ -450,10 +467,21 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                       className="mt-1"
                     />
                     <div className="flex-1">
-                      <div className="font-semibold text-gray-900">🎁 I want to forfeit my payment</div>
-                      <div className="text-sm text-gray-600 mt-1">
-                        The $200 payment will go to the system owner. You still grow your network.
-                      </div>
+                      {formData.tierType === 'full-system' ? (
+                        <>
+                          <div className="font-semibold text-gray-900">🎁 I want to forfeit my payment</div>
+                          <div className="text-sm text-gray-600 mt-1">
+                            The $200 payment will go to the system owner. You still grow your network.
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="font-semibold text-gray-900">🎁 I want to forfeit my payment</div>
+                          <div className="text-sm text-gray-600 mt-1">
+                            The payment ($297 Y1, $200 Y2+) will go to the system owner. You still grow your network.
+                          </div>
+                        </>
+                      )}
                     </div>
                   </label>
                 </div>

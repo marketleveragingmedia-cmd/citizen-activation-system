@@ -178,13 +178,18 @@ export default function OrganizationAdminDashboard({
                 Copy Link
               </button>
             </div>
-            <div className="bg-blue-50 border border-blue-200 rounded p-2">
-              <p className="text-xs text-blue-900">
-                💡 <strong>Your subdomain is:</strong> <span className="font-mono font-bold">{subdomain}</span>
+            <div className="bg-yellow-50 border border-yellow-300 rounded p-3">
+              <p className="text-xs text-yellow-900 font-semibold mb-1">
+                💡 Your Subdomain: <span className="font-mono text-sm bg-white px-2 py-1 rounded border border-yellow-400">{subdomain}</span>
               </p>
-              <p className="text-xs text-blue-800 mt-1">
-                When sharing this link, make sure people use YOUR subdomain (<strong>{subdomain}</strong>) in the URL, not a placeholder like "your-org".
+              <p className="text-xs text-yellow-800">
+                When sharing this link, be sure to <strong>replace "your-org"</strong> with <strong>your subdomain</strong> like:
               </p>
+              <ul className="text-xs text-yellow-800 mt-1 ml-4 space-y-1">
+                <li>• "abc-ministry.citizenactivation.com"</li>
+                <li>• "main-charity.citizenactivation.com"</li>
+                <li>• "grace-church.citizenactivation.com"</li>
+              </ul>
             </div>
           </div>
 

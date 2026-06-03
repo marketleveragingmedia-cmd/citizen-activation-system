@@ -379,7 +379,7 @@ export default function CreateAccountPage() {
           {/* Referral Code */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              MOSCA Referral Code *
+              Strategic Partner Referral Code *
             </label>
             <input
               type="text"
@@ -391,7 +391,7 @@ export default function CreateAccountPage() {
               required
             />
             <p className="text-sm text-gray-500 mt-1">
-              Required - Confirms they have an activated MOSCA wallet
+              Required - Confirms they have an activated wallet
             </p>
           </div>
 

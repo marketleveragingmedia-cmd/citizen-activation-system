@@ -135,7 +135,6 @@ async function getDashboardData(userId: string, role: string, type: string) {
 
     const recentRequests = await prisma.request.findMany({
       where: { teamId: admin.teamId },
-      take: 10,
       orderBy: { dateSubmitted: 'desc' },
       include: { assignedPartner: true }
     })
@@ -176,7 +175,6 @@ async function getDashboardData(userId: string, role: string, type: string) {
 
     const recentRequests = await prisma.request.findMany({
       where: { teamId: admin.teamId },
-      take: 10,
       orderBy: { dateSubmitted: 'desc' },
       include: { assignedPartner: true }
     })

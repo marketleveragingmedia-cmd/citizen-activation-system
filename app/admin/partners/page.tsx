@@ -11,8 +11,8 @@ export default async function PartnersPage() {
     redirect('/login')
   }
 
-  // Only Main Admin or Master Admin
-  if (session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'MASTER_ADMIN') {
+  // Only Main Admin, Organization Admin, or Master Admin
+  if (session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'MASTER_ADMIN' && session.user.role !== 'ORG_ADMIN') {
     redirect('/dashboard')
   }
 
@@ -26,7 +26,7 @@ export default async function PartnersPage() {
     redirect('/dashboard')
   }
 
-  // Master Admin sees ALL partners, Main Admin sees only THEIR team's partners
+  // Master Admin sees ALL partners, Main Admin/Org Admin see only THEIR team's partners
   const whereClause = session.user.role === 'MASTER_ADMIN'
     ? {}
     : { teamId: currentAdmin.teamId }

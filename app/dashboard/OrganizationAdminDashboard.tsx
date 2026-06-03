@@ -218,6 +218,12 @@ export default function OrganizationAdminDashboard({
             >
               View All Team Admins
             </Link>
+            <Link
+              href="/admin/partners"
+              className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg inline-block"
+            >
+              View All Strategic Partners
+            </Link>
             <button
               onClick={() => setShowBrandingSettings(true)}
               className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg"

@@ -379,19 +379,19 @@ export default function CreateAccountPage() {
           {/* Referral Code */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Referral Code *
+              MOSCA Referral Code *
             </label>
             <input
               type="text"
               name="referralCode"
               value={formData.referralCode}
               onChange={handleChange}
-              placeholder="Enter Referral Code"
+              placeholder="Your Strategic Partner Referral Code"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
             />
             <p className="text-sm text-gray-500 mt-1">
-              Required - Confirms they are an completed wallet activation
+              Required - Confirms they have an activated MOSCA wallet
             </p>
           </div>
 

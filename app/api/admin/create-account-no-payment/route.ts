@@ -128,7 +128,21 @@ export async function POST(req: Request) {
       }
 
       case 'TEAM_ADMIN': {
-        // Team Admin (direct, no team)
+        // Create team for Team Admin
+        const team = await prisma.team.create({
+          data: {
+            name: organizationName || `${firstName} ${lastName}'s Team`,
+            adminId: 'temp',
+            tierType: 'FullSystem',
+            autoAssignEnabled: true,
+            status: 'Active',
+            createdByAdminId: session.user.id // Track Master Admin creator
+          }
+        })
+
+        teamId = team.id
+
+        // Create TEAM_ADMIN with team
         newAdmin = await prisma.admin.create({
           data: {
             role: 'TEAM_ADMIN',
@@ -139,8 +153,15 @@ export async function POST(req: Request) {
             subdomain: cleanSubdomain,
             passwordHash: hashedPassword,
             referralCode: referralCode,
-            status: 'Active'
+            status: 'Active',
+            teamId: team.id
           }
+        })
+
+        // Update team adminId
+        await prisma.team.update({
+          where: { id: team.id },
+          data: { adminId: newAdmin.id }
         })
         break
       }

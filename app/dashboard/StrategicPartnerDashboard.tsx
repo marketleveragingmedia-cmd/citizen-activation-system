@@ -42,9 +42,9 @@ export default function StrategicPartnerDashboard({ partner, assignedRequests, u
   const requestsPerPage = 20
   const [showReferralModal, setShowReferralModal] = useState(false)
 
-  // Check if partner has temporary referral code (starts with "TEMP-")
+  // Check if partner needs to add their referral code
   useEffect(() => {
-    if (partner.referralCode && partner.referralCode.startsWith('TEMP-')) {
+    if (!partner.referralCode) {
       setShowReferralModal(true)
     }
   }, [partner.referralCode])

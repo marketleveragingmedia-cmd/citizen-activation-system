@@ -203,13 +203,7 @@ export default function OrganizationAdminDashboard({
               onClick={() => setShowAddTeam(true)}
               className="bg-[#C9A441] hover:bg-[#B8932F] text-white font-bold py-3 px-6 rounded-lg"
             >
-              + Add Team Admin
-            </button>
-            <button
-              onClick={() => setShowAddTeam(true)}
-              className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold py-3 px-6 rounded-lg"
-            >
-              + Add Organization Admin
+              + Add Team / Organization Admin
             </button>
             <button
               onClick={() => setShowAddPartner(true)}

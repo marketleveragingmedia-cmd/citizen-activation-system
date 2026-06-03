@@ -13,9 +13,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Only Main Admin can add Strategic Partners
-    if (session.user.role !== 'MAIN_ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    // Only admins can add Strategic Partners
+    const allowedRoles = ['MAIN_ADMIN', 'TEAM_ADMIN', 'ORG_ADMIN', 'MASTER_ADMIN']
+    if (!allowedRoles.includes(session.user.role)) {
+      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
     }
 
     const body = await request.json()
@@ -44,13 +45,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Referral code already exists' }, { status: 400 })
     }
 
-    // Get the main team (for now, all Strategic Partners go to main team)
-    const team = await prisma.team.findFirst({
-      where: { status: 'Active' }
+    // Get the admin's team
+    if (!session.user.teamId) {
+      return NextResponse.json({ error: 'Admin has no team assigned' }, { status: 500 })
+    }
+
+    const team = await prisma.team.findUnique({
+      where: { id: session.user.teamId }
     })
 
-    if (!team) {
-      return NextResponse.json({ error: 'No active team found' }, { status: 500 })
+    if (!team || team.status !== 'Active') {
+      return NextResponse.json({ error: 'Team not found or inactive' }, { status: 500 })
     }
 
     // Generate temp password

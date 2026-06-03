@@ -386,7 +386,7 @@ export default function OrganizationAdminDashboard({
             setShowAddTeam(false)
             window.location.reload()
           }}
-          isMainAdmin={true}
+          isMainAdmin={false}
           hasStripeAccount={hasStripeAccount}
           stripeAccountId={stripeAccountId}
         />

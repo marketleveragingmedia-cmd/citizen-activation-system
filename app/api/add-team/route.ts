@@ -13,8 +13,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Master Admin, Main Admin, OR Team Admin can add teams
-    if (session.user.role !== 'MASTER_ADMIN' && session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'TEAM_ADMIN') {
+    // Master Admin, Main Admin, Team Admin, OR Organization Admin can add teams
+    if (session.user.role !== 'MASTER_ADMIN' && session.user.role !== 'MAIN_ADMIN' && session.user.role !== 'TEAM_ADMIN' && session.user.role !== 'ORG_ADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -53,9 +53,9 @@ export async function POST(request: NextRequest) {
     let team
     let admin
 
-    // Check if this is Master Admin or Main Admin (creates new team) vs Team Admin (adds to existing)
-    if (session.user.role === 'MASTER_ADMIN' || session.user.role === 'MAIN_ADMIN') {
-      // Main Admin: Create NEW team with new admin as owner
+    // Check if this is Master Admin, Main Admin, or Org Admin (creates new team) vs Team Admin (adds to existing)
+    if (session.user.role === 'MASTER_ADMIN' || session.user.role === 'MAIN_ADMIN' || session.user.role === 'ORG_ADMIN') {
+      // Main Admin / Org Admin: Create NEW team with new admin as owner
       team = await prisma.team.create({
         data: {
           name: teamName,
@@ -66,6 +66,9 @@ export async function POST(request: NextRequest) {
         }
       })
 
+      // Set role based on tier type
+      const newAdminRole = tierType === 'solo-org' ? 'ORG_ADMIN' : 'TEAM_ADMIN'
+
       admin = await prisma.admin.create({
         data: {
           teamId: team.id,
@@ -75,7 +78,7 @@ export async function POST(request: NextRequest) {
           subdomain: subdomain,
           passwordHash: hashedPassword,
           referralCode: referralCode,
-          role: 'TEAM_ADMIN',
+          role: newAdminRole,
           status: 'Active'
         }
       })

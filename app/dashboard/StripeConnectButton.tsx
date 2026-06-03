@@ -56,15 +56,12 @@ export default function StripeConnectButton({ hasStripeAccount, stripeAccountId 
     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
       <div className="mb-3">
         <div className="font-semibold text-yellow-800 mb-1">Connect Stripe to Receive Payments</div>
-        <div className="text-sm text-yellow-700 space-y-2">
+        <div className="text-sm text-yellow-700 space-y-1.5">
           <p>
             When you add <strong>Team Admins</strong> ($497/year each), you'll automatically receive <strong>$200</strong> and we'll handle the platform fee ($297).
           </p>
           <p>
-            When you add <strong>Organization Admins</strong> ($997 Year 1), you'll automatically receive <strong>$297</strong> and we'll handle the platform fee ($700).
-          </p>
-          <p>
-            You will automatically receive <strong>$200</strong> year 2+ and we'll handle the platform fee ($297) when the Organization Admin renews at $497/yr.
+            When you add <strong>Organization Admins</strong> ($997 Year 1), you'll automatically receive <strong>$297</strong> and we'll handle the platform fee ($700). You will automatically receive <strong>$200</strong> year 2+ and we'll handle the platform fee ($297) when the Organization Admin renews at $497/yr.
           </p>
         </div>
       </div>

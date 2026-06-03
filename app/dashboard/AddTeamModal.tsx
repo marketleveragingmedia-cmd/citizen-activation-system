@@ -229,31 +229,29 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
                 </div>
               </label>
 
-              {isMainAdmin && (
-                <label className={`
-                  relative flex flex-col p-4 border-2 rounded-lg cursor-pointer
-                  ${formData.tierType === 'solo-org' 
-                    ? 'border-[#1E8E5A] bg-green-50' 
-                    : 'border-gray-300 hover:border-gray-400'}
-                `}>
-                  <input
-                    type="radio"
-                    name="tierType"
-                    value="solo-org"
-                    checked={formData.tierType === 'solo-org'}
-                    onChange={(e) => setFormData({ ...formData, tierType: e.target.value })}
-                    className="mb-2"
-                  />
-                  <div>
-                    <div className="font-bold text-lg">Add Organization Admin</div>
-                    <ul className="text-sm text-gray-600 mt-2 space-y-1">
-                      <li>✓ Oversee their Organization</li>
-                      <li>✓ Add Strategic Partners</li>
-                      <li>✓ Receive Invite Requests</li>
-                    </ul>
-                  </div>
-                </label>
-              )}
+              <label className={`
+                relative flex flex-col p-4 border-2 rounded-lg cursor-pointer
+                ${formData.tierType === 'solo-org' 
+                  ? 'border-[#1E8E5A] bg-green-50' 
+                  : 'border-gray-300 hover:border-gray-400'}
+              `}>
+                <input
+                  type="radio"
+                  name="tierType"
+                  value="solo-org"
+                  checked={formData.tierType === 'solo-org'}
+                  onChange={(e) => setFormData({ ...formData, tierType: e.target.value })}
+                  className="mb-2"
+                />
+                <div>
+                  <div className="font-bold text-lg">Add Organization Admin</div>
+                  <ul className="text-sm text-gray-600 mt-2 space-y-1">
+                    <li>✓ Oversee their Organization</li>
+                    <li>✓ Add Strategic Partners</li>
+                    <li>✓ Receive Invite Requests</li>
+                  </ul>
+                </div>
+              </label>
             </div>
           </div>
 

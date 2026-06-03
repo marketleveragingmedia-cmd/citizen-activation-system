@@ -287,7 +287,7 @@ export default function BrandingSettingsModal({ team, onClose, onSuccess }: Bran
                   className="mt-1 h-4 w-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500"
                 />
                 <label htmlFor="hidePlatformBranding" className="ml-3 block text-sm text-gray-700">
-                  Hide "Powered by Citizen Activation" footer
+                  Hide "Powered by CitizenActivation.com" footer
                   <p className="text-xs text-gray-500 mt-1">Remove platform branding from subdomain pages</p>
                 </label>
               </div>
@@ -362,7 +362,7 @@ export default function BrandingSettingsModal({ team, onClose, onSuccess }: Bran
               {/* Preview Footer */}
               {!formData.hidePlatformBranding && (
                 <div className="text-xs text-gray-500 text-center pt-4 border-t">
-                  Powered by Citizen Activation
+                  Powered by CitizenActivation.com
                 </div>
               )}
             </div>

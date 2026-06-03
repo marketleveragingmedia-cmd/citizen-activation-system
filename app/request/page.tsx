@@ -116,7 +116,7 @@ export default async function RequestPage() {
         {/* Platform footer - optional for Org Admin */}
         {!hidePlatformBranding && (
           <div className="mt-8 text-center text-sm text-gray-500">
-            Powered by <a href="https://citizenactivation.com" className="hover:underline" style={{ color: secondaryColor }}>Citizen Activation</a>
+            Powered by <a href="https://citizenactivation.com" className="hover:underline" style={{ color: secondaryColor }}>CitizenActivation.com</a>
           </div>
         )}
       </div>

@@ -1,7 +1,0 @@
-
-  function handleEditSave(updated: any) {
-    setAdminList(prev => prev.map(a => a.id === updated.id ? updated : a))
-    setSelectedAdmin(updated)
-    setShowEdit(false)
-    setSuccessMessage('Account updated successfully!')
-  }

@@ -26,7 +26,15 @@ model Admin {
   lastLogin    DateTime?
   status       AdminStatus @default(Active)
 
+  // Founder fields
+  isFounder            Boolean   @default(false)
+  founderDate          DateTime?
+  founderPaymentMethod String?   // "Stripe" | "MOSCA" | "Manual"
+  founderPaymentDetails String?  @db.Text // Transaction ID, confirmation #, wallet address, etc.
+  moscaCode            String?   // MOSCA Strategic Partner Referral Code
+
   teamsCreated Team[]      @relation("TeamsCreated") // Teams this Main Admin created
+  foundersPending FounderPending[] @relation("FounderCreatedBy")
 
   @@map("admins")
 }
@@ -165,4 +173,27 @@ enum RequestStatus {
   Invited
   OnboardingScheduled
   Activated
+}
+
+model FounderPending {
+  id                String   @id @default(cuid())
+  firstName         String
+  lastName          String
+  email             String
+  phone             String
+  moscaCode         String   // MOSCA Strategic Partner Referral Code
+  subdomainOption1  String
+  subdomainOption2  String
+  walletInfo        String   @db.Text // User's wallet address or TX ID
+  paymentMethod     String   @default("MOSCA") // "MOSCA" | "Manual"
+  manualPaymentType String?  // "Zelle" | "CashApp" | other
+  status            String   @default("Pending") // "Pending" | "Approved" | "Rejected"
+  submittedDate     DateTime @default(now())
+  approvedDate      DateTime?
+  approvedByAdminId String?
+  approvedBy        Admin?   @relation("FounderCreatedBy", fields: [approvedByAdminId], references: [id])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("founders_pending")
 }

@@ -121,6 +121,31 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
       <div className="max-w-7xl mx-auto p-4">
         {/* Stats Grid */}
 
+        {/* Master Admin Quick Links */}
+        {isMasterAdmin && (
+          <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4 mb-6">
+            <h2 className="text-xl font-bold text-purple-900 mb-4">🔧 Master Admin Tools</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+              <Link href="/master-admin/main-admins" className="block p-3 bg-white border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition">
+                <h3 className="font-bold text-blue-900 text-sm">📊 View Main Admins</h3>
+                <p className="text-xs text-blue-700 mt-1">Manage all Main Admin accounts</p>
+              </Link>
+              <Link href="/master-admin/founders" className="block p-3 bg-white border-2 border-yellow-600 rounded-lg hover:bg-yellow-50 transition">
+                <h3 className="font-bold text-yellow-900 text-sm">⭐ View Founders</h3>
+                <p className="text-xs text-yellow-700 mt-1">Founders & MOSCA approvals</p>
+              </Link>
+              <Link href="/master-admin/create-account" className="block p-3 bg-white border-2 border-green-600 rounded-lg hover:bg-green-50 transition">
+                <h3 className="font-bold text-green-900 text-sm">➕ Create Account</h3>
+                <p className="text-xs text-green-700 mt-1">Create admin (no payment)</p>
+              </Link>
+              <Link href="/admin/team-admins" className="block p-3 bg-white border-2 border-orange-600 rounded-lg hover:bg-orange-50 transition">
+                <h3 className="font-bold text-orange-900 text-sm">👥 View All Admins</h3>
+                <p className="text-xs text-orange-700 mt-1">Team & Org Admins</p>
+              </Link>
+            </div>
+          </div>
+        )}
+
         {/* Checkout Pages Section - Master Admin Only */}
         {isMasterAdmin && (
           <div className="bg-white rounded-lg shadow p-3 mb-4">

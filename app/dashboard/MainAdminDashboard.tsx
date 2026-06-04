@@ -582,7 +582,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                     setShowReassign(selectedRequest)
                     setSelectedRequest(null)
                   }}
-                  className="px-4 py-2 bg-[#1E8E5A] text-white rounded-lg hover:bg-[#177349]"
+                  className="px-4 py-2 bg-[#1E8E5A] text-white rounded-lg hover:bg-[#177349] text-sm font-medium"
                 >
                   Reassign
                 </button>

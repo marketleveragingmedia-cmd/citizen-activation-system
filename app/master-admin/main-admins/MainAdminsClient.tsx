@@ -1,8 +1,7 @@
 'use client'
-import { btn } from '@/app/lib/buttonStyles'
 
 import { useState } from 'react'
-import Link from 'next/link'
+import { btn } from '@/app/lib/buttonStyles'
 
 interface MainAdminsClientProps {
   mainAdmins: any[]
@@ -10,6 +9,113 @@ interface MainAdminsClientProps {
 
 export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) {
   const [selectedAdmin, setSelectedAdmin] = useState<any>(null)
+  const [adminList, setAdminList] = useState(mainAdmins)
+  const [loading, setLoading] = useState(false)
+
+  async function handleToggleStatus() {
+    if (!selectedAdmin) return
+    setLoading(true)
+    try {
+      const res = await fetch('/api/admin/toggle-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminId: selectedAdmin.id })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        const updated = { ...selectedAdmin, status: data.newStatus }
+        setAdminList(prev => prev.map(a => a.id === updated.id ? updated : a))
+        setSelectedAdmin(updated)
+        alert(`Account ${data.newStatus === 'Active' ? 'reactivated' : 'paused'} successfully!`)
+      } else {
+        alert(`Error: ${data.error}`)
+      }
+    } catch (err: any) {
+      alert(`Error: ${err.message}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleResetPassword() {
+    if (!selectedAdmin) return
+    if (!confirm(`Reset password for ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThey will receive an email with a new temporary password.`)) return
+    
+    setLoading(true)
+    try {
+      const res = await fetch('/api/admin/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminId: selectedAdmin.id })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        alert('Password reset email sent successfully!')
+      } else {
+        alert(`Error: ${data.error}`)
+      }
+    } catch (err: any) {
+      alert(`Error: ${err.message}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleResendWelcome() {
+    if (!selectedAdmin) return
+    if (!confirm(`Resend welcome email to ${selectedAdmin.email}?`)) return
+    
+    setLoading(true)
+    try {
+      const res = await fetch('/api/admin/resend-welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminId: selectedAdmin.id })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        alert('Welcome email sent successfully!')
+      } else {
+        alert(`Error: ${data.error}`)
+      }
+    } catch (err: any) {
+      alert(`Error: ${err.message}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleDelete() {
+    if (!selectedAdmin) return
+    if (!confirm(`⚠️ DELETE ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThis will:\n- Delete the admin account\n- Preserve their network (Team Admins, Org Admins)\n- Keep Strategic Partners assigned\n\nThis action CANNOT be undone!`)) return
+    
+    const confirmText = prompt('Type DELETE to confirm:')
+    if (confirmText !== 'DELETE') {
+      alert('Deletion cancelled - confirmation text did not match')
+      return
+    }
+    
+    setLoading(true)
+    try {
+      const res = await fetch('/api/admin/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminId: selectedAdmin.id, confirmText })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setAdminList(prev => prev.filter(a => a.id !== selectedAdmin.id))
+        setSelectedAdmin(null)
+        alert('Admin account deleted successfully')
+      } else {
+        alert(`Error: ${data.error}`)
+      }
+    } catch (err: any) {
+      alert(`Error: ${err.message}`)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <>
@@ -28,7 +134,7 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {mainAdmins.map((mainAdmin) => {
+          {adminList.map((mainAdmin) => {
             const teamAdmins = mainAdmin.teamsCreated.filter((t: any) => t.tierType === 'FullSystem').length
             const orgAdmins = mainAdmin.teamsCreated.filter((t: any) => t.tierType === 'SoloOrg').length
 
@@ -100,7 +206,7 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
         </tbody>
       </table>
 
-      {/* View Details Modal */}
+      {/* Modal */}
       {selectedAdmin && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -116,103 +222,14 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-gray-500">Type</div>
-                  <div className="text-lg">
-                    {selectedAdmin.isFounder ? (
-                      <span className="text-yellow-600 font-bold">⭐ Founder</span>
-                    ) : (
-                      <span className="text-gray-700">Main Admin</span>
-                    )}
-                  </div>
+                  <div className="text-sm font-medium text-gray-500">Status</div>
+                  <div className="text-gray-900">{selectedAdmin.status}</div>
                 </div>
               </div>
 
               <div>
                 <div className="text-sm font-medium text-gray-500">Email</div>
                 <div className="text-gray-900">{selectedAdmin.email}</div>
-              </div>
-
-              <div>
-                <div className="text-sm font-medium text-gray-500">Phone</div>
-                <div className="text-gray-900">{selectedAdmin.phone || 'N/A'}</div>
-              </div>
-
-              <div>
-                <div className="text-sm font-medium text-gray-500">Subdomain</div>
-                <div className="text-gray-900">
-                  {selectedAdmin.subdomain ? (
-                    <a 
-                      href={`https://${selectedAdmin.subdomain}.citizenactivation.com`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
-                    >
-                      {selectedAdmin.subdomain}.citizenactivation.com
-                    </a>
-                  ) : 'N/A'}
-                </div>
-              </div>
-
-              {selectedAdmin.moscaCode && (
-                <div>
-                  <div className="text-sm font-medium text-gray-500">MOSCA Strategic Partner Code</div>
-                  <div className="text-gray-900 font-mono">{selectedAdmin.moscaCode}</div>
-                </div>
-              )}
-
-              <div className="border-t pt-4">
-                <div className="text-sm font-medium text-gray-500 mb-2">Payment Information</div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="text-xs text-gray-500">Method</div>
-                    <div className="text-gray-900">{selectedAdmin.founderPaymentMethod || 'N/A'}</div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-gray-500">Amount</div>
-                    <div className="text-gray-900">
-                      {selectedAdmin.isFounder ? '$997 (Founder)' : '$1,497 Y1'}
-                    </div>
-                  </div>
-                </div>
-                {selectedAdmin.founderPaymentDetails && (
-                  <div className="mt-2">
-                    <div className="text-xs text-gray-500">Payment Details</div>
-                    <div className="text-gray-900 text-sm">{selectedAdmin.founderPaymentDetails}</div>
-                  </div>
-                )}
-              </div>
-
-              <div className="border-t pt-4">
-                <div className="text-sm font-medium text-gray-500 mb-2">Network</div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="text-xs text-gray-500">Team Admins</div>
-                    <div className="text-2xl font-bold text-gray-900">
-                      {selectedAdmin.teamsCreated.filter((t: any) => t.tierType === 'FullSystem').length}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-gray-500">Org Admins</div>
-                    <div className="text-2xl font-bold text-gray-900">
-                      {selectedAdmin.teamsCreated.filter((t: any) => t.tierType === 'SoloOrg').length}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="border-t pt-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="text-sm font-medium text-gray-500">Status</div>
-                    <div className="text-gray-900">{selectedAdmin.status}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-gray-500">Created</div>
-                    <div className="text-gray-900">
-                      {new Date(selectedAdmin.createdDate).toLocaleString()}
-                    </div>
-                  </div>
-                </div>
               </div>
 
               {selectedAdmin.referralCode && (
@@ -222,71 +239,43 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                 </div>
               )}
             </div>
+            
             <div className="p-6 border-t bg-gray-50">
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
-                  onClick={() => {
-                    // TODO: Open edit modal
-                    alert('Edit functionality coming next')
-                  }}
-                  className={btn.primary}
+                  onClick={handleToggleStatus}
+                  disabled={loading}
+                  className="bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
                 >
-                  ✏️ Edit Account
+                  {loading ? 'Working...' : (selectedAdmin.status === 'Active' ? '⏸️ Pause' : '▶️ Reactivate')}
                 </button>
                 <button
-                  onClick={() => {
-                    if (confirm(`${selectedAdmin.status === 'Active' ? 'Pause' : 'Reactivate'} ${selectedAdmin.firstName} ${selectedAdmin.lastName}?`)) {
-                      // TODO: API call to toggle status
-                      alert('Pause/Reactivate functionality coming next')
-                    }
-                  }}
-                  className={selectedAdmin.status === 'Active' ? btn.warning : btn.success}
+                  onClick={handleResetPassword}
+                  disabled={loading}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
                 >
-                  {selectedAdmin.status === 'Active' ? '⏸️ Pause Account' : '▶️ Reactivate'}
+                  {loading ? 'Working...' : '🔑 Reset Password'}
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
-                  onClick={() => {
-                    if (confirm(`Reset password for ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThey will receive an email with a new temporary password.`)) {
-                      // TODO: API call to reset password
-                      alert('Reset Password functionality coming next')
-                    }
-                  }}
-                  className={btn.purple}
+                  onClick={handleResendWelcome}
+                  disabled={loading}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
                 >
-                  🔑 Reset Password
+                  {loading ? 'Working...' : '📧 Resend Welcome'}
                 </button>
                 <button
-                  onClick={() => {
-                    if (confirm(`Resend welcome email to ${selectedAdmin.email}?`)) {
-                      // TODO: API call to resend welcome email
-                      alert('Resend Welcome Email functionality coming next')
-                    }
-                  }}
-                  className={btn.indigo}
+                  onClick={handleDelete}
+                  disabled={loading}
+                  className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
                 >
-                  📧 Resend Welcome
-                </button>
-              </div>
-              <div className="mb-3">
-                <button
-                  onClick={() => {
-                    if (confirm(`⚠️ DELETE ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThis will:\n- Delete the admin account\n- Preserve their network (Team Admins, Org Admins)\n- Keep Strategic Partners assigned\n\nThis action CANNOT be undone!`)) {
-                      if (confirm('Are you ABSOLUTELY SURE? Type DELETE to confirm.')) {
-                        // TODO: API call to delete account
-                        alert('Delete Account functionality coming next')
-                      }
-                    }
-                  }}
-                  className={`w-full ${btn.danger}`}
-                >
-                  🗑️ Delete Account
+                  {loading ? 'Working...' : '🗑️ Delete'}
                 </button>
               </div>
               <button
                 onClick={() => setSelectedAdmin(null)}
-                className={`w-full ${btn.secondary}`}
+                className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
               >
                 Close
               </button>

@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import MainAdminsClient from './MainAdminsClient'
 
 export default async function MainAdminsPage() {
   const session = await getServerSession(authOptions)
@@ -47,7 +48,6 @@ export default async function MainAdminsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <nav className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <div>
@@ -102,86 +102,7 @@ export default async function MainAdminsPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Subdomain</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Payment</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Network</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Account ID</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {mainAdmins.map((mainAdmin) => {
-                    const teamAdmins = mainAdmin.teamsCreated.filter(t => t.tierType === 'FullSystem').length
-                    const orgAdmins = mainAdmin.teamsCreated.filter(t => t.tierType === 'SoloOrg').length
-
-                    return (
-                      <tr key={mainAdmin.id}>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {mainAdmin.status === 'Active' ? (
-                            <span className="text-green-600 font-semibold">✅ Active</span>
-                          ) : (
-                            <span className="text-gray-600 font-semibold">⏸️ Inactive</span>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="font-medium text-gray-900">
-                            {mainAdmin.firstName} {mainAdmin.lastName}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-600">{mainAdmin.email}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
-                            {mainAdmin.subdomain || '-'}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {mainAdmin.isFounder ? (
-                            <span className="inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-3 py-1 rounded-full text-xs font-bold">
-                              ⭐ Founder
-                            </span>
-                          ) : (
-                            <span className="text-gray-600 text-sm">Main Admin</span>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
-                            {mainAdmin.founderPaymentMethod || '-'}
-                          </div>
-                          {mainAdmin.founderPaymentMethod && (
-                            <div className="text-xs text-gray-500">
-                              {mainAdmin.isFounder ? '$997' : '$1,497'}
-                            </div>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-600">
-                            {teamAdmins} Team, {orgAdmins} Org
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-600">
-                            {new Date(mainAdmin.createdDate).toLocaleDateString()}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-600">
-                            ID: {mainAdmin.id.slice(0, 8)}...
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+              <MainAdminsClient mainAdmins={mainAdmins} />
             </div>
           )}
         </div>

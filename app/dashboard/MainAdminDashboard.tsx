@@ -8,6 +8,7 @@ import ReassignModal from './ReassignModal'
 import AddNoteModal from './AddNoteModal'
 import StripeConnectButton from './StripeConnectButton'
 import UpdateSlotLimitModal from './UpdateSlotLimitModal'
+import { btn } from '@/app/lib/buttonStyles'
 
 interface MainAdminDashboardProps {
   stats: any
@@ -218,25 +219,25 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setShowAddTeam(true)}
-              className="btn-brand-gold"
+              className={btn.brandGold}
             >
               + Add Team / Organization Admin
             </button>
             <button
               onClick={() => setShowAddPartner(true)}
-              className="btn-brand-green"
+              className={btn.brandGreen}
             >
               + Add Strategic Partner
             </button>
             <Link
               href="/admin/team-admins"
-              className="btn-brand-gold"
+              className={btn.brandGold}
             >
               View All Team Admins
             </Link>
             <Link
               href="/admin/partners"
-              className="btn-secondary"
+              className={btn.secondary}
             >
               View All Strategic Partners
             </Link>

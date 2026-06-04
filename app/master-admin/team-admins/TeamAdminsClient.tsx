@@ -1,4 +1,5 @@
 'use client'
+import { btn } from '@/app/lib/buttonStyles'
 
 import { useState } from 'react'
 
@@ -149,7 +150,7 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
                   onClick={() => {
                     alert('Edit functionality coming next')
                   }}
-                  className="btn-primary"
+                  className={btn.primary}
                 >
                   ✏️ Edit Account
                 </button>
@@ -159,7 +160,7 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
                       alert('Pause/Reactivate functionality coming next')
                     }
                   }}
-                  className={selectedAdmin.status === 'Active' ? 'btn-warning' : 'btn-success'}
+                  className={selectedAdmin.status === 'Active' ? btn.warning : btn.success}
                 >
                   {selectedAdmin.status === 'Active' ? '⏸️ Pause Account' : '▶️ Reactivate'}
                 </button>
@@ -171,7 +172,7 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
                       alert('Reset Password functionality coming next')
                     }
                   }}
-                  className="btn-purple"
+                  className={btn.purple}
                 >
                   🔑 Reset Password
                 </button>
@@ -181,7 +182,7 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
                       alert('Resend Welcome Email functionality coming next')
                     }
                   }}
-                  className="btn-indigo"
+                  className={btn.indigo}
                 >
                   📧 Resend Welcome
                 </button>
@@ -195,14 +196,14 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
                       }
                     }
                   }}
-                  className="w-full btn-danger"
+                  className={`w-full ${btn.danger}`}
                 >
                   🗑️ Delete Account
                 </button>
               </div>
               <button
                 onClick={() => setSelectedAdmin(null)}
-                className="w-full btn-secondary"
+                className={`w-full ${btn.secondary}`}
               >
                 Close
               </button>

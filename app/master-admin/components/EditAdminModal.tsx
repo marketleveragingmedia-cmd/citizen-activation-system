@@ -4,11 +4,11 @@ import { useState } from 'react'
 
 interface EditAdminModalProps {
   admin: any
-  onClose: () => void
   onSave: (updated: any) => void
+  onCancel: () => void
 }
 
-export default function EditAdminModal({ admin, onClose, onSave }: EditAdminModalProps) {
+export default function EditAdminModal({ admin, onSave, onCancel }: EditAdminModalProps) {
   const [firstName, setFirstName] = useState(admin.firstName)
   const [lastName, setLastName] = useState(admin.lastName)
   const [email, setEmail] = useState(admin.email)
@@ -17,6 +17,11 @@ export default function EditAdminModal({ admin, onClose, onSave }: EditAdminModa
   const [error, setError] = useState('')
 
   async function handleSave() {
+    if (!firstName || !lastName || !email) {
+      setError('First name, last name, and email are required')
+      return
+    }
+
     setSaving(true)
     setError('')
 
@@ -40,7 +45,6 @@ export default function EditAdminModal({ admin, onClose, onSave }: EditAdminModa
       }
 
       onSave(data.admin)
-      onClose()
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -49,51 +53,51 @@ export default function EditAdminModal({ admin, onClose, onSave }: EditAdminModa
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
         <div className="p-6 border-b">
           <h2 className="text-xl font-bold text-gray-900">Edit Admin Account</h2>
         </div>
         <div className="p-6 space-y-4">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
               {error}
             </div>
           )}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              First Name
+              First Name *
             </label>
             <input
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Last Name
+              Last Name *
             </label>
             <input
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
+              Email *
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -105,14 +109,14 @@ export default function EditAdminModal({ admin, onClose, onSave }: EditAdminModa
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Optional"
             />
           </div>
         </div>
         <div className="p-6 border-t bg-gray-50 flex gap-3">
           <button
-            onClick={onClose}
+            onClick={onCancel}
             disabled={saving}
             className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
           >

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import ConfirmDialog from '../components/ConfirmDialog'
+import EditAdminModal from '../components/EditAdminModal'
 import SuccessToast from '../components/SuccessToast'
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog'
 
@@ -17,8 +18,16 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [showResendConfirm, setShowResendConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showEdit, setShowEdit] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
   const [error, setError] = useState('')
+
+  function handleEditSave(updated: any) {
+    setAdminList(prev => prev.map(a => a.id === updated.id ? updated : a))
+    setSelectedAdmin(updated)
+    setShowEdit(false)
+    setSuccessMessage('Account updated successfully!')
+  }
 
   async function handleToggleStatus() {
     if (!selectedAdmin) return
@@ -159,7 +168,15 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                   )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <button
+                                <div className="grid grid-cols-2 gap-3 mb-3">
+                <button
+                  onClick={() => setShowEdit(true)}
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
+                >
+                  ✏️ Edit Account
+                </button>
+                <button
                     onClick={() => setSelectedAdmin(mainAdmin)}
                     className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-left"
                   >
@@ -190,7 +207,15 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <button
+                                <div className="grid grid-cols-2 gap-3 mb-3">
+                <button
+                  onClick={() => setShowEdit(true)}
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
+                >
+                  ✏️ Edit Account
+                </button>
+                <button
                     onClick={() => setSelectedAdmin(mainAdmin)}
                     className="text-blue-600 hover:text-blue-800 font-medium text-sm"
                   >
@@ -245,12 +270,28 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
             
             <div className="p-6 border-t bg-gray-50">
               <div className="grid grid-cols-2 gap-3 mb-3">
+                              <div className="grid grid-cols-2 gap-3 mb-3">
+                <button
+                  onClick={() => setShowEdit(true)}
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
+                >
+                  ✏️ Edit Account
+                </button>
                 <button
                   onClick={() => setShowToggleConfirm(true)}
                   disabled={loading}
                   className="bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
                 >
                   {selectedAdmin.status === 'Active' ? '⏸️ Pause' : '▶️ Reactivate'}
+                </button>
+                              <div className="grid grid-cols-2 gap-3 mb-3">
+                <button
+                  onClick={() => setShowEdit(true)}
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
+                >
+                  ✏️ Edit Account
                 </button>
                 <button
                   onClick={() => setShowResetConfirm(true)}
@@ -261,12 +302,28 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-3 mb-3">
+                              <div className="grid grid-cols-2 gap-3 mb-3">
+                <button
+                  onClick={() => setShowEdit(true)}
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
+                >
+                  ✏️ Edit Account
+                </button>
                 <button
                   onClick={() => setShowResendConfirm(true)}
                   disabled={loading}
                   className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
                 >
                   📧 Resend Welcome
+                </button>
+                              <div className="grid grid-cols-2 gap-3 mb-3">
+                <button
+                  onClick={() => setShowEdit(true)}
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
+                >
+                  ✏️ Edit Account
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(true)}
@@ -276,7 +333,15 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                   🗑️ Delete
                 </button>
               </div>
-              <button
+                            <div className="grid grid-cols-2 gap-3 mb-3">
+                <button
+                  onClick={() => setShowEdit(true)}
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
+                >
+                  ✏️ Edit Account
+                </button>
+                <button
                 onClick={() => setSelectedAdmin(null)}
                 className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
               >
@@ -334,6 +399,28 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
         <SuccessToast
           message={successMessage}
           onClose={() => setSuccessMessage('')}
+        />
+      )}
+    </>
+  )
+}
+
+      {/* Edit Modal */}
+      {showEdit && selectedAdmin && (
+        <EditAdminModal
+          admin={selectedAdmin}
+          onSave={handleEditSave}
+          onCancel={() => setShowEdit(false)}
+        />
+      )}
+
+
+      {/* Edit Modal */}
+      {showEdit && selectedAdmin && (
+        <EditAdminModal
+          admin={selectedAdmin}
+          onSave={handleEditSave}
+          onCancel={() => setShowEdit(false)}
         />
       )}
     </>

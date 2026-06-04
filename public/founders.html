@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Founders Beta Launch - Citizen Activation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+
+        .logo {
+            max-width: 300px;
+            height: auto;
+            margin: 0 auto 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1E8E5A;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1E8E5A 0%, #065F46 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .hero .price {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .hero .tagline {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Example Section */
+        .example {
+            background: #f9fafb;
+            padding: 40px;
+            border-radius: 12px;
+            margin: 40px 0;
+            border-left: 4px solid #1E8E5A;
+        }
+
+        .example h3 {
+            font-size: 1.5rem;
+            color: #1E8E5A;
+            margin-bottom: 20px;
+        }
+
+        .example-steps {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .example-steps li {
+            padding: 10px 0;
+            font-size: 1rem;
+            color: #374151;
+        }
+
+        .example-steps li::before {
+            content: "→ ";
+            color: #1E8E5A;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .example-link {
+            background: #1E8E5A;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Strategic Placement Section */
+        .strategic {
+            background: #fffbeb;
+            padding: 40px;
+            border-radius: 12px;
+            margin: 40px 0;
+            border-left: 4px solid #C9A441;
+        }
+
+        .strategic h3 {
+            font-size: 1.5rem;
+            color: #92400e;
+            margin-bottom: 20px;
+        }
+
+        .strategic ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .strategic ul li {
+            padding: 8px 0;
+            color: #78350f;
+        }
+
+        .strategic ul li::before {
+            content: "✓ ";
+            color: #C9A441;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            margin: 40px 0;
+        }
+
+        .benefits h3 {
+            font-size: 1.75rem;
+            color: #1E8E5A;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .benefit-card {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .benefit-card h4 {
+            color: #1E8E5A;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .benefit-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .benefit-card ul li {
+            padding: 6px 0;
+            font-size: 0.95rem;
+            color: #4b5563;
+        }
+
+        .benefit-card ul li::before {
+            content: "✅ ";
+            margin-right: 6px;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, #C9A441 0%, #B8932F 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .cta h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-button {
+            background: white;
+            color: #C9A441;
+            padding: 18px 48px;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 2px solid #f3f4f6;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+
+            .hero .price {
+                font-size: 2rem;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <img src="/citizen-activation-logo.jpg" alt="Citizen Activation System" class="logo">
+            <h1>Founders Beta Launch</h1>
+            <p class="subtitle">Citizen Activation System</p>
+        </header>
+
+        <!-- Hero -->
+        <div class="hero">
+            <h2>$997 One-Time</h2>
+            <p class="price">Lifetime Access</p>
+            <p class="tagline">Zero Annual Fees. EVER.</p>
+        </div>
+
+        <!-- Real-World Example -->
+        <div class="example">
+            <h3>⚡ Real-World Example</h3>
+            <h4 style="color: #374151; margin-bottom: 15px;">Grace Community Church MOSCA Presentation</h4>
+            <ul class="example-steps">
+                <li>You (MOSCA Founder) add Pastor as Organization Admin</li>
+                <li>Pastor gets branded link: <span class="example-link" style="display: inline; padding: 6px 12px; font-size: 0.9rem;">grace-church.citizenactivation.com</span></li>
+                <li>Pastor gives MOSCA "Press Play" presentation to congregation</li>
+                <li>Pastor shares link</li>
+                <li>Round Robin distributes to Strategic Partners</li>
+                <li>Church network builds fast</li>
+            </ul>
+        </div>
+
+        <!-- Strategic Placement -->
+        <div class="strategic">
+            <h3>💡 The Power of Strategic Placement</h3>
+            <h4 style="color: #92400e; margin-bottom: 15px;">Deep & Wide = Everyone Wins</h4>
+            <ul>
+                <li>Round Robin assigns 3-5 per Strategic Partner (manageable)</li>
+                <li>3×3×3 structure builds DEEP</li>
+                <li>Can scale to 5×5×5 structure</li>
+                <li>Everyone earns at every level</li>
+            </ul>
+        </div>
+
+        <!-- Benefits -->
+        <div class="benefits">
+            <h3>🚀 What You Get</h3>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h4>Full Access</h4>
+                    <ul>
+                        <li>Lifetime access to Citizen Activation System</li>
+                        <li>Custom link for presentations</li>
+                        <li>Unlimited Strategic Partners</li>
+                        <li>Dashboard visibility</li>
+                        <li>Professional platform</li>
+                    </ul>
+                </div>
+
+                <div class="benefit-card">
+                    <h4>Add Admins</h4>
+                    <ul>
+                        <li>Add Team Admins (groups, teams, networks)</li>
+                        <li>Add Organization Admins (churches, charities, schools)</li>
+                        <li>Payment splits ($200-$297 per admin)</li>
+                        <li>Round Robin automation</li>
+                    </ul>
+                </div>
+
+                <div class="benefit-card">
+                    <h4>Founder Benefits</h4>
+                    <ul>
+                        <li>Pay once, own forever</li>
+                        <li>Zero annual fees (EVER)</li>
+                        <li>Priority support</li>
+                        <li>Founder recognition</li>
+                        <li>Suggest feature requests</li>
+                        <li>Early access to new features</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta">
+            <h3>Ready to Become a Founder?</h3>
+            <p style="font-size: 1.1rem; margin-bottom: 10px;">Limited Time Offer</p>
+            <p style="opacity: 0.95;">$997 one-time vs. $10,470 over 10 years</p>
+            <a href="#" class="cta-button">Join Founders Beta →</a>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 Citizen Activation System. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

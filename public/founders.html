@@ -50,56 +50,85 @@
             font-weight: 500;
         }
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #1E8E5A 0%, #065F46 100%);
-            color: white;
-            padding: 60px 40px;
-            border-radius: 12px;
-            margin: 40px 0;
+        /* Section Headers */
+        .section {
+            margin: 50px 0;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            color: #1E8E5A;
+            margin-bottom: 25px;
             text-align: center;
         }
 
-        .hero h2 {
-            font-size: 2rem;
+        .section p {
+            font-size: 1.1rem;
+            color: #4b5563;
+            line-height: 1.8;
             margin-bottom: 15px;
         }
 
-        .hero .price {
-            font-size: 3rem;
-            font-weight: 700;
-            margin: 20px 0;
+        /* What Is Section */
+        .what-is {
+            background: #f9fafb;
+            padding: 40px;
+            border-radius: 12px;
+            border-left: 4px solid #1E8E5A;
         }
 
-        .hero .tagline {
-            font-size: 1.1rem;
-            opacity: 0.95;
+        /* Why Use Section */
+        .why-use {
+            background: #fffbeb;
+            padding: 40px;
+            border-radius: 12px;
+            border-left: 4px solid #C9A441;
+        }
+
+        .why-use ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 20px;
+        }
+
+        .why-use ul li {
+            padding: 10px 0;
+            font-size: 1.05rem;
+            color: #78350f;
+        }
+
+        .why-use ul li::before {
+            content: "✓ ";
+            color: #C9A441;
+            font-weight: bold;
+            margin-right: 8px;
+            font-size: 1.2rem;
         }
 
         /* Example Section */
         .example {
-            background: #f9fafb;
+            background: #f0fdf4;
             padding: 40px;
             border-radius: 12px;
-            margin: 40px 0;
             border-left: 4px solid #1E8E5A;
         }
 
         .example h3 {
             font-size: 1.5rem;
-            color: #1E8E5A;
+            color: #065f46;
             margin-bottom: 20px;
         }
 
         .example-steps {
             list-style: none;
             padding-left: 0;
+            margin-top: 20px;
         }
 
         .example-steps li {
             padding: 10px 0;
             font-size: 1rem;
-            color: #374151;
+            color: #047857;
         }
 
         .example-steps li::before {
@@ -112,20 +141,18 @@
         .example-link {
             background: #1E8E5A;
             color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
+            padding: 8px 16px;
+            border-radius: 6px;
             display: inline-block;
-            margin-top: 15px;
             font-weight: 600;
-            text-decoration: none;
+            font-size: 0.95rem;
         }
 
-        /* Strategic Placement Section */
+        /* Strategic Placement */
         .strategic {
-            background: #fffbeb;
+            background: #fef3c7;
             padding: 40px;
             border-radius: 12px;
-            margin: 40px 0;
             border-left: 4px solid #C9A441;
         }
 
@@ -138,11 +165,13 @@
         .strategic ul {
             list-style: none;
             padding-left: 0;
+            margin-top: 15px;
         }
 
         .strategic ul li {
             padding: 8px 0;
             color: #78350f;
+            font-size: 1.05rem;
         }
 
         .strategic ul li::before {
@@ -152,28 +181,17 @@
             margin-right: 8px;
         }
 
-        /* Benefits Section */
-        .benefits {
-            margin: 40px 0;
-        }
-
-        .benefits h3 {
-            font-size: 1.75rem;
-            color: #1E8E5A;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
+        /* Benefits Grid */
         .benefits-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-top: 30px;
         }
 
         .benefit-card {
             background: #f9fafb;
-            padding: 20px;
+            padding: 25px;
             border-radius: 8px;
             border: 2px solid #e5e7eb;
         }
@@ -181,7 +199,7 @@
         .benefit-card h4 {
             color: #1E8E5A;
             margin-bottom: 15px;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
         }
 
         .benefit-card ul {
@@ -200,6 +218,34 @@
             margin-right: 6px;
         }
 
+        /* Pricing Hero */
+        .pricing-hero {
+            background: linear-gradient(135deg, #1E8E5A 0%, #065F46 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .pricing-hero h2 {
+            font-size: 2.25rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .pricing-hero .price {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .pricing-hero .tagline {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            margin-top: 10px;
+        }
+
         /* CTA Section */
         .cta {
             background: linear-gradient(135deg, #C9A441 0%, #B8932F 100%);
@@ -207,7 +253,7 @@
             padding: 60px 40px;
             border-radius: 12px;
             text-align: center;
-            margin: 40px 0;
+            margin: 50px 0;
         }
 
         .cta h3 {
@@ -247,16 +293,20 @@
                 font-size: 2rem;
             }
 
-            .hero h2 {
+            .section h2 {
                 font-size: 1.5rem;
             }
 
-            .hero .price {
-                font-size: 2rem;
+            .pricing-hero .price {
+                font-size: 2.5rem;
             }
 
             .benefits-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .what-is, .why-use, .example, .strategic {
+                padding: 25px;
             }
         }
     </style>
@@ -270,42 +320,74 @@
             <p class="subtitle">Citizen Activation System</p>
         </header>
 
-        <!-- Hero -->
-        <div class="hero">
-            <h2>$997 One-Time</h2>
-            <p class="price">Lifetime Access</p>
-            <p class="tagline">Zero Annual Fees. EVER.</p>
-        </div>
+        <!-- 1. What Is the Citizen Activation System -->
+        <section class="section">
+            <div class="what-is">
+                <h2>What Is the Citizen Activation System?</h2>
+                <p>
+                    The Citizen Activation System is a professional network coordination platform designed to accelerate MOSCA wallet activations through strategic group invitations and automated Round Robin distribution.
+                </p>
+                <p>
+                    Instead of manually coordinating private invitations one-by-one, you share a single branded link during your MOSCA presentation. The system automatically distributes requests to your Strategic Partners using intelligent placement (3-5 per person), building deep networks fast.
+                </p>
+                <p>
+                    Perfect for MOSCA members who give presentations to churches, charities, schools, organizations, and business teams.
+                </p>
+            </div>
+        </section>
 
-        <!-- Real-World Example -->
-        <div class="example">
-            <h3>⚡ Real-World Example</h3>
-            <h4 style="color: #374151; margin-bottom: 15px;">Grace Community Church MOSCA Presentation</h4>
-            <ul class="example-steps">
-                <li>You (MOSCA Founder) add Pastor as Organization Admin</li>
-                <li>Pastor gets branded link: <span class="example-link" style="display: inline; padding: 6px 12px; font-size: 0.9rem;">grace-church.citizenactivation.com</span></li>
-                <li>Pastor gives MOSCA "Press Play" presentation to congregation</li>
-                <li>Pastor shares link</li>
-                <li>Round Robin distributes to Strategic Partners</li>
-                <li>Church network builds fast</li>
-            </ul>
-        </div>
+        <!-- 2. Why Use It -->
+        <section class="section">
+            <div class="why-use">
+                <h2>Why Use the Citizen Activation System?</h2>
+                <p style="color: #92400e; font-size: 1.1rem; margin-bottom: 20px;">
+                    <strong>You already know MOSCA works. This accelerates it.</strong>
+                </p>
+                <ul>
+                    <li>Share ONE link during your MOSCA "Press Play" presentation (entire group has access instantly)</li>
+                    <li>Round Robin distributes strategically to Strategic Partners (3-5 each, manageable)</li>
+                    <li>3×3×3 structure builds DEEP, can scale to 5×5×5</li>
+                    <li>Weeks not months to build network (momentum stays hot)</li>
+                    <li>Everyone earns at every level (not just top)</li>
+                    <li>Professional dashboard tracks all requests and activations</li>
+                    <li>Add Organization Admins (churches, charities, schools) and receive payment splits</li>
+                </ul>
+            </div>
+        </section>
 
-        <!-- Strategic Placement -->
-        <div class="strategic">
-            <h3>💡 The Power of Strategic Placement</h3>
-            <h4 style="color: #92400e; margin-bottom: 15px;">Deep & Wide = Everyone Wins</h4>
-            <ul>
-                <li>Round Robin assigns 3-5 per Strategic Partner (manageable)</li>
-                <li>3×3×3 structure builds DEEP</li>
-                <li>Can scale to 5×5×5 structure</li>
-                <li>Everyone earns at every level</li>
-            </ul>
-        </div>
+        <!-- 3. Real-World Example -->
+        <section class="section">
+            <div class="example">
+                <h2>How It Works: Real-World Example</h2>
+                <h3>Grace Community Church MOSCA Presentation</h3>
+                <ul class="example-steps">
+                    <li>You (MOSCA Founder) add Pastor as Organization Admin</li>
+                    <li>Pastor gets branded link: <span class="example-link">grace-church.citizenactivation.com</span></li>
+                    <li>Pastor gives MOSCA "Press Play" presentation to congregation</li>
+                    <li>Pastor shares link</li>
+                    <li>Round Robin distributes to Strategic Partners</li>
+                    <li>Church network builds fast</li>
+                </ul>
+            </div>
+        </section>
 
-        <!-- Benefits -->
-        <div class="benefits">
-            <h3>🚀 What You Get</h3>
+        <!-- 4. Strategic Placement Power -->
+        <section class="section">
+            <div class="strategic">
+                <h2>The Power of Strategic Placement</h2>
+                <h3>Deep & Wide = Everyone Wins</h3>
+                <ul>
+                    <li>Round Robin assigns 3-5 per Strategic Partner (manageable)</li>
+                    <li>3×3×3 structure builds DEEP</li>
+                    <li>Can scale to 5×5×5 structure</li>
+                    <li>Everyone earns at every level</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. What You Get -->
+        <section class="section">
+            <h2>What You Get as a Founder</h2>
             <div class="benefits-grid">
                 <div class="benefit-card">
                     <h4>Full Access</h4>
@@ -340,13 +422,23 @@
                     </ul>
                 </div>
             </div>
+        </section>
+
+        <!-- 6. Pricing -->
+        <div class="pricing-hero">
+            <h2>Founders Beta Pricing</h2>
+            <p class="price">$997 One-Time</p>
+            <p class="tagline">Lifetime Access • Zero Annual Fees • EVER</p>
+            <p style="margin-top: 20px; font-size: 1.1rem; opacity: 0.9;">
+                vs. Regular Pricing: $1,497 Year 1 + $997/year = $10,470 over 10 years
+            </p>
         </div>
 
-        <!-- CTA -->
+        <!-- 7. CTA -->
         <div class="cta">
             <h3>Ready to Become a Founder?</h3>
-            <p style="font-size: 1.1rem; margin-bottom: 10px;">Limited Time Offer</p>
-            <p style="opacity: 0.95;">$997 one-time vs. $10,470 over 10 years</p>
+            <p style="font-size: 1.1rem; margin-bottom: 10px;">Limited Time Beta Launch</p>
+            <p style="opacity: 0.95;">For Current MOSCA Citizens & Strategic Partners</p>
             <a href="#" class="cta-button">Join Founders Beta →</a>
         </div>
 

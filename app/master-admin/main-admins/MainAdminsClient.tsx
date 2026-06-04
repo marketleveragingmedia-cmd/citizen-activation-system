@@ -41,9 +41,12 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                   )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="font-medium text-gray-900">
+                  <button
+                    onClick={() => setSelectedAdmin(mainAdmin)}
+                    className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-left"
+                  >
                     {mainAdmin.firstName} {mainAdmin.lastName}
-                  </div>
+                  </button>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-600">{mainAdmin.email}</div>
@@ -87,7 +90,7 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                     onClick={() => setSelectedAdmin(mainAdmin)}
                     className="text-blue-600 hover:text-blue-800 font-medium text-sm"
                   >
-                    View
+                    View Details
                   </button>
                 </td>
               </tr>

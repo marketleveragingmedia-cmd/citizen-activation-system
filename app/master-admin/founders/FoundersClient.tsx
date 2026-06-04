@@ -253,7 +253,7 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
                   onClick={() => alert('Edit functionality coming next')}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                  className="btn-primary"
                 >
                   ✏️ Edit Account
                 </button>
@@ -263,7 +263,7 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
                       alert('Pause/Reactivate functionality coming next')
                     }
                   }}
-                  className={`${selectedAdmin.status === 'Active' ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700'} text-white font-medium py-2 px-4 rounded-lg text-sm`}
+                  className={selectedAdmin.status === 'Active' ? 'btn-warning' : 'btn-success'}
                 >
                   {selectedAdmin.status === 'Active' ? '⏸️ Pause Account' : '▶️ Reactivate'}
                 </button>
@@ -275,7 +275,7 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
                       alert('Reset Password functionality coming next')
                     }
                   }}
-                  className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                  className="btn-purple"
                 >
                   🔑 Reset Password
                 </button>
@@ -285,7 +285,7 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
                       alert('Resend Welcome Email functionality coming next')
                     }
                   }}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                  className="btn-indigo"
                 >
                   📧 Resend Welcome
                 </button>
@@ -299,14 +299,14 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
                       }
                     }
                   }}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                  className="w-full btn-danger"
                 >
                   🗑️ Delete Account
                 </button>
               </div>
               <button
                 onClick={() => setSelectedAdmin(null)}
-                className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                className="w-full btn-secondary"
               >
                 Close
               </button>

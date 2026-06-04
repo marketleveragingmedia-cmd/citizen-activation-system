@@ -218,25 +218,25 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setShowAddTeam(true)}
-              className="bg-[#C9A441] hover:bg-[#B8932F] text-white font-bold py-2 px-4 rounded-lg text-sm"
+              className="btn-brand-gold"
             >
               + Add Team / Organization Admin
             </button>
             <button
               onClick={() => setShowAddPartner(true)}
-              className="bg-[#1E8E5A] hover:bg-[#177349] text-white font-bold py-2 px-4 rounded-lg text-sm"
+              className="btn-brand-green"
             >
               + Add Strategic Partner
             </button>
             <Link
               href="/admin/team-admins"
-              className="bg-[#C9A441] hover:bg-[#B8932F] text-white font-bold py-2 px-4 rounded-lg inline-block text-sm"
+              className="btn-brand-gold"
             >
               View All Team Admins
             </Link>
             <Link
               href="/admin/partners"
-              className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg inline-block text-sm"
+              className="btn-secondary"
             >
               View All Strategic Partners
             </Link>

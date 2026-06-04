@@ -1,0 +1,240 @@
+'use client'
+
+import { useState } from 'react'
+
+interface OrgAdminsClientProps {
+  orgAdmins: any[]
+}
+
+export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
+  const [selectedAdmin, setSelectedAdmin] = useState<any>(null)
+
+  return (
+    <>
+      <table className="w-full">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Organization</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parent Admin</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200">
+          {orgAdmins.map((orgAdmin) => {
+            const parentAdmin = orgAdmin.team?.createdByAdmin
+
+            return (
+              <tr key={orgAdmin.id}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {orgAdmin.status === 'Active' ? (
+                    <span className="text-green-600 font-semibold">✅ Active</span>
+                  ) : (
+                    <span className="text-gray-600 font-semibold">⏸️ Inactive</span>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <button
+                    onClick={() => setSelectedAdmin(orgAdmin)}
+                    className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-left"
+                  >
+                    {orgAdmin.firstName} {orgAdmin.lastName}
+                  </button>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-600">{orgAdmin.email}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-600">{orgAdmin.phone || '-'}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">{orgAdmin.team?.organizationName || '-'}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {parentAdmin ? (
+                    <div className="text-sm text-gray-900">
+                      {parentAdmin.firstName} {parentAdmin.lastName}
+                    </div>
+                  ) : (
+                    <span className="text-gray-400">-</span>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-600">
+                    {new Date(orgAdmin.createdDate).toLocaleDateString()}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <button
+                    onClick={() => setSelectedAdmin(orgAdmin)}
+                    className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                  >
+                    View Details
+                  </button>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+
+      {/* View Details Modal */}
+      {selectedAdmin && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b">
+              <h2 className="text-xl font-bold text-gray-900">Organization Admin Account Details</h2>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm font-medium text-gray-500">Name</div>
+                  <div className="text-lg font-semibold text-gray-900">
+                    {selectedAdmin.firstName} {selectedAdmin.lastName}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-gray-500">Type</div>
+                  <div className="text-lg text-gray-700">Organization Admin</div>
+                </div>
+              </div>
+
+              <div>
+                <div className="text-sm font-medium text-gray-500">Email</div>
+                <div className="text-gray-900">{selectedAdmin.email}</div>
+              </div>
+
+              <div>
+                <div className="text-sm font-medium text-gray-500">Phone</div>
+                <div className="text-gray-900">{selectedAdmin.phone || 'N/A'}</div>
+              </div>
+
+              {selectedAdmin.team?.organizationName && (
+                <div className="border-t pt-4">
+                  <div className="text-sm font-medium text-gray-500 mb-2">Organization</div>
+                  <div className="bg-gray-50 p-3 rounded">
+                    <div className="font-medium text-gray-900">{selectedAdmin.team.organizationName}</div>
+                    {selectedAdmin.team.subdomain && (
+                      <div className="text-sm text-blue-600 mt-1">
+                        <a 
+                          href={`https://${selectedAdmin.team.subdomain}.citizenactivation.com`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                        >
+                          {selectedAdmin.team.subdomain}.citizenactivation.com
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {selectedAdmin.team?.createdByAdmin && (
+                <div className="border-t pt-4">
+                  <div className="text-sm font-medium text-gray-500 mb-2">Parent Admin (Created By)</div>
+                  <div className="bg-gray-50 p-3 rounded">
+                    <div className="font-medium text-gray-900">
+                      {selectedAdmin.team.createdByAdmin.firstName} {selectedAdmin.team.createdByAdmin.lastName}
+                    </div>
+                    <div className="text-sm text-gray-600">{selectedAdmin.team.createdByAdmin.email}</div>
+                  </div>
+                </div>
+              )}
+
+              <div className="border-t pt-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-sm font-medium text-gray-500">Status</div>
+                    <div className="text-gray-900">{selectedAdmin.status}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-gray-500">Created</div>
+                    <div className="text-gray-900">
+                      {new Date(selectedAdmin.createdDate).toLocaleString()}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {selectedAdmin.referralCode && (
+                <div className="border-t pt-4">
+                  <div className="text-sm font-medium text-gray-500">Strategic Partner Referral Code</div>
+                  <div className="text-lg text-gray-900 font-mono font-bold">{selectedAdmin.referralCode}</div>
+                </div>
+              )}
+            </div>
+            <div className="p-6 border-t bg-gray-50">
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <button
+                  onClick={() => {
+                    alert('Edit functionality coming next')
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                >
+                  ✏️ Edit Account
+                </button>
+                <button
+                  onClick={() => {
+                    if (confirm(`${selectedAdmin.status === 'Active' ? 'Pause' : 'Reactivate'} ${selectedAdmin.firstName} ${selectedAdmin.lastName}?`)) {
+                      alert('Pause/Reactivate functionality coming next')
+                    }
+                  }}
+                  className={`${selectedAdmin.status === 'Active' ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700'} text-white font-medium py-2 px-4 rounded-lg text-sm`}
+                >
+                  {selectedAdmin.status === 'Active' ? '⏸️ Pause Account' : '▶️ Reactivate'}
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <button
+                  onClick={() => {
+                    if (confirm(`Reset password for ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThey will receive an email with a new temporary password.`)) {
+                      alert('Reset Password functionality coming next')
+                    }
+                  }}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                >
+                  🔑 Reset Password
+                </button>
+                <button
+                  onClick={() => {
+                    if (confirm(`Resend welcome email to ${selectedAdmin.email}?`)) {
+                      alert('Resend Welcome Email functionality coming next')
+                    }
+                  }}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                >
+                  📧 Resend Welcome
+                </button>
+              </div>
+              <div className="mb-3">
+                <button
+                  onClick={() => {
+                    if (confirm(`⚠️ DELETE ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThis action CANNOT be undone!`)) {
+                      if (confirm('Are you ABSOLUTELY SURE?')) {
+                        alert('Delete Account functionality coming next')
+                      }
+                    }
+                  }}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                >
+                  🗑️ Delete Account
+                </button>
+              </div>
+              <button
+                onClick={() => setSelectedAdmin(null)}
+                className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}

@@ -31,7 +31,7 @@ export default async function OrgAdminsPage() {
     include: {
       team: {
         include: {
-          createdByAdmin: {
+          createdBy: {
             select: {
               id: true,
               firstName: true,

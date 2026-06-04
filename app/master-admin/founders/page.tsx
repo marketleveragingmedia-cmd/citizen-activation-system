@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import FoundersClient from './FoundersClient'
 
 export default async function FoundersPage() {
   const session = await getServerSession(authOptions)
@@ -150,7 +151,7 @@ export default async function FoundersPage() {
         {/* Active Founders Table */}
         <div className="bg-white rounded-lg shadow">
           <div className="p-6 border-b">
-            <h2 className="text-xl font-bold text-gray-900">Active Founders</h2>
+            <h2 className="text-xl font-bold text-gray-900">All Founders</h2>
           </div>
 
           {founders.length === 0 ? (
@@ -159,7 +160,7 @@ export default async function FoundersPage() {
               <p className="text-sm mt-2">Founders will appear here once approved</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <FoundersClient founders={founders} />
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -221,8 +222,6 @@ export default async function FoundersPage() {
                     </tr>
                   ))}
                 </tbody>
-              </table>
-            </div>
           )}
         </div>
       </div>

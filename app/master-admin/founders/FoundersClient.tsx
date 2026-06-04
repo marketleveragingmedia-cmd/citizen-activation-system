@@ -2,35 +2,78 @@
 
 import { useState } from 'react'
 
-interface TeamAdminsClientProps {
-  teamAdmins: any[]
+interface FoundersClientProps {
+  founders: any[]
 }
 
-export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) {
+export default function FoundersClient({ founders }: FoundersClientProps) {
   const [selectedAdmin, setSelectedAdmin] = useState<any>(null)
+  const [statusFilter, setStatusFilter] = useState<string>('All')
+  const [paymentFilter, setPaymentFilter] = useState<string>('All')
+
+  // Filter founders
+  const filteredFounders = founders.filter(founder => {
+    if (statusFilter !== 'All' && founder.status !== statusFilter) return false
+    if (paymentFilter !== 'All' && founder.founderPaymentMethod !== paymentFilter) return false
+    return true
+  })
 
   return (
     <>
+      {/* Filters */}
+      <div className="p-4 border-b bg-gray-50 flex gap-4">
+        <div>
+          <label className="text-sm font-medium text-gray-700 mr-2">Status:</label>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-1 text-sm"
+          >
+            <option value="All">All Status</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <div>
+          <label className="text-sm font-medium text-gray-700 mr-2">Payment Method:</label>
+          <select
+            value={paymentFilter}
+            onChange={(e) => setPaymentFilter(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-1 text-sm"
+          >
+            <option value="All">All Payment Methods</option>
+            <option value="Stripe">Stripe</option>
+            <option value="MOSCA">MOSCA Wallet</option>
+            <option value="Manual">Manual</option>
+          </select>
+        </div>
+        <div className="ml-auto text-sm text-gray-600">
+          Showing {filteredFounders.length} of {founders.length} founders
+        </div>
+      </div>
+
       <table className="w-full">
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parent Admin</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Subdomain</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Payment</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Network</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Founded</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {teamAdmins.map((teamAdmin) => {
-            const parentAdmin = teamAdmin.team?.createdBy
+          {filteredFounders.map((founder) => {
+            const teamAdmins = founder.teamsCreated.filter((t: any) => t.tierType === 'FullSystem').length
+            const orgAdmins = founder.teamsCreated.filter((t: any) => t.tierType === 'SoloOrg').length
 
             return (
-              <tr key={teamAdmin.id}>
+              <tr key={founder.id}>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {teamAdmin.status === 'Active' ? (
+                  {founder.status === 'Active' ? (
                     <span className="text-green-600 font-semibold">✅ Active</span>
                   ) : (
                     <span className="text-gray-600 font-semibold">⏸️ Inactive</span>
@@ -38,35 +81,39 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button
-                    onClick={() => setSelectedAdmin(teamAdmin)}
+                    onClick={() => setSelectedAdmin(founder)}
                     className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-left"
                   >
-                    {teamAdmin.firstName} {teamAdmin.lastName}
+                    {founder.firstName} {founder.lastName}
                   </button>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{teamAdmin.email}</div>
+                  <div className="text-sm text-gray-600">{founder.email}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{teamAdmin.phone || '-'}</div>
+                  <div className="text-sm text-gray-900">
+                    {founder.subdomain || '-'}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {parentAdmin ? (
-                    <div className="text-sm text-gray-900">
-                      {parentAdmin.firstName} {parentAdmin.lastName}
-                    </div>
-                  ) : (
-                    <span className="text-gray-400">-</span>
-                  )}
+                  <div className="text-sm font-medium text-gray-900">
+                    {founder.founderPaymentMethod || '-'}
+                  </div>
+                  <div className="text-xs text-gray-500">$997</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-600">
-                    {new Date(teamAdmin.createdDate).toLocaleDateString()}
+                    {teamAdmins} Team, {orgAdmins} Org
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-600">
+                    {founder.founderDate ? new Date(founder.founderDate).toLocaleDateString() : '-'}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button
-                    onClick={() => setSelectedAdmin(teamAdmin)}
+                    onClick={() => setSelectedAdmin(founder)}
                     className="text-blue-600 hover:text-blue-800 font-medium text-sm"
                   >
                     View Details
@@ -78,12 +125,18 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
         </tbody>
       </table>
 
+      {filteredFounders.length === 0 && (
+        <div className="p-12 text-center text-gray-500">
+          <p className="text-lg">No founders match the selected filters</p>
+        </div>
+      )}
+
       {/* View Details Modal */}
       {selectedAdmin && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b">
-              <h2 className="text-xl font-bold text-gray-900">Team Admin Account Details</h2>
+              <h2 className="text-xl font-bold text-gray-900">⭐ Founder Account Details</h2>
             </div>
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -95,7 +148,11 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
                 </div>
                 <div>
                   <div className="text-sm font-medium text-gray-500">Type</div>
-                  <div className="text-lg text-gray-700">Team Admin</div>
+                  <div className="text-lg">
+                    <span className="inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                      ⭐ Founder
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -109,17 +166,66 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
                 <div className="text-gray-900">{selectedAdmin.phone || 'N/A'}</div>
               </div>
 
-              {selectedAdmin.team?.createdBy && (
-                <div className="border-t pt-4">
-                  <div className="text-sm font-medium text-gray-500 mb-2">Parent Admin (Created By)</div>
-                  <div className="bg-gray-50 p-3 rounded">
-                    <div className="font-medium text-gray-900">
-                      {selectedAdmin.team.createdBy.firstName} {selectedAdmin.team.createdBy.lastName}
-                    </div>
-                    <div className="text-sm text-gray-600">{selectedAdmin.team.createdBy.email}</div>
-                  </div>
+              <div>
+                <div className="text-sm font-medium text-gray-500">Subdomain</div>
+                <div className="text-gray-900">
+                  {selectedAdmin.subdomain ? (
+                    <a 
+                      href={`https://${selectedAdmin.subdomain}.citizenactivation.com`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      {selectedAdmin.subdomain}.citizenactivation.com
+                    </a>
+                  ) : 'N/A'}
+                </div>
+              </div>
+
+              {selectedAdmin.moscaCode && (
+                <div>
+                  <div className="text-sm font-medium text-gray-500">MOSCA Strategic Partner Code</div>
+                  <div className="text-gray-900 font-mono">{selectedAdmin.moscaCode}</div>
                 </div>
               )}
+
+              <div className="border-t pt-4">
+                <div className="text-sm font-medium text-gray-500 mb-2">Payment Information</div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-xs text-gray-500">Method</div>
+                    <div className="text-gray-900">{selectedAdmin.founderPaymentMethod || 'N/A'}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-500">Amount</div>
+                    <div className="text-gray-900 font-semibold">$997 (One-Time)</div>
+                  </div>
+                </div>
+                {selectedAdmin.founderPaymentDetails && (
+                  <div className="mt-2">
+                    <div className="text-xs text-gray-500">Payment Details</div>
+                    <div className="text-gray-900 text-sm">{selectedAdmin.founderPaymentDetails}</div>
+                  </div>
+                )}
+              </div>
+
+              <div className="border-t pt-4">
+                <div className="text-sm font-medium text-gray-500 mb-2">Network</div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-xs text-gray-500">Team Admins</div>
+                    <div className="text-2xl font-bold text-gray-900">
+                      {selectedAdmin.teamsCreated.filter((t: any) => t.tierType === 'FullSystem').length}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-500">Org Admins</div>
+                    <div className="text-2xl font-bold text-gray-900">
+                      {selectedAdmin.teamsCreated.filter((t: any) => t.tierType === 'SoloOrg').length}
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <div className="border-t pt-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -128,9 +234,9 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
                     <div className="text-gray-900">{selectedAdmin.status}</div>
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-gray-500">Created</div>
+                    <div className="text-sm font-medium text-gray-500">Founded</div>
                     <div className="text-gray-900">
-                      {new Date(selectedAdmin.createdDate).toLocaleString()}
+                      {selectedAdmin.founderDate ? new Date(selectedAdmin.founderDate).toLocaleString() : 'N/A'}
                     </div>
                   </div>
                 </div>
@@ -146,9 +252,7 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
             <div className="p-6 border-t bg-gray-50">
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
-                  onClick={() => {
-                    alert('Edit functionality coming next')
-                  }}
+                  onClick={() => alert('Edit functionality coming next')}
                   className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
                 >
                   ✏️ Edit Account

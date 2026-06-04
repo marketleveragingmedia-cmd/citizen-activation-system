@@ -26,7 +26,7 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
         </thead>
         <tbody className="divide-y divide-gray-200">
           {orgAdmins.map((orgAdmin) => {
-            const parentAdmin = orgAdmin.team?.createdByAdmin
+            const parentAdmin = orgAdmin.team?.createdBy
 
             return (
               <tr key={orgAdmin.id}>
@@ -134,14 +134,14 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
                 </div>
               )}
 
-              {selectedAdmin.team?.createdByAdmin && (
+              {selectedAdmin.team?.createdBy && (
                 <div className="border-t pt-4">
                   <div className="text-sm font-medium text-gray-500 mb-2">Parent Admin (Created By)</div>
                   <div className="bg-gray-50 p-3 rounded">
                     <div className="font-medium text-gray-900">
-                      {selectedAdmin.team.createdByAdmin.firstName} {selectedAdmin.team.createdByAdmin.lastName}
+                      {selectedAdmin.team.createdBy.firstName} {selectedAdmin.team.createdBy.lastName}
                     </div>
-                    <div className="text-sm text-gray-600">{selectedAdmin.team.createdByAdmin.email}</div>
+                    <div className="text-sm text-gray-600">{selectedAdmin.team.createdBy.email}</div>
                   </div>
                 </div>
               )}

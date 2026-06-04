@@ -31,7 +31,7 @@ export default async function TeamAdminsPage() {
     include: {
       team: {
         include: {
-          createdByAdmin: {
+          createdBy: {
             select: {
               id: true,
               firstName: true,

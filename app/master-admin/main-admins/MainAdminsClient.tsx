@@ -217,11 +217,6 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                   <div className="text-lg text-gray-900 font-mono font-bold">{selectedAdmin.referralCode}</div>
                 </div>
               )}
-
-              <div className="border-t pt-4">
-                <div className="text-xs text-gray-500">Account ID</div>
-                <div className="text-xs text-gray-700 font-mono break-all">{selectedAdmin.id}</div>
-              </div>
             </div>
             <div className="p-6 border-t bg-gray-50">
               <button

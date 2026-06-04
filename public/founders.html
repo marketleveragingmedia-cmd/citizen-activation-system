@@ -287,18 +287,56 @@
             font-size: 0.9rem;
         }
 
+        .footer-text {
+            display: inline;
+        }
+
+        .footer-rights {
+            display: inline;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
-            }
-
-            .section h2 {
                 font-size: 1.5rem;
             }
 
+            .section h2 {
+                font-size: 1.3rem;
+            }
+
+            /* How It Works - split into two lines */
+            .example h2 {
+                text-align: left;
+                font-size: 1.3rem;
+            }
+
+            .example h2::after {
+                content: '\ARe al-World Example';
+                white-space: pre;
+                text-align: center;
+                display: block;
+                margin-top: 5px;
+            }
+
+            /* Strategic Placement - one line */
+            .strategic h2 {
+                font-size: 1.1rem;
+            }
+
+            /* Deep & Wide = CASHFLOW - one line */
+            .strategic h3 {
+                font-size: 1.1rem;
+            }
+
+            /* Founders Beta Pricing - one line */
+            .pricing-hero h2 {
+                font-size: 1.3rem;
+            }
+
+            /* $997 One-Time - one line */
             .pricing-hero .price {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
 
             .benefits-grid {
@@ -307,6 +345,16 @@
 
             .what-is, .why-use, .example, .strategic {
                 padding: 25px;
+            }
+
+            /* Footer - All Rights Reserved on separate line */
+            .footer-text {
+                display: block;
+            }
+
+            .footer-rights {
+                display: block;
+                margin-top: 5px;
             }
         }
     </style>
@@ -359,7 +407,7 @@
         <!-- 3. Real-World Example -->
         <section class="section">
             <div class="example">
-                <h2>How It Works: Real-World Example</h2>
+                <h2>How It Works:</h2>
                 <h3>Grace Community Church MOSCA Presentation</h3>
                 <ul class="example-steps">
                     <li>You (MOSCA Founder) add Pastor as Organization Admin</li>
@@ -376,7 +424,7 @@
         <section class="section">
             <div class="strategic">
                 <h2>The Power of Strategic Placement</h2>
-                <h3>Deep & Wide = Everyone Wins</h3>
+                <h3>Deep & Wide = CASHFLOW</h3>
                 <ul>
                     <li>Round Robin assigns 3-5 per Strategic Partner (manageable)</li>
                     <li>3×3×3 structure builds DEEP</li>
@@ -446,7 +494,10 @@
 
         <!-- Footer -->
         <footer>
-            <p>&copy; 2026 CitizenActivationSystem.com All Rights Reserved</p>
+            <p>
+                <span class="footer-text">&copy; 2026 CitizenActivationSystem.com</span>
+                <span class="footer-rights">All Rights Reserved</span>
+            </p>
         </footer>
     </div>
 </body>

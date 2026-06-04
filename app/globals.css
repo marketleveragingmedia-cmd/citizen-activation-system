@@ -25,3 +25,102 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* Professional Button System - Citizen Activation Platform */
+
+/* Primary Action Button */
+.btn-primary {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg;
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  @apply transition-colors duration-150;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Success/Add Button */
+.btn-success {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg;
+  @apply bg-green-600 text-white hover:bg-green-700;
+  @apply focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2;
+  @apply transition-colors duration-150;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Warning/Pause Button */
+.btn-warning {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg;
+  @apply bg-yellow-600 text-white hover:bg-yellow-700;
+  @apply focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2;
+  @apply transition-colors duration-150;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Danger/Delete Button */
+.btn-danger {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg;
+  @apply bg-red-600 text-white hover:bg-red-700;
+  @apply focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+  @apply transition-colors duration-150;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Secondary/Utility Button */
+.btn-secondary {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg;
+  @apply bg-gray-600 text-white hover:bg-gray-700;
+  @apply focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  @apply transition-colors duration-150;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Purple/Special Action */
+.btn-purple {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg;
+  @apply bg-purple-600 text-white hover:bg-purple-700;
+  @apply focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2;
+  @apply transition-colors duration-150;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Indigo/Info Button */
+.btn-indigo {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg;
+  @apply bg-indigo-600 text-white hover:bg-indigo-700;
+  @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+  @apply transition-colors duration-150;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Brand Green (Citizen Activation) */
+.btn-brand-green {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg;
+  @apply bg-[#1E8E5A] text-white hover:bg-[#177349];
+  @apply focus:outline-none focus:ring-2 focus:ring-[#1E8E5A] focus:ring-offset-2;
+  @apply transition-colors duration-150;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Brand Gold (Citizen Activation) */
+.btn-brand-gold {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg;
+  @apply bg-[#C9A441] text-white hover:bg-[#B8932F];
+  @apply focus:outline-none focus:ring-2 focus:ring-[#C9A441] focus:ring-offset-2;
+  @apply transition-colors duration-150;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Link Style Button */
+.btn-link {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg;
+  @apply text-blue-600 hover:text-blue-800 hover:underline;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  @apply transition-colors duration-150;
+}
+
+/* Outline Button */
+.btn-outline {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg;
+  @apply border-2 border-gray-300 text-gray-700 hover:bg-gray-50;
+  @apply focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  @apply transition-colors duration-150;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}

@@ -70,8 +70,8 @@ export default async function FoundersPage() {
             <p className="text-sm text-gray-600">Founders Management</p>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/master-admin" className="text-blue-600 hover:underline">
-              ← Back to Master Admin
+            <Link href="/dashboard" className="text-blue-600 hover:underline">
+              ← Back to Dashboard
             </Link>
             <Link href="/api/auth/signout" className="text-red-600 hover:underline">
               Sign Out
@@ -170,7 +170,7 @@ export default async function FoundersPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Payment</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">MOSCA Code</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email (Full)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -214,12 +214,9 @@ export default async function FoundersPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <Link
-                          href={`/master-admin/main-admins/${founder.id}`}
-                          className="text-blue-600 hover:text-blue-800 font-medium"
-                        >
-                          View
-                        </Link>
+                        <div className="text-sm text-gray-600">
+                          {founder.email}
+                        </div>
                       </td>
                     </tr>
                   ))}

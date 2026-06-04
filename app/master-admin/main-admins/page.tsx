@@ -55,8 +55,8 @@ export default async function MainAdminsPage() {
             <p className="text-sm text-gray-600">Main Admins Management</p>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/master-admin" className="text-blue-600 hover:underline">
-              ← Back to Master Admin
+            <Link href="/dashboard" className="text-blue-600 hover:underline">
+              ← Back to Dashboard
             </Link>
             <Link href="/api/auth/signout" className="text-red-600 hover:underline">
               Sign Out
@@ -113,7 +113,7 @@ export default async function MainAdminsPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Payment</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Network</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Account ID</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -173,12 +173,9 @@ export default async function MainAdminsPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <Link
-                            href={`/master-admin/main-admins/${mainAdmin.id}`}
-                            className="text-blue-600 hover:text-blue-800 font-medium"
-                          >
-                            View
-                          </Link>
+                          <div className="text-sm text-gray-600">
+                            ID: {mainAdmin.id.slice(0, 8)}...
+                          </div>
                         </td>
                       </tr>
                     )

@@ -211,6 +211,13 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                 </div>
               </div>
 
+              {selectedAdmin.referralCode && (
+                <div className="border-t pt-4">
+                  <div className="text-sm font-medium text-gray-500">Strategic Partner Referral Code</div>
+                  <div className="text-lg text-gray-900 font-mono font-bold">{selectedAdmin.referralCode}</div>
+                </div>
+              )}
+
               <div className="border-t pt-4">
                 <div className="text-xs text-gray-500">Account ID</div>
                 <div className="text-xs text-gray-700 font-mono break-all">{selectedAdmin.id}</div>

@@ -4,5 +4,11 @@
       "path": "/api/cron/check-delayed-requests",
       "schedule": "0 9 * * *"
     }
-  ]
+  ],
+  "github": {
+    "enabled": true,
+    "autoAlias": true,
+    "silent": false
+  },
+  "buildCommand": "prisma generate && next build"
 }

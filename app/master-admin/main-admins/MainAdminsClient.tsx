@@ -219,6 +219,67 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
               )}
             </div>
             <div className="p-6 border-t bg-gray-50">
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <button
+                  onClick={() => {
+                    // TODO: Open edit modal
+                    alert('Edit functionality coming next')
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                >
+                  ✏️ Edit Account
+                </button>
+                <button
+                  onClick={() => {
+                    if (confirm(`${selectedAdmin.status === 'Active' ? 'Pause' : 'Reactivate'} ${selectedAdmin.firstName} ${selectedAdmin.lastName}?`)) {
+                      // TODO: API call to toggle status
+                      alert('Pause/Reactivate functionality coming next')
+                    }
+                  }}
+                  className={`${selectedAdmin.status === 'Active' ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700'} text-white font-medium py-2 px-4 rounded-lg text-sm`}
+                >
+                  {selectedAdmin.status === 'Active' ? '⏸️ Pause Account' : '▶️ Reactivate'}
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <button
+                  onClick={() => {
+                    if (confirm(`Reset password for ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThey will receive an email with a new temporary password.`)) {
+                      // TODO: API call to reset password
+                      alert('Reset Password functionality coming next')
+                    }
+                  }}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                >
+                  🔑 Reset Password
+                </button>
+                <button
+                  onClick={() => {
+                    if (confirm(`Resend welcome email to ${selectedAdmin.email}?`)) {
+                      // TODO: API call to resend welcome email
+                      alert('Resend Welcome Email functionality coming next')
+                    }
+                  }}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                >
+                  📧 Resend Welcome
+                </button>
+              </div>
+              <div className="mb-3">
+                <button
+                  onClick={() => {
+                    if (confirm(`⚠️ DELETE ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThis will:\n- Delete the admin account\n- Preserve their network (Team Admins, Org Admins)\n- Keep Strategic Partners assigned\n\nThis action CANNOT be undone!`)) {
+                      if (confirm('Are you ABSOLUTELY SURE? Type DELETE to confirm.')) {
+                        // TODO: API call to delete account
+                        alert('Delete Account functionality coming next')
+                      }
+                    }
+                  }}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                >
+                  🗑️ Delete Account
+                </button>
+              </div>
               <button
                 onClick={() => setSelectedAdmin(null)}
                 className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg text-sm"

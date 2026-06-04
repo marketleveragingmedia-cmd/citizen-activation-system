@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { btn } from '@/app/lib/buttonStyles'
+import ConfirmDialog from '../components/ConfirmDialog'
+import SuccessToast from '../components/SuccessToast'
+import DeleteConfirmDialog from '../components/DeleteConfirmDialog'
 
 interface MainAdminsClientProps {
   mainAdmins: any[]
@@ -11,10 +13,19 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
   const [selectedAdmin, setSelectedAdmin] = useState<any>(null)
   const [adminList, setAdminList] = useState(mainAdmins)
   const [loading, setLoading] = useState(false)
+  const [showToggleConfirm, setShowToggleConfirm] = useState(false)
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
+  const [showResendConfirm, setShowResendConfirm] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [error, setError] = useState('')
 
   async function handleToggleStatus() {
     if (!selectedAdmin) return
+    setShowToggleConfirm(false)
     setLoading(true)
+    setError('')
+    
     try {
       const res = await fetch('/api/admin/toggle-status', {
         method: 'POST',
@@ -22,16 +33,17 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
         body: JSON.stringify({ adminId: selectedAdmin.id })
       })
       const data = await res.json()
+      
       if (res.ok) {
         const updated = { ...selectedAdmin, status: data.newStatus }
         setAdminList(prev => prev.map(a => a.id === updated.id ? updated : a))
         setSelectedAdmin(updated)
-        alert(`Account ${data.newStatus === 'Active' ? 'reactivated' : 'paused'} successfully!`)
+        setSuccessMessage(`Account ${data.newStatus === 'Active' ? 'reactivated' : 'paused'} successfully!`)
       } else {
-        alert(`Error: ${data.error}`)
+        setError(data.error || 'Failed to toggle status')
       }
     } catch (err: any) {
-      alert(`Error: ${err.message}`)
+      setError(err.message)
     } finally {
       setLoading(false)
     }
@@ -39,9 +51,10 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
 
   async function handleResetPassword() {
     if (!selectedAdmin) return
-    if (!confirm(`Reset password for ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThey will receive an email with a new temporary password.`)) return
-    
+    setShowResetConfirm(false)
     setLoading(true)
+    setError('')
+    
     try {
       const res = await fetch('/api/admin/reset-password', {
         method: 'POST',
@@ -49,13 +62,14 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
         body: JSON.stringify({ adminId: selectedAdmin.id })
       })
       const data = await res.json()
+      
       if (res.ok) {
-        alert('Password reset email sent successfully!')
+        setSuccessMessage('Password reset email sent successfully!')
       } else {
-        alert(`Error: ${data.error}`)
+        setError(data.error || 'Failed to reset password')
       }
     } catch (err: any) {
-      alert(`Error: ${err.message}`)
+      setError(err.message)
     } finally {
       setLoading(false)
     }
@@ -63,9 +77,10 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
 
   async function handleResendWelcome() {
     if (!selectedAdmin) return
-    if (!confirm(`Resend welcome email to ${selectedAdmin.email}?`)) return
-    
+    setShowResendConfirm(false)
     setLoading(true)
+    setError('')
+    
     try {
       const res = await fetch('/api/admin/resend-welcome', {
         method: 'POST',
@@ -73,13 +88,14 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
         body: JSON.stringify({ adminId: selectedAdmin.id })
       })
       const data = await res.json()
+      
       if (res.ok) {
-        alert('Welcome email sent successfully!')
+        setSuccessMessage('Welcome email sent successfully!')
       } else {
-        alert(`Error: ${data.error}`)
+        setError(data.error || 'Failed to send welcome email')
       }
     } catch (err: any) {
-      alert(`Error: ${err.message}`)
+      setError(err.message)
     } finally {
       setLoading(false)
     }
@@ -87,31 +103,27 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
 
   async function handleDelete() {
     if (!selectedAdmin) return
-    if (!confirm(`⚠️ DELETE ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThis will:\n- Delete the admin account\n- Preserve their network (Team Admins, Org Admins)\n- Keep Strategic Partners assigned\n\nThis action CANNOT be undone!`)) return
-    
-    const confirmText = prompt('Type DELETE to confirm:')
-    if (confirmText !== 'DELETE') {
-      alert('Deletion cancelled - confirmation text did not match')
-      return
-    }
-    
+    setShowDeleteConfirm(false)
     setLoading(true)
+    setError('')
+    
     try {
       const res = await fetch('/api/admin/delete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ adminId: selectedAdmin.id, confirmText })
+        body: JSON.stringify({ adminId: selectedAdmin.id, confirmText: 'DELETE' })
       })
       const data = await res.json()
+      
       if (res.ok) {
         setAdminList(prev => prev.filter(a => a.id !== selectedAdmin.id))
+        setSuccessMessage('Admin account deleted successfully')
         setSelectedAdmin(null)
-        alert('Admin account deleted successfully')
       } else {
-        alert(`Error: ${data.error}`)
+        setError(data.error || 'Failed to delete account')
       }
     } catch (err: any) {
-      alert(`Error: ${err.message}`)
+      setError(err.message)
     } finally {
       setLoading(false)
     }
@@ -127,7 +139,6 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Subdomain</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Payment</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Network</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
@@ -159,9 +170,7 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                   <div className="text-sm text-gray-600">{mainAdmin.email}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    {mainAdmin.subdomain || '-'}
-                  </div>
+                  <div className="text-sm text-gray-900">{mainAdmin.subdomain || '-'}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {mainAdmin.isFounder ? (
@@ -173,19 +182,7 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                   )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    {mainAdmin.founderPaymentMethod || '-'}
-                  </div>
-                  {mainAdmin.founderPaymentMethod && (
-                    <div className="text-xs text-gray-500">
-                      {mainAdmin.isFounder ? '$997' : '$1,497'}
-                    </div>
-                  )}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">
-                    {teamAdmins} Team, {orgAdmins} Org
-                  </div>
+                  <div className="text-sm text-gray-600">{teamAdmins} Team, {orgAdmins} Org</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-600">
@@ -206,14 +203,20 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
         </tbody>
       </table>
 
-      {/* Modal */}
+      {/* Detail Modal */}
       {selectedAdmin && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b">
-              <h2 className="text-xl font-bold text-gray-900">Main Admin Account Details</h2>
+              <h2 className="text-xl font-bold text-gray-900">Main Admin Account</h2>
             </div>
             <div className="p-6 space-y-4">
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                  {error}
+                </div>
+              )}
+              
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-sm font-medium text-gray-500">Name</div>
@@ -243,34 +246,34 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
             <div className="p-6 border-t bg-gray-50">
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
-                  onClick={handleToggleStatus}
+                  onClick={() => setShowToggleConfirm(true)}
                   disabled={loading}
                   className="bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
                 >
-                  {loading ? 'Working...' : (selectedAdmin.status === 'Active' ? '⏸️ Pause' : '▶️ Reactivate')}
+                  {selectedAdmin.status === 'Active' ? '⏸️ Pause' : '▶️ Reactivate'}
                 </button>
                 <button
-                  onClick={handleResetPassword}
+                  onClick={() => setShowResetConfirm(true)}
                   disabled={loading}
                   className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
                 >
-                  {loading ? 'Working...' : '🔑 Reset Password'}
+                  🔑 Reset Password
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
-                  onClick={handleResendWelcome}
+                  onClick={() => setShowResendConfirm(true)}
                   disabled={loading}
                   className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
                 >
-                  {loading ? 'Working...' : '📧 Resend Welcome'}
+                  📧 Resend Welcome
                 </button>
                 <button
-                  onClick={handleDelete}
+                  onClick={() => setShowDeleteConfirm(true)}
                   disabled={loading}
                   className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
                 >
-                  {loading ? 'Working...' : '🗑️ Delete'}
+                  🗑️ Delete
                 </button>
               </div>
               <button
@@ -282,6 +285,56 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
             </div>
           </div>
         </div>
+      )}
+
+      {/* Confirm Dialogs */}
+      {showToggleConfirm && selectedAdmin && (
+        <ConfirmDialog
+          title={selectedAdmin.status === 'Active' ? 'Pause Account' : 'Reactivate Account'}
+          message={`${selectedAdmin.status === 'Active' ? 'Pause' : 'Reactivate'} ${selectedAdmin.firstName} ${selectedAdmin.lastName}?`}
+          confirmText={selectedAdmin.status === 'Active' ? 'Pause' : 'Reactivate'}
+          confirmColor={selectedAdmin.status === 'Active' ? 'yellow' : 'green'}
+          onConfirm={handleToggleStatus}
+          onCancel={() => setShowToggleConfirm(false)}
+        />
+      )}
+
+      {showResetConfirm && selectedAdmin && (
+        <ConfirmDialog
+          title="Reset Password"
+          message={`Reset password for ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThey will receive an email with a new temporary password.`}
+          confirmText="Reset Password"
+          confirmColor="purple"
+          onConfirm={handleResetPassword}
+          onCancel={() => setShowResetConfirm(false)}
+        />
+      )}
+
+      {showResendConfirm && selectedAdmin && (
+        <ConfirmDialog
+          title="Resend Welcome Email"
+          message={`Resend welcome email to ${selectedAdmin.email}?`}
+          confirmText="Send Email"
+          confirmColor="blue"
+          onConfirm={handleResendWelcome}
+          onCancel={() => setShowResendConfirm(false)}
+        />
+      )}
+
+      {showDeleteConfirm && selectedAdmin && (
+        <DeleteConfirmDialog
+          adminName={`${selectedAdmin.firstName} ${selectedAdmin.lastName}`}
+          onConfirm={handleDelete}
+          onCancel={() => setShowDeleteConfirm(false)}
+        />
+      )}
+
+      {/* Success Toast */}
+      {successMessage && (
+        <SuccessToast
+          message={successMessage}
+          onClose={() => setSuccessMessage('')}
+        />
       )}
     </>
   )

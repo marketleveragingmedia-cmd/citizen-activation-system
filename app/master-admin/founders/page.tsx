@@ -161,67 +161,6 @@ export default async function FoundersPage() {
             </div>
           ) : (
             <FoundersClient founders={founders} />
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Subdomain</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Payment</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">MOSCA Code</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email (Full)</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {founders.map((founder) => (
-                    <tr key={founder.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {founder.status === 'Active' ? (
-                          <span className="text-green-600 font-semibold">✅ Active</span>
-                        ) : (
-                          <span className="text-gray-600 font-semibold">⏸️ Inactive</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="font-medium text-gray-900">
-                          {founder.firstName} {founder.lastName}
-                        </div>
-                        <div className="text-xs text-yellow-600">⭐ Founder</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-600">{founder.email}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {founder.subdomain || '-'}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {founder.founderPaymentMethod || '-'}
-                        </div>
-                        <div className="text-xs text-gray-500">$997</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-600">
-                          {founder.moscaCode || '-'}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-600">
-                          {founder.founderDate ? new Date(founder.founderDate).toLocaleDateString() : '-'}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-600">
-                          {founder.email}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
           )}
         </div>
       </div>

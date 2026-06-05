@@ -1,5 +1,6 @@
 'use client'
 import { btn } from '@/app/lib/buttonStyles'
+import EditAdminModal from '../components/EditAdminModal'
 
 import { useState } from 'react'
 
@@ -9,6 +10,14 @@ interface OrgAdminsClientProps {
 
 export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
   const [selectedAdmin, setSelectedAdmin] = useState<any>(null)
+  const [adminList, setAdminList] = useState(orgAdmins)
+  const [showEdit, setShowEdit] = useState(false)
+
+  function handleEditSave(updated: any) {
+    setAdminList(prev => prev.map(a => a.id === updated.id ? updated : a))
+    setSelectedAdmin(updated)
+    setShowEdit(false)
+  }
 
   return (
     <>
@@ -26,7 +35,7 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {orgAdmins.map((orgAdmin) => {
+          {adminList.map((orgAdmin) => {
             const parentAdmin = orgAdmin.team?.createdBy
 
             return (
@@ -172,9 +181,7 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
             <div className="p-6 border-t bg-gray-50">
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
-                  onClick={() => {
-                    alert('Edit functionality coming next')
-                  }}
+                  onClick={() => setShowEdit(true)}
                   className={btn.primary}
                 >
                   ✏️ Edit Account
@@ -235,6 +242,15 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Edit Admin Modal */}
+      {showEdit && selectedAdmin && (
+        <EditAdminModal
+          admin={selectedAdmin}
+          onSave={handleEditSave}
+          onCancel={() => setShowEdit(false)}
+        />
       )}
     </>
   )

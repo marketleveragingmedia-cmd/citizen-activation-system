@@ -1,5 +1,6 @@
 'use client'
 import { btn } from '@/app/lib/buttonStyles'
+import EditAdminModal from '../components/EditAdminModal'
 
 import { useState } from 'react'
 
@@ -9,6 +10,14 @@ interface TeamAdminsClientProps {
 
 export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) {
   const [selectedAdmin, setSelectedAdmin] = useState<any>(null)
+  const [adminList, setAdminList] = useState(teamAdmins)
+  const [showEdit, setShowEdit] = useState(false)
+
+  function handleEditSave(updated: any) {
+    setAdminList(prev => prev.map(a => a.id === updated.id ? updated : a))
+    setSelectedAdmin(updated)
+    setShowEdit(false)
+  }
 
   return (
     <>
@@ -25,7 +34,7 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {teamAdmins.map((teamAdmin) => {
+          {adminList.map((teamAdmin) => {
             const parentAdmin = teamAdmin.team?.createdBy
 
             return (
@@ -147,9 +156,7 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
             <div className="p-6 border-t bg-gray-50">
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
-                  onClick={() => {
-                    alert('Edit functionality coming next')
-                  }}
+                  onClick={() => setShowEdit(true)}
                   className={btn.primary}
                 >
                   ✏️ Edit Account
@@ -210,6 +217,15 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
             </div>
           </div>
         </div>
+      )}
+
+      {/* Edit Admin Modal */}
+      {showEdit && selectedAdmin && (
+        <EditAdminModal
+          admin={selectedAdmin}
+          onSave={handleEditSave}
+          onCancel={() => setShowEdit(false)}
+        />
       )}
     </>
   )

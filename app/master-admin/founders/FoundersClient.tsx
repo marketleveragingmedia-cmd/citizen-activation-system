@@ -1,5 +1,6 @@
 'use client'
 import { btn } from '@/app/lib/buttonStyles'
+import EditAdminModal from '../components/EditAdminModal'
 
 import { useState } from 'react'
 
@@ -9,11 +10,19 @@ interface FoundersClientProps {
 
 export default function FoundersClient({ founders }: FoundersClientProps) {
   const [selectedAdmin, setSelectedAdmin] = useState<any>(null)
+  const [adminList, setAdminList] = useState(founders)
   const [statusFilter, setStatusFilter] = useState<string>('All')
   const [paymentFilter, setPaymentFilter] = useState<string>('All')
+  const [showEdit, setShowEdit] = useState(false)
+
+  function handleEditSave(updated: any) {
+    setAdminList(prev => prev.map(a => a.id === updated.id ? updated : a))
+    setSelectedAdmin(updated)
+    setShowEdit(false)
+  }
 
   // Filter founders
-  const filteredFounders = founders.filter(founder => {
+  const filteredFounders = adminList.filter(founder => {
     if (statusFilter !== 'All' && founder.status !== statusFilter) return false
     if (paymentFilter !== 'All' && founder.founderPaymentMethod !== paymentFilter) return false
     return true
@@ -49,7 +58,7 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
           </select>
         </div>
         <div className="ml-auto text-sm text-gray-600">
-          Showing {filteredFounders.length} of {founders.length} founders
+          Showing {filteredFounders.length} of {adminList.length} founders
         </div>
       </div>
 
@@ -253,7 +262,7 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
             <div className="p-6 border-t bg-gray-50">
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
-                  onClick={() => alert('Edit functionality coming next')}
+                  onClick={() => setShowEdit(true)}
                   className={btn.primary}
                 >
                   ✏️ Edit Account
@@ -314,6 +323,15 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Edit Admin Modal */}
+      {showEdit && selectedAdmin && (
+        <EditAdminModal
+          admin={selectedAdmin}
+          onSave={handleEditSave}
+          onCancel={() => setShowEdit(false)}
+        />
       )}
     </>
   )

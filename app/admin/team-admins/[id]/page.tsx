@@ -12,6 +12,10 @@ export default function TeamAdminDetailPage() {
   const [requests, setRequests] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState('all')
+  const [editMode, setEditMode] = useState(false)
+  const [editData, setEditData] = useState({ firstName: '', lastName: '', email: '', phone: '' })
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     fetchTeamAdminData()
@@ -26,6 +30,12 @@ export default function TeamAdminDetailPage() {
         setTeamAdmin(data.teamAdmin)
         setPartners(data.partners || [])
         setRequests(data.requests || [])
+        setEditData({
+          firstName: data.teamAdmin.firstName,
+          lastName: data.teamAdmin.lastName,
+          email: data.teamAdmin.email,
+          phone: data.teamAdmin.phone || ''
+        })
       } else{
         alert('Failed to load team admin data')
         router.push('/dashboard')
@@ -35,6 +45,43 @@ export default function TeamAdminDetailPage() {
       router.push('/dashboard')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleSaveEdit = async () => {
+    if (!editData.firstName || !editData.lastName || !editData.email) {
+      setError('First name, last name, and email are required')
+      return
+    }
+
+    setSaving(true)
+    setError('')
+
+    try {
+      const res = await fetch('/api/admin/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          adminId: teamAdmin.id,
+          firstName: editData.firstName,
+          lastName: editData.lastName,
+          email: editData.email,
+          phone: editData.phone
+        })
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to update')
+      }
+
+      setTeamAdmin(data.admin)
+      setEditMode(false)
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -111,8 +158,17 @@ export default function TeamAdminDetailPage() {
                   </p>
                 </div>
               </div>
-              <div className="text-right">
-                <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-[#C9A441] text-white">
+              <div className="text-right flex gap-2">
+                <button
+                  onClick={() => {
+                    setEditMode(true)
+                    setError('')
+                  }}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm"
+                >
+                  ✏️ Edit Profile
+                </button>
+                <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-[#C9A441] text-white self-center">
                   Team Admin
                 </span>
               </div>
@@ -343,6 +399,90 @@ export default function TeamAdminDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {editMode && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div className="p-6 border-b">
+              <h2 className="text-xl font-bold text-gray-900">Edit Team Admin</h2>
+            </div>
+            <div className="p-6 space-y-4">
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
+                  {error}
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+                <input
+                  type="text"
+                  value={editData.firstName}
+                  onChange={(e) => setEditData({ ...editData, firstName: e.target.value })}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1E8E5A]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+                <input
+                  type="text"
+                  value={editData.lastName}
+                  onChange={(e) => setEditData({ ...editData, lastName: e.target.value })}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1E8E5A]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <input
+                  type="email"
+                  value={editData.email}
+                  onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1E8E5A]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <input
+                  type="tel"
+                  value={editData.phone}
+                  onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1E8E5A]"
+                  placeholder="Optional"
+                />
+              </div>
+            </div>
+            <div className="p-6 border-t bg-gray-50 flex gap-3">
+              <button
+                onClick={() => {
+                  setEditMode(false)
+                  setError('')
+                  setEditData({
+                    firstName: teamAdmin.firstName,
+                    lastName: teamAdmin.lastName,
+                    email: teamAdmin.email,
+                    phone: teamAdmin.phone || ''
+                  })
+                }}
+                disabled={saving}
+                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveEdit}
+                disabled={saving}
+                className="flex-1 bg-[#1E8E5A] hover:bg-[#177349] text-white font-medium py-2 px-4 rounded-lg text-sm disabled:opacity-50"
+              >
+                {saving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

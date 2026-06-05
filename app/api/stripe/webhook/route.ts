@@ -652,6 +652,122 @@ export async function POST(request: NextRequest) {
           console.error('Error creating Org Admin after payment:', err)
         }
       }
+
+      // FOUNDER PURCHASE
+      if (paymentType === 'founder_purchase') {
+        try {
+          const { firstName, lastName, email, phone, moscaCode, assignedSubdomain } = session.metadata || {}
+
+          if (!email || !firstName || !lastName) {
+            console.error('Missing required Founder metadata')
+            return NextResponse.json({ error: 'Missing metadata' }, { status: 400 })
+          }
+
+          // Generate temp password
+          const tempPassword = Math.random().toString(36).slice(-10) + 'F1!'
+          const hashedPassword = await bcrypt.hash(tempPassword, 10)
+
+          // Create Main Admin account with Founder status
+          const founder = await prisma.admin.create({
+            data: {
+              firstName,
+              lastName,
+              email,
+              phone: phone || null,
+              subdomain: assignedSubdomain || null,
+              moscaCode: moscaCode || null,
+              passwordHash: hashedPassword,
+              role: 'MAIN_ADMIN',
+              status: 'Active',
+              isFounder: true,
+              founderDate: new Date(),
+              founderPaymentMethod: 'Stripe',
+              founderPaymentDetails: `Stripe Session: ${session.id}`,
+            }
+          })
+
+          // Create team for Founder
+          await prisma.team.create({
+            data: {
+              name: `${firstName} ${lastName} - Founder Network`,
+              adminId: founder.id,
+              tierType: 'FullSystem',
+              status: 'Active',
+              createdByAdminId: founder.id,
+            }
+          })
+
+          // Send welcome email
+          await sendEmail({
+            to: email,
+            subject: '🎉 Welcome, Founder! Your Lifetime Account is Ready',
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                  <h1 style="color: #1E8E5A; font-size: 32px; margin-bottom: 10px;">⭐ Welcome, Founder!</h1>
+                  <p style="font-size: 18px; color: #666;">Your Lifetime Account is Active</p>
+                </div>
+                
+                <div style="background: #f0fdf4; border: 2px solid #1E8E5A; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+                  <h3 style="color: #1E8E5A; margin-top: 0;">Login Credentials:</h3>
+                  <p><strong>URL:</strong> <a href="${process.env.NEXTAUTH_URL}/login">${process.env.NEXTAUTH_URL}/login</a></p>
+                  <p><strong>Email:</strong> ${email}</p>
+                  <p><strong>Temporary Password:</strong> <code style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 16px;">${tempPassword}</code></p>
+                  <p style="color: #dc2626; font-weight: bold;">⚠️ Please change your password after first login</p>
+                </div>
+
+                <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 20px;">
+                  <h3 style="margin-top: 0; color: #92400e;">🔗 Your Custom Link:</h3>
+                  <p style="font-size: 18px; font-weight: bold; color: #92400e;">${assignedSubdomain}.citizenactivation.com</p>
+                  <p style="font-size: 14px; color: #92400e; margin-bottom: 0;">Share during MOSCA presentations only</p>
+                </div>
+
+                <h3>Founder Benefits:</h3>
+                <ul style="line-height: 1.8;">
+                  <li>✅ <strong>Lifetime Access</strong> - Zero annual fees, ever</li>
+                  <li>⭐ <strong>Founder Badge</strong> - Recognition in your dashboard</li>
+                  <li>🎯 <strong>Priority Support</strong> - Direct assistance when needed</li>
+                  <li>💰 <strong>Payment Splits</strong> - Earn $200-$297 per admin you add</li>
+                  <li>🚀 <strong>Early Access</strong> - New features before general release</li>
+                </ul>
+
+                <div style="text-align: center; margin: 30px 0;">
+                  <a href="${process.env.NEXTAUTH_URL}/login" 
+                     style="background: #1E8E5A; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-size: 18px; font-weight: bold;">
+                    Go to Dashboard
+                  </a>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+                <p style="font-size: 12px; color: #666; text-align: center;">
+                  Questions? Email <a href="mailto:support@citizenactivation.com">support@citizenactivation.com</a><br>
+                  Citizen Activation System - Founders Beta<br>
+                  Lifetime Access • Zero Annual Fees
+                </p>
+              </div>
+            `
+          })
+
+          // Notify admin
+          await sendEmail({
+            to: 'mzsamantha01@gmail.com',
+            subject: '🎉 New Stripe Founder Account Created',
+            html: `
+              <h2>New Stripe Founder</h2>
+              <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+              <p><strong>Email:</strong> ${email}</p>
+              <p><strong>Subdomain:</strong> ${assignedSubdomain}.citizenactivation.com</p>
+              <p><strong>MOSCA Code:</strong> ${moscaCode}</p>
+              <p><strong>Payment:</strong> $997 via Stripe</p>
+              <p><strong>Status:</strong> ✅ Account Created & Active</p>
+            `
+          })
+
+          console.log('Founder created successfully:', founder.email)
+        } catch (err) {
+          console.error('Error creating Founder after payment:', err)
+        }
+      }
     }
 
     return NextResponse.json({ received: true })

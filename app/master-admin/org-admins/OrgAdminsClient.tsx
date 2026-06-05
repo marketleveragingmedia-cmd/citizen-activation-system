@@ -18,11 +18,120 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [showResendConfirm, setShowResendConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   function handleEditSave(updated: any) {
     setAdminList(prev => prev.map(a => a.id === updated.id ? updated : a))
     setSelectedAdmin(updated)
     setShowEdit(false)
+  }
+
+  async function handleToggleStatus() {
+    if (!selectedAdmin) return
+    setShowToggleConfirm(false)
+    setLoading(true)
+    setError('')
+    
+    try {
+      const res = await fetch('/api/admin/toggle-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminId: selectedAdmin.id })
+      })
+      const data = await res.json()
+      
+      if (res.ok) {
+        const updated = { ...selectedAdmin, status: data.newStatus }
+        setAdminList(prev => prev.map(a => a.id === updated.id ? updated : a))
+        setSelectedAdmin(updated)
+      } else {
+        setError(data.error || 'Failed to toggle status')
+      }
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleResetPassword() {
+    if (!selectedAdmin) return
+    setShowResetConfirm(false)
+    setLoading(true)
+    setError('')
+    
+    try {
+      const res = await fetch('/api/admin/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminId: selectedAdmin.id })
+      })
+      const data = await res.json()
+      
+      if (res.ok) {
+        setError('')
+      } else {
+        setError(data.error || 'Failed to reset password')
+      }
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleResendWelcome() {
+    if (!selectedAdmin) return
+    setShowResendConfirm(false)
+    setLoading(true)
+    setError('')
+    
+    try {
+      const res = await fetch('/api/admin/resend-welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminId: selectedAdmin.id })
+      })
+      const data = await res.json()
+      
+      if (res.ok) {
+        setError('')
+      } else {
+        setError(data.error || 'Failed to send welcome email')
+      }
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleDelete() {
+    if (!selectedAdmin) return
+    setShowDeleteConfirm(false)
+    setLoading(true)
+    setError('')
+    
+    try {
+      const res = await fetch('/api/admin/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminId: selectedAdmin.id, confirmText: 'DELETE' })
+      })
+      const data = await res.json()
+      
+      if (res.ok) {
+        setAdminList(prev => prev.filter(a => a.id !== selectedAdmin.id))
+        setSelectedAdmin(null)
+      } else {
+        setError(data.error || 'Failed to delete admin')
+      }
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -248,10 +357,7 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
           message={`${selectedAdmin.status === 'Active' ? 'Pause' : 'Reactivate'} ${selectedAdmin.firstName} ${selectedAdmin.lastName}?`}
           confirmText={selectedAdmin.status === 'Active' ? 'Pause' : 'Reactivate'}
           confirmColor={selectedAdmin.status === 'Active' ? 'yellow' : 'green'}
-          onConfirm={() => {
-            setShowToggleConfirm(false)
-            console.log('Pause/Reactivate functionality coming next')
-          }}
+          onConfirm={handleToggleStatus}
           onCancel={() => setShowToggleConfirm(false)}
         />
       )}
@@ -262,10 +368,7 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
           message={`Reset password for ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThey will receive an email with a new temporary password.`}
           confirmText="Reset Password"
           confirmColor="purple"
-          onConfirm={() => {
-            setShowResetConfirm(false)
-            console.log('Reset Password functionality coming next')
-          }}
+          onConfirm={handleResetPassword}
           onCancel={() => setShowResetConfirm(false)}
         />
       )}
@@ -276,10 +379,7 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
           message={`Resend welcome email to ${selectedAdmin.email}?`}
           confirmText="Send Email"
           confirmColor="blue"
-          onConfirm={() => {
-            setShowResendConfirm(false)
-            console.log('Resend Welcome Email functionality coming next')
-          }}
+          onConfirm={handleResendWelcome}
           onCancel={() => setShowResendConfirm(false)}
         />
       )}
@@ -287,10 +387,7 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
       {showDeleteConfirm && selectedAdmin && (
         <DeleteConfirmDialog
           adminName={`${selectedAdmin.firstName} ${selectedAdmin.lastName}`}
-          onConfirm={() => {
-            setShowDeleteConfirm(false)
-            console.log('Delete Account functionality coming next')
-          }}
+          onConfirm={handleDelete}
           onCancel={() => setShowDeleteConfirm(false)}
         />
       )}

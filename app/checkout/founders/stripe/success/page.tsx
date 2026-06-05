@@ -44,8 +44,8 @@ function SuccessContent() {
             <Image
               src="/founder-badge.png"
               alt="Founders Badge"
-              width={120}
-              height={120}
+              width={80}
+              height={80}
               priority
             />
           </div>

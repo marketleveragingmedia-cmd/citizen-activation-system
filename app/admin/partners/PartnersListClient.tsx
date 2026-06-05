@@ -255,7 +255,31 @@ export default function PartnersListClient({ partners, userName }: any) {
               </div>
             </div>
 
-            <div className="mt-6 flex justify-end">
+            <div className="mt-6 flex justify-between">
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setEditingPartner(selectedPartner)
+                    setSelectedPartner(null)
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  Edit Partner
+                </button>
+                <button
+                  onClick={() => {
+                    toggleStatus(selectedPartner.id, selectedPartner.status)
+                    setSelectedPartner(null)
+                  }}
+                  className={`px-4 py-2 rounded-lg ${
+                    selectedPartner.status === 'Active'
+                      ? 'bg-yellow-600 text-white hover:bg-yellow-700'
+                      : 'bg-green-600 text-white hover:bg-green-700'
+                  }`}
+                >
+                  {selectedPartner.status === 'Active' ? 'Pause Partner' : 'Reactivate Partner'}
+                </button>
+              </div>
               <button
                 onClick={() => setSelectedPartner(null)}
                 className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"

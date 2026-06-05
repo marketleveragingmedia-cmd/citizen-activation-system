@@ -7,7 +7,7 @@ export default function FoundersMoscaPending() {
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-6">
-            <Image src="/founder-badge.png" alt="Founders Badge" width={120} height={120} priority />
+            <Image src="/founder-badge.png" alt="Founders Badge" width={80} height={80} priority />
           </div>
           <div className="mb-6">
             <div className="text-6xl mb-4">⏳</div>

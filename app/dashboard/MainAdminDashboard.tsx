@@ -116,9 +116,9 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
             <span className="text-gray-600 flex items-center gap-2">
               {userName}
               {isFounder && (
-                <span className="flex items-center gap-1 text-yellow-600 font-semibold">
-                  <Image src="/founder-badge.png" alt="Founder" width={20} height={20} className="inline" />
-                  Founder
+                <span className="flex items-center gap-1.5 text-yellow-600 font-semibold">
+                  <Image src="/founder-badge.png" alt="Founder" width={24} height={24} className="inline" />
+                  <span>Founder</span>
                 </span>
               )}
             </span>

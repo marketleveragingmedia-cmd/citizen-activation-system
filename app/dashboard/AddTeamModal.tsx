@@ -80,10 +80,10 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
       if (response.ok && data.onboardingUrl) {
         window.location.href = data.onboardingUrl
       } else {
-        alert('Failed to create Stripe account')
+        setError('Failed to create Stripe account')
       }
     } catch (err) {
-      alert('Network error. Please try again.')
+      setError('Network error. Please try again.')
     }
   }
 
@@ -103,7 +103,6 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
         const data = await response.json()
 
         if (response.ok) {
-          alert(`Team added successfully!\n\nTeam Admin Login:\nEmail: ${data.team.adminEmail}\nTemporary Password: ${data.team.tempPassword}\n\nWelcome email sent to ${data.team.adminEmail}`)
           onSuccess()
         } else {
           setError(data.error || 'Failed to add team')
@@ -123,11 +122,6 @@ export default function AddTeamModal({ onClose, onSuccess, isMainAdmin = false, 
       const data = await response.json()
 
       if (response.ok) {
-        const paymentMessage = formData.tierType === 'full-system'
-          ? `Once they complete payment ($497), their Team Admin account will be activated and you'll ${formData.wantsCommission ? 'receive your $200 payment' : 'forfeit payment (goes to system owner)'}.`
-          : `Once they complete payment ($997 Year 1), their Organization Admin account will be activated and you'll ${formData.wantsCommission ? 'receive your $297 payment (Year 1). Renewals at $497/yr will pay you $200' : 'forfeit payment (goes to system owner)'}.`
-        
-        alert(`Payment link sent!\n\nA payment link has been sent to ${formData.adminEmail}.\n\n${paymentMessage}`)
         onSuccess()
       } else {
         setError(data.error || 'Failed to create Team Admin')

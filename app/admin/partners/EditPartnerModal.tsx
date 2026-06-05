@@ -54,7 +54,6 @@ export default function EditPartnerModal({ partner, onClose, onSuccess }: EditPa
       const slotData = await slotResponse.json()
 
       if (response.ok && slotResponse.ok) {
-        alert('Strategic Partner updated successfully!')
         onSuccess()
       } else {
         setError(data.error || 'Failed to update Strategic Partner')

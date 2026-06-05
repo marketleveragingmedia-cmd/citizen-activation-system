@@ -11,10 +11,6 @@ export default function PartnersListClient({ partners, userName }: any) {
 
   const toggleStatus = async (partnerId: string, currentStatus: string) => {
     const newStatus = currentStatus === 'Active' ? 'Paused' : 'Active'
-    
-    if (!confirm(`${newStatus === 'Paused' ? 'Pause' : 'Activate'} this Strategic Partner?`)) {
-      return
-    }
 
     try {
       const response = await fetch('/api/toggle-partner-status', {
@@ -26,16 +22,17 @@ export default function PartnersListClient({ partners, userName }: any) {
       if (response.ok) {
         window.location.reload()
       } else {
-        alert('Failed to update status')
+        console.error('Failed to update status')
+        window.location.reload()
       }
     } catch (error) {
-      alert('Error updating status')
+      console.error('Error updating status')
+      window.location.reload()
     }
   }
 
   const updateSlotLimit = async (partnerId: string, newLimit: number) => {
     if (newLimit < 1 || newLimit > 100) {
-      alert('Slot limit must be between 1 and 100')
       return
     }
 
@@ -51,11 +48,12 @@ export default function PartnersListClient({ partners, userName }: any) {
       if (response.ok) {
         window.location.reload()
       } else {
-        const data = await response.json()
-        alert(data.error || 'Failed to update slot limit')
+        console.error('Failed to update slot limit')
+        window.location.reload()
       }
     } catch (error) {
-      alert('Error updating slot limit')
+      console.error('Error updating slot limit')
+      window.location.reload()
     } finally {
       setUpdatingSlots(null)
     }

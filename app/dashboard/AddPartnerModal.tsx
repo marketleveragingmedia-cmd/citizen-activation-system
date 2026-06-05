@@ -34,7 +34,6 @@ export default function AddPartnerModal({ onClose, onSuccess }: AddPartnerModalP
       const data = await response.json()
 
       if (response.ok) {
-        alert(`Strategic Partner added successfully!\n\nWelcome email sent to: ${formData.email}\n\nLogin credentials sent via email.`)
         onSuccess()
       } else {
         setError(data.error || 'Failed to add Strategic Partner')

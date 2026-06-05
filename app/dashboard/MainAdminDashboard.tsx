@@ -233,14 +233,6 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
             >
               + Add Strategic Partner
             </button>
-            {!isMasterAdmin && (
-              <Link
-                href="/admin/partners"
-                className={btn.secondary}
-              >
-                View All Strategic Partners
-              </Link>
-            )}
           </div>
         </div>
 

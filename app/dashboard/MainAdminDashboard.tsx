@@ -126,7 +126,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
         {isMasterAdmin && (
           <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4 mb-6">
             <h2 className="text-xl font-bold text-purple-900 mb-4">🔧 Master Admin Tools</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-3 mb-4">
               <Link href="/master-admin/main-admins" className="block p-3 bg-white border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition">
                 <h3 className="font-bold text-blue-900 text-sm">📊 Main Admins</h3>
                 <p className="text-xs text-blue-700 mt-1">Manage Main Admins</p>
@@ -139,13 +139,17 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                 <h3 className="font-bold text-indigo-900 text-sm">🏢 Org Admins</h3>
                 <p className="text-xs text-indigo-700 mt-1">Manage Org Admins</p>
               </Link>
+              <Link href="/admin/partners" className="block p-3 bg-white border-2 border-green-600 rounded-lg hover:bg-green-50 transition">
+                <h3 className="font-bold text-green-900 text-sm">🤝 Strategic Partners</h3>
+                <p className="text-xs text-green-700 mt-1">Manage Partners</p>
+              </Link>
               <Link href="/master-admin/founders" className="block p-3 bg-white border-2 border-yellow-600 rounded-lg hover:bg-yellow-50 transition">
                 <h3 className="font-bold text-yellow-900 text-sm">⭐ Founders</h3>
                 <p className="text-xs text-yellow-700 mt-1">Founders & MOSCA</p>
               </Link>
-              <Link href="/master-admin/create-account" className="block p-3 bg-white border-2 border-green-600 rounded-lg hover:bg-green-50 transition">
-                <h3 className="font-bold text-green-900 text-sm">➕ Create Account</h3>
-                <p className="text-xs text-green-700 mt-1">No payment required</p>
+              <Link href="/master-admin/create-account" className="block p-3 bg-white border-2 border-teal-600 rounded-lg hover:bg-teal-50 transition">
+                <h3 className="font-bold text-teal-900 text-sm">➕ Create Account</h3>
+                <p className="text-xs text-teal-700 mt-1">No payment required</p>
               </Link>
             </div>
           </div>
@@ -229,18 +233,14 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
             >
               + Add Strategic Partner
             </button>
-            <Link
-              href="/admin/team-admins"
-              className={btn.brandGold}
-            >
-              View All Team Admins
-            </Link>
-            <Link
-              href="/admin/partners"
-              className={btn.secondary}
-            >
-              View All Strategic Partners
-            </Link>
+            {!isMasterAdmin && (
+              <Link
+                href="/admin/partners"
+                className={btn.secondary}
+              >
+                View All Strategic Partners
+              </Link>
+            )}
           </div>
         </div>
 

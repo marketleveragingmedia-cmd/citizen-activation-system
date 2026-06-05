@@ -92,6 +92,7 @@ export default function ReassignModal({ request, onClose, onSuccess }: ReassignM
       const data = await response.json()
 
       if (response.ok) {
+        alert('Request reassigned successfully!')
         onSuccess()
       } else {
         setError(data.error || data.message || 'Failed to reassign request')

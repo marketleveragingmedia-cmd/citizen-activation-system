@@ -163,10 +163,11 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
                 </button>
                 <button
                   onClick={() => {
-                    console.log('Pause/Reactivate functionality coming next')
+                    if (confirm(`${selectedAdmin.status === 'Active' ? 'Pause' : 'Reactivate'} ${selectedAdmin.firstName} ${selectedAdmin.lastName}?`)) {
+                      alert('Pause/Reactivate functionality coming next')
+                    }
                   }}
                   className={selectedAdmin.status === 'Active' ? btn.warning : btn.success}
-                  disabled
                 >
                   {selectedAdmin.status === 'Active' ? '⏸️ Pause Account' : '▶️ Reactivate'}
                 </button>
@@ -174,19 +175,21 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
                   onClick={() => {
-                    console.log('Reset Password functionality coming next')
+                    if (confirm(`Reset password for ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThey will receive an email with a new temporary password.`)) {
+                      alert('Reset Password functionality coming next')
+                    }
                   }}
                   className={btn.purple}
-                  disabled
                 >
                   🔑 Reset Password
                 </button>
                 <button
                   onClick={() => {
-                    console.log('Resend Welcome Email functionality coming next')
+                    if (confirm(`Resend welcome email to ${selectedAdmin.email}?`)) {
+                      alert('Resend Welcome Email functionality coming next')
+                    }
                   }}
                   className={btn.indigo}
-                  disabled
                 >
                   📧 Resend Welcome
                 </button>
@@ -194,10 +197,13 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
               <div className="mb-3">
                 <button
                   onClick={() => {
-                    console.log('Delete Account functionality coming next')
+                    if (confirm(`⚠️ DELETE ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThis action CANNOT be undone!`)) {
+                      if (confirm('Are you ABSOLUTELY SURE?')) {
+                        alert('Delete Account functionality coming next')
+                      }
+                    }
                   }}
                   className={`w-full ${btn.danger}`}
-                  disabled
                 >
                   🗑️ Delete Account
                 </button>

@@ -90,6 +90,7 @@ export default function BrandingSettingsModal({ team, onClose, onSuccess }: Bran
         throw new Error(data.error || 'Failed to update branding')
       }
 
+      alert('✅ Branding updated successfully!')
       onSuccess()
     } catch (err: any) {
       setError(err.message || 'Failed to update branding')

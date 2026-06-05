@@ -17,7 +17,6 @@ interface Props {
 export default function UpdateSlotLimitModal({ partner, onClose, onUpdate }: Props) {
   const [customLimit, setCustomLimit] = useState(partner.customSlotLimit?.toString() || '')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,10 +36,10 @@ export default function UpdateSlotLimitModal({ partner, onClose, onUpdate }: Pro
         onUpdate()
         onClose()
       } else {
-        setError('Failed to update slot limit')
+        alert('Failed to update slot limit')
       }
     } catch (error) {
-      setError('Error updating slot limit')
+      alert('Error updating slot limit')
     } finally {
       setLoading(false)
     }
@@ -58,12 +57,6 @@ export default function UpdateSlotLimitModal({ partner, onClose, onUpdate }: Pro
           <br />
           Current: {partner.customSlotLimit || partner.slotsAvailable} slots
         </p>
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm mb-4">
-            {error}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

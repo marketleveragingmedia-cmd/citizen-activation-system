@@ -32,7 +32,8 @@ export const authOptions: NextAuthOptions = {
               lastName: admin.lastName,
               role: admin.role,
               type: 'admin',
-              teamId: admin.teamId
+              teamId: admin.teamId,
+              isFounder: admin.isFounder || false
             } as any
           }
         }
@@ -69,6 +70,7 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role
         token.type = user.type
         token.teamId = user.teamId
+        token.isFounder = user.isFounder || false
       }
       return token
     },
@@ -78,6 +80,7 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role as string
         session.user.type = token.type as string
         session.user.teamId = token.teamId as string
+        session.user.isFounder = token.isFounder as boolean
       }
       return session
     }

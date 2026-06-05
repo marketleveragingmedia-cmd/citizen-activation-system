@@ -18,9 +18,10 @@ interface MainAdminDashboardProps {
   hasStripeAccount?: boolean
   stripeAccountId?: string | null
   isMasterAdmin?: boolean
+  isFounder?: boolean
 }
 
-export default function MainAdminDashboard({ stats, recentRequests, partners = [], userName, hasStripeAccount, stripeAccountId, isMasterAdmin = false }: MainAdminDashboardProps) {
+export default function MainAdminDashboard({ stats, recentRequests, partners = [], userName, hasStripeAccount, stripeAccountId, isMasterAdmin = false, isFounder = false }: MainAdminDashboardProps) {
   const [selectedRequest, setSelectedRequest] = useState<any>(null)
   const [showAddPartner, setShowAddPartner] = useState(false)
   const [showAddTeam, setShowAddTeam] = useState(false)
@@ -111,7 +112,10 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
             <Link href="/profile" className="text-gray-600 hover:text-gray-900">
               Profile
             </Link>
-            <span className="text-gray-600">{userName}</span>
+            <span className="text-gray-600">
+              {userName}
+              {isFounder && <span className="ml-2 text-yellow-600 font-semibold">⭐ Founder</span>}
+            </span>
             <Link href="/api/auth/signout" className="text-red-600 hover:underline">
               Sign Out
             </Link>

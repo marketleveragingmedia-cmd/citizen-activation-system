@@ -120,7 +120,7 @@ export default function FoundersMoscaCheckout() {
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-6">
-            <Image src="/founder-badge.png" alt="Founders Badge" width={80} height={80} priority />
+            <Image src="/founder-badge.png" alt="Founders Logo" width={140} height={140} priority />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Founders Beta Launch</h1>
           <p className="text-xl text-[#1E8E5A] font-semibold mb-4">$997 One-Time • Lifetime Access • Zero Annual Fees</p>

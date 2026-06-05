@@ -161,9 +161,9 @@ export default function FoundersStripeCheckout() {
           <div className="flex justify-center mb-6">
             <Image
               src="/founder-badge.png"
-              alt="Founders Badge"
-              width={80}
-              height={80}
+              alt="Founders Logo"
+              width={140}
+              height={140}
               priority
             />
           </div>

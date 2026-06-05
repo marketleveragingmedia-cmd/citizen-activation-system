@@ -248,6 +248,7 @@ export default async function DashboardPage() {
         hasStripeAccount={data.hasStripeAccount}
         stripeAccountId={data.stripeAccountId}
         isMasterAdmin={true}
+        isFounder={session.user.isFounder || false}
       />
     )
   }
@@ -263,6 +264,7 @@ export default async function DashboardPage() {
         hasStripeAccount={data.hasStripeAccount}
         stripeAccountId={data.stripeAccountId}
         isMasterAdmin={false}
+        isFounder={session.user.isFounder || false}
       />
     )
   }

@@ -162,8 +162,8 @@ export default function FoundersStripeCheckout() {
             <Image
               src="/founder-badge.png"
               alt="Founders Logo"
-              width={200}
-              height={200}
+              width={280}
+              height={280}
               priority
             />
           </div>

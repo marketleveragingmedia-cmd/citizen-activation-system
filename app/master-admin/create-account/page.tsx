@@ -256,11 +256,13 @@ export default function CreateAccountPage() {
               <option value="MAIN_ADMIN">Main Admin ($1,497 → $997/year)</option>
               <option value="TEAM_ADMIN">Team Admin Direct ($497/year)</option>
               <option value="ORG_ADMIN">Organization Admin ($997 → $497/year)</option>
+              <option value="FOUNDER">Founder (Lifetime Access - $997 one-time)</option>
             </select>
             <p className="text-sm text-gray-500 mt-1">
               {formData.accountType === 'MAIN_ADMIN' && 'Full network control, can add Team Admins & Org Admins'}
               {formData.accountType === 'TEAM_ADMIN' && 'Manage Strategic Partners & Requests'}
               {formData.accountType === 'ORG_ADMIN' && 'Organization branding, sees only their network'}
+              {formData.accountType === 'FOUNDER' && '⭐ Founder Badge • Lifetime Access • Zero Annual Fees'}
             </p>
           </div>
 

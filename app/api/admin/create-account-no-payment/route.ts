@@ -205,6 +205,50 @@ export async function POST(req: Request) {
         break
       }
 
+      case 'FOUNDER': {
+        // Create team for Founder
+        const team = await prisma.team.create({
+          data: {
+            name: organizationName || `${firstName} ${lastName} - Founder Network`,
+            adminId: 'temp',
+            tierType: 'FullSystem',
+            autoAssignEnabled: true,
+            status: 'Active',
+            createdByAdminId: session.user.id // Track Master Admin creator
+          }
+        })
+
+        teamId = team.id
+
+        // Create FOUNDER (MAIN_ADMIN + isFounder flags)
+        newAdmin = await prisma.admin.create({
+          data: {
+            role: 'MAIN_ADMIN',
+            firstName,
+            lastName,
+            email,
+            phone,
+            subdomain: cleanSubdomain,
+            passwordHash: hashedPassword,
+            referralCode: referralCode,
+            moscaCode: referralCode, // Save MOSCA code
+            status: 'Active',
+            teamId: team.id,
+            isFounder: true,
+            founderDate: new Date(),
+            founderPaymentMethod: 'Manual',
+            founderPaymentDetails: `Created by Master Admin (${session.user.email}) - No payment required`,
+          }
+        })
+
+        // Update team adminId
+        await prisma.team.update({
+          where: { id: team.id },
+          data: { adminId: newAdmin.id }
+        })
+        break
+      }
+
       default:
         return NextResponse.json({ 
           success: false, 

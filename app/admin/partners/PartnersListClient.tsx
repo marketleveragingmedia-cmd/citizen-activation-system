@@ -155,15 +155,15 @@ export default function PartnersListClient({ partners, userName }: any) {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col gap-1">
-                          <Link
-                            href={`/admin/partners/${partner.id}`}
-                            className="text-[#1E8E5A] hover:underline text-sm font-medium"
+                          <button
+                            onClick={() => setSelectedPartner(partner)}
+                            className="text-[#1E8E5A] hover:underline text-sm font-medium text-left"
                           >
                             View Details
-                          </Link>
+                          </button>
                           <button
                             onClick={() => setEditingPartner(partner)}
-                            className="text-blue-600 hover:underline text-sm font-medium"
+                            className="text-blue-600 hover:underline text-sm font-medium text-left"
                           >
                             Edit
                           </button>

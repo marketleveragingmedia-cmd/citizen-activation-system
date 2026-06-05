@@ -213,6 +213,17 @@ export default function FoundersMoscaCheckout() {
             <p className="text-center text-sm text-gray-500 mt-2">Questions? Email <a href="mailto:support@citizenactivation.com" className="text-[#1E8E5A] hover:underline">support@citizenactivation.com</a></p>
           </div>
         </form>
+
+        {/* Disclosure */}
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <p className="text-xs text-gray-500 text-center leading-relaxed">
+            <strong>Disclosure:</strong> This is a one-time payment of $997 (or equivalent) for lifetime access to the Citizen Activation System Founders Beta. 
+            There are no recurring charges or annual fees. All sales are final. Your application will be reviewed within 24-48 hours after payment verification. 
+            By submitting this application, you acknowledge that you are purchasing a digital product and agree to our terms of service. 
+            Your account will be activated upon payment confirmation by our team. 
+            For questions or support, contact <a href="mailto:support@citizenactivation.com" className="text-[#1E8E5A] hover:underline">support@citizenactivation.com</a>.
+          </p>
+        </div>
       </div>
     </div>
   )

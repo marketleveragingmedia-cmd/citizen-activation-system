@@ -56,6 +56,16 @@ export default function FoundersMoscaPending() {
             <p className="text-gray-600 mb-4">Payment verification typically takes 24-48 hours. You'll receive another email once your account is activated.</p>
             <p className="text-gray-600">Questions? Email <a href="mailto:support@citizenactivation.com" className="text-[#1E8E5A] hover:underline font-medium">support@citizenactivation.com</a></p>
           </div>
+
+          {/* Disclosure */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <p className="text-xs text-gray-500 text-center leading-relaxed">
+              <strong>Disclosure:</strong> You have submitted an application for a one-time payment of $997 (or equivalent) for lifetime access to the Citizen Activation System Founders Beta. 
+              There are no recurring charges or annual fees. All sales are final. Your payment is currently under review and will be verified within 24-48 hours. 
+              Once verified, your account will be activated and you will receive login credentials via email. This is a digital product. 
+              For questions or support, contact <a href="mailto:support@citizenactivation.com" className="text-[#1E8E5A] hover:underline">support@citizenactivation.com</a>.
+            </p>
+          </div>
         </div>
       </div>
     </div>

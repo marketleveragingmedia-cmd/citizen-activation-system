@@ -105,6 +105,15 @@ function SuccessContent() {
               Questions? Email <a href="mailto:support@citizenactivation.com" className="text-[#1E8E5A] hover:underline font-medium">support@citizenactivation.com</a>
             </p>
           </div>
+
+          {/* Disclosure */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <p className="text-xs text-gray-500 text-center leading-relaxed">
+              <strong>Disclosure:</strong> You have completed a one-time payment of $997 for lifetime access to the Citizen Activation System Founders Beta. 
+              There are no recurring charges or annual fees. All sales are final. Your account has been activated and you now have full access to the platform. 
+              This is a digital product. For questions or support, contact <a href="mailto:support@citizenactivation.com" className="text-[#1E8E5A] hover:underline">support@citizenactivation.com</a>.
+            </p>
+          </div>
         </div>
       </div>
     </div>

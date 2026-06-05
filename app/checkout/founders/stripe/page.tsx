@@ -357,6 +357,16 @@ export default function FoundersStripeCheckout() {
             </p>
           </div>
         </form>
+
+        {/* Disclosure */}
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <p className="text-xs text-gray-500 text-center leading-relaxed">
+            <strong>Disclosure:</strong> This is a one-time payment of $997 for lifetime access to the Citizen Activation System Founders Beta. 
+            There are no recurring charges or annual fees. All sales are final. By proceeding with payment, you acknowledge that you are purchasing 
+            a digital product and agree to our terms of service. Your account will be activated immediately upon successful payment. 
+            For questions or support, contact <a href="mailto:support@citizenactivation.com" className="text-[#1E8E5A] hover:underline">support@citizenactivation.com</a>.
+          </p>
+        </div>
       </div>
     </div>
   )

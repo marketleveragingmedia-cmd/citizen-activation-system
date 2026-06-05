@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import AddPartnerModal from './AddPartnerModal'
 import AddTeamModal from './AddTeamModal'
 import ReassignModal from './ReassignModal'
@@ -112,9 +113,14 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
             <Link href="/profile" className="text-gray-600 hover:text-gray-900">
               Profile
             </Link>
-            <span className="text-gray-600">
+            <span className="text-gray-600 flex items-center gap-2">
               {userName}
-              {isFounder && <span className="ml-2 text-yellow-600 font-semibold">⭐ Founder</span>}
+              {isFounder && (
+                <span className="flex items-center gap-1 text-yellow-600 font-semibold">
+                  <Image src="/founder-badge.png" alt="Founder" width={20} height={20} className="inline" />
+                  Founder
+                </span>
+              )}
             </span>
             <Link href="/api/auth/signout" className="text-red-600 hover:underline">
               Sign Out

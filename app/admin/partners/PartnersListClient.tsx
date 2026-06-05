@@ -11,10 +11,6 @@ export default function PartnersListClient({ partners, userName }: any) {
 
   const toggleStatus = async (partnerId: string, currentStatus: string) => {
     const newStatus = currentStatus === 'Active' ? 'Paused' : 'Active'
-    
-    if (!confirm(`${newStatus === 'Paused' ? 'Pause' : 'Activate'} this Strategic Partner?`)) {
-      return
-    }
 
     try {
       const response = await fetch('/api/toggle-partner-status', {
@@ -35,7 +31,6 @@ export default function PartnersListClient({ partners, userName }: any) {
 
   const updateSlotLimit = async (partnerId: string, newLimit: number) => {
     if (newLimit < 1 || newLimit > 100) {
-      alert('Slot limit must be between 1 and 100')
       return
     }
 

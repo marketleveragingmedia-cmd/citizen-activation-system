@@ -1,6 +1,8 @@
 'use client'
 import { btn } from '@/app/lib/buttonStyles'
 import EditAdminModal from '../components/EditAdminModal'
+import ConfirmDialog from '../components/ConfirmDialog'
+import DeleteConfirmDialog from '../components/DeleteConfirmDialog'
 
 import { useState } from 'react'
 
@@ -14,6 +16,10 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
   const [statusFilter, setStatusFilter] = useState<string>('All')
   const [paymentFilter, setPaymentFilter] = useState<string>('All')
   const [showEdit, setShowEdit] = useState(false)
+  const [showToggleConfirm, setShowToggleConfirm] = useState(false)
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
+  const [showResendConfirm, setShowResendConfirm] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   function handleEditSave(updated: any) {
     setAdminList(prev => prev.map(a => a.id === updated.id ? updated : a))
@@ -268,11 +274,7 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
                   ✏️ Edit Account
                 </button>
                 <button
-                  onClick={() => {
-                    if (confirm(`${selectedAdmin.status === 'Active' ? 'Pause' : 'Reactivate'} ${selectedAdmin.firstName} ${selectedAdmin.lastName}?`)) {
-                      alert('Pause/Reactivate functionality coming next')
-                    }
-                  }}
+                  onClick={() => setShowToggleConfirm(true)}
                   className={selectedAdmin.status === 'Active' ? btn.warning : btn.success}
                 >
                   {selectedAdmin.status === 'Active' ? '⏸️ Pause Account' : '▶️ Reactivate'}
@@ -280,21 +282,13 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
               </div>
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
-                  onClick={() => {
-                    if (confirm(`Reset password for ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThey will receive an email with a new temporary password.`)) {
-                      alert('Reset Password functionality coming next')
-                    }
-                  }}
+                  onClick={() => setShowResetConfirm(true)}
                   className={btn.purple}
                 >
                   🔑 Reset Password
                 </button>
                 <button
-                  onClick={() => {
-                    if (confirm(`Resend welcome email to ${selectedAdmin.email}?`)) {
-                      alert('Resend Welcome Email functionality coming next')
-                    }
-                  }}
+                  onClick={() => setShowResendConfirm(true)}
                   className={btn.indigo}
                 >
                   📧 Resend Welcome
@@ -302,13 +296,7 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
               </div>
               <div className="mb-3">
                 <button
-                  onClick={() => {
-                    if (confirm(`⚠️ DELETE ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThis action CANNOT be undone!`)) {
-                      if (confirm('Are you ABSOLUTELY SURE?')) {
-                        alert('Delete Account functionality coming next')
-                      }
-                    }
-                  }}
+                  onClick={() => setShowDeleteConfirm(true)}
                   className={`w-full ${btn.danger}`}
                 >
                   🗑️ Delete Account
@@ -331,6 +319,60 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
           admin={selectedAdmin}
           onSave={handleEditSave}
           onCancel={() => setShowEdit(false)}
+        />
+      )}
+
+      {/* Confirmation Dialogs */}
+      {showToggleConfirm && selectedAdmin && (
+        <ConfirmDialog
+          title={selectedAdmin.status === 'Active' ? 'Pause Account' : 'Reactivate Account'}
+          message={`${selectedAdmin.status === 'Active' ? 'Pause' : 'Reactivate'} ${selectedAdmin.firstName} ${selectedAdmin.lastName}?`}
+          confirmText={selectedAdmin.status === 'Active' ? 'Pause' : 'Reactivate'}
+          confirmColor={selectedAdmin.status === 'Active' ? 'yellow' : 'green'}
+          onConfirm={() => {
+            setShowToggleConfirm(false)
+            console.log('Pause/Reactivate functionality coming next')
+          }}
+          onCancel={() => setShowToggleConfirm(false)}
+        />
+      )}
+
+      {showResetConfirm && selectedAdmin && (
+        <ConfirmDialog
+          title="Reset Password"
+          message={`Reset password for ${selectedAdmin.firstName} ${selectedAdmin.lastName}?\n\nThey will receive an email with a new temporary password.`}
+          confirmText="Reset Password"
+          confirmColor="purple"
+          onConfirm={() => {
+            setShowResetConfirm(false)
+            console.log('Reset Password functionality coming next')
+          }}
+          onCancel={() => setShowResetConfirm(false)}
+        />
+      )}
+
+      {showResendConfirm && selectedAdmin && (
+        <ConfirmDialog
+          title="Resend Welcome Email"
+          message={`Resend welcome email to ${selectedAdmin.email}?`}
+          confirmText="Send Email"
+          confirmColor="blue"
+          onConfirm={() => {
+            setShowResendConfirm(false)
+            console.log('Resend Welcome Email functionality coming next')
+          }}
+          onCancel={() => setShowResendConfirm(false)}
+        />
+      )}
+
+      {showDeleteConfirm && selectedAdmin && (
+        <DeleteConfirmDialog
+          adminName={`${selectedAdmin.firstName} ${selectedAdmin.lastName}`}
+          onConfirm={() => {
+            setShowDeleteConfirm(false)
+            console.log('Delete Account functionality coming next')
+          }}
+          onCancel={() => setShowDeleteConfirm(false)}
         />
       )}
     </>

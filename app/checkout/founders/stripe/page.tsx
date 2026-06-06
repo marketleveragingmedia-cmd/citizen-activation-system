@@ -358,8 +358,26 @@ export default function FoundersStripeCheckout() {
           </div>
         </form>
 
-        {/* Disclosure */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
+        {/* MOSCA Disclosure */}
+        <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-lg">
+          <h3 className="font-bold text-gray-900 mb-3 text-center">Non-Affiliation Disclosure</h3>
+          <p className="text-sm text-gray-600 leading-relaxed text-center">
+            The Citizen Activation System is an independent platform and is not affiliated with, endorsed by, or officially connected to MOSCA or any of its subsidiaries or affiliates. MOSCA is a registered trademark of its respective owner. Any references to MOSCA are for informational and descriptive purposes only to explain the compatibility and use case of this system.
+          </p>
+          <div className="mt-4 pt-4 border-t border-gray-300">
+            <p className="text-xs text-gray-500 text-center">
+              Brought To You By: <span className="font-medium">Network Leveraging Cash Flow</span>
+            </p>
+            <div className="mt-2 text-xs text-gray-500 text-center space-x-3">
+              <a href="/terms" className="hover:underline">Terms</a>
+              <span>|</span>
+              <a href="/privacy" className="hover:underline">Privacy</a>
+            </div>
+          </div>
+        </div>
+
+        {/* Purchase Disclosure */}
+        <div className="mt-4 pt-6 border-t border-gray-200">
           <p className="text-xs text-gray-500 text-center leading-relaxed">
             <strong>Disclosure:</strong> This is a one-time payment of $997 for lifetime access to the Citizen Activation System Founders Beta. 
             There are no recurring charges or annual fees. All sales are final. By proceeding with payment, you acknowledge that you are purchasing 

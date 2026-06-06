@@ -243,34 +243,6 @@ export default function RequestForm() {
             <a href="/login" className="text-[#1E8E5A] font-medium hover:underline ml-1">Login to Strategic Partner Hub</a>
           </p>
         </div>
-
-        {/* Checkout Links Section */}
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-6">
-            Join as an Administrator
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <a 
-              href="/checkout/team-admin-direct" 
-              className="block p-6 bg-white border-2 border-[#1E8E5A] rounded-lg hover:shadow-lg transition-shadow"
-            >
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Team Admin Access</h3>
-              <p className="text-gray-600 mb-4">Manage Strategic Partners and grow your network</p>
-              <div className="text-2xl font-bold text-[#1E8E5A] mb-2">$497/year</div>
-              <p className="text-sm text-gray-500">Includes full dashboard access</p>
-            </a>
-            
-            <a 
-              href="/checkout/org-admin" 
-              className="block p-6 bg-white border-2 border-[#1E8E5A] rounded-lg hover:shadow-lg transition-shadow"
-            >
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Organization Admin</h3>
-              <p className="text-gray-600 mb-4">White-label branding + organization management</p>
-              <div className="text-2xl font-bold text-[#1E8E5A] mb-2">$997 Year 1</div>
-              <p className="text-sm text-gray-500">Then $297/year renewal</p>
-            </a>
-          </div>
-        </div>
       </div>
     </div>
   )

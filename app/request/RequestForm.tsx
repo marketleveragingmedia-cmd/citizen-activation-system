@@ -257,6 +257,24 @@ export default function RequestForm({ subdomain, primaryColor, secondaryColor }:
           By submitting, you'll be assigned to a Strategic Partner who will guide you through the Activation Process.
         </p>
       </form>
+
+      {/* MOSCA Disclosure */}
+      <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-lg text-center">
+        <h3 className="font-bold text-gray-900 mb-3">Non-Affiliation Disclosure</h3>
+        <p className="text-sm text-gray-600 leading-relaxed">
+          The Citizen Activation System is an independent platform and is not affiliated with, endorsed by, or officially connected to MOSCA or any of its subsidiaries or affiliates. MOSCA is a registered trademark of its respective owner. Any references to MOSCA are for informational and descriptive purposes only to explain the compatibility and use case of this system.
+        </p>
+        <div className="mt-4 pt-4 border-t border-gray-300">
+          <p className="text-xs text-gray-500">
+            Brought To You By: <span className="font-medium">Network Leveraging Cash Flow</span>
+          </p>
+          <div className="mt-2 text-xs text-gray-500 space-x-3">
+            <a href="/terms" className="hover:underline">Terms</a>
+            <span>|</span>
+            <a href="/privacy" className="hover:underline">Privacy</a>
+          </div>
+        </div>
+      </div>
     </>
   )
 }

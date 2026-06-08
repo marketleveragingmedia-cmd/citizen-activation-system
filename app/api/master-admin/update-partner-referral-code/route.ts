@@ -20,13 +20,13 @@ export async function POST(request: NextRequest) {
     const { partnerId, referralCode } = body
 
     if (!partnerId || !referralCode) {
-      return NextResponse.json({ error: 'Partner ID and referral code are required' }, { status: 400 })
+      return NextResponse.json({ error: 'Partner ID and Strategic Partner Referral Code are required' }, { status: 400 })
     }
 
     const trimmedCode = referralCode.trim()
 
     if (!trimmedCode) {
-      return NextResponse.json({ error: 'Referral code cannot be empty' }, { status: 400 })
+      return NextResponse.json({ error: 'Strategic Partner Referral Code cannot be empty' }, { status: 400 })
     }
 
     // Check if the partner exists
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Strategic Partner not found' }, { status: 404 })
     }
 
-    // Check if referral code is already used by another partner
+    // Check if Strategic Partner Referral Code is already used by another partner
     const existing = await prisma.strategicPartner.findFirst({
       where: {
         referralCode: trimmedCode,
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
 
     if (existing) {
       return NextResponse.json({ 
-        error: `This referral code is already in use by ${existing.firstName} ${existing.lastName} (${existing.email})` 
+        error: `This Strategic Partner Referral Code is already in use by ${existing.firstName} ${existing.lastName} (${existing.email})` 
       }, { status: 400 })
     }
 
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
 
     if (adminUsing) {
       return NextResponse.json({ 
-        error: `This referral code is already in use by admin ${adminUsing.firstName} ${adminUsing.lastName} (${adminUsing.email})` 
+        error: `This Strategic Partner Referral Code is already in use by admin ${adminUsing.firstName} ${adminUsing.lastName} (${adminUsing.email})` 
       }, { status: 400 })
     }
 
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true })
 
   } catch (error) {
-    console.error('Master Admin update partner referral code error:', error)
+    console.error('Master Admin update Strategic Partner Referral Code error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

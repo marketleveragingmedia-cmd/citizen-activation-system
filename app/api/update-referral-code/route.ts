@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     const { referralCode } = body
 
     if (!referralCode || !referralCode.trim()) {
-      return NextResponse.json({ error: 'Referral code is required' }, { status: 400 })
+      return NextResponse.json({ error: 'Strategic Partner Referral Code is required' }, { status: 400 })
     }
 
     const trimmedCode = referralCode.trim()
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Only Strategic Partners can update referral codes via this endpoint' }, { status: 403 })
     }
 
-    // Check if referral code is already used by another partner
+    // Check if Strategic Partner Referral Code is already used by another partner
     const existing = await prisma.strategicPartner.findFirst({
       where: {
         referralCode: trimmedCode,
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true })
 
   } catch (error) {
-    console.error('Update referral code error:', error)
+    console.error('Update Strategic Partner Referral Code error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

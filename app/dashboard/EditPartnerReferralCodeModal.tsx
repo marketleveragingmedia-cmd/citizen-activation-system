@@ -25,11 +25,11 @@ export default function EditPartnerReferralCodeModal({
     e.preventDefault()
     
     if (!referralCode.trim()) {
-      setError('Referral code cannot be empty')
+      setError('Strategic Partner Referral Code cannot be empty')
       return
     }
 
-    if (!confirm(`Update ${partnerName}'s referral code to: ${referralCode.trim()}?`)) {
+    if (!confirm(`Update ${partnerName}'s Strategic Partner Referral Code to: ${referralCode.trim()}?`)) {
       return
     }
 
@@ -49,10 +49,10 @@ export default function EditPartnerReferralCodeModal({
       const data = await response.json()
 
       if (response.ok) {
-        alert('Referral code updated successfully')
+        alert('Strategic Partner Referral Code updated successfully')
         onSuccess()
       } else {
-        setError(data.error || 'Failed to update referral code')
+        setError(data.error || 'Failed to update Strategic Partner Referral Code')
       }
     } catch (err) {
       setError('Network error. Please try again.')
@@ -66,7 +66,7 @@ export default function EditPartnerReferralCodeModal({
       <div className="bg-white rounded-lg max-w-md w-full p-6">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Edit Referral Code</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Edit Strategic Partner Referral Code</h2>
             <p className="text-sm text-gray-600 mt-1">Strategic Partner: {partnerName}</p>
           </div>
           <button
@@ -86,7 +86,7 @@ export default function EditPartnerReferralCodeModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
-              Referral Code *
+              Strategic Partner Referral Code *
             </label>
             <input
               type="text"
@@ -95,7 +95,7 @@ export default function EditPartnerReferralCodeModal({
               value={referralCode}
               onChange={(e) => setReferralCode(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent font-mono text-lg"
-              placeholder="MOSCA referral code"
+              placeholder="Strategic Partner Referral Code from MOSCA"
               autoFocus
             />
             <p className="text-sm text-gray-500 mt-1">

@@ -16,7 +16,7 @@ export default function ReferralCodeModal({ onClose, onSuccess }: ReferralCodeMo
     e.preventDefault()
     
     if (!referralCode.trim()) {
-      setError('Referral Code is required')
+      setError('Strategic Partner Referral Code is required')
       return
     }
 
@@ -35,7 +35,7 @@ export default function ReferralCodeModal({ onClose, onSuccess }: ReferralCodeMo
       if (response.ok) {
         onSuccess()
       } else {
-        setError(data.error || 'Failed to update Referral Code')
+        setError(data.error || 'Failed to update Strategic Partner Referral Code')
       }
     } catch (err) {
       setError('Network error. Please try again.')
@@ -54,7 +54,7 @@ export default function ReferralCodeModal({ onClose, onSuccess }: ReferralCodeMo
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Add Your Referral Code
+            Add Your Strategic Partner Referral Code
           </h2>
           <p className="text-gray-600">
             You received this code when you completed wallet activation with MOSCA
@@ -71,7 +71,7 @@ export default function ReferralCodeModal({ onClose, onSuccess }: ReferralCodeMo
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="referralCode" className="block text-sm font-semibold text-gray-700 mb-2">
-              Referral Code *
+              Strategic Partner Referral Code *
             </label>
             <input
               type="text"

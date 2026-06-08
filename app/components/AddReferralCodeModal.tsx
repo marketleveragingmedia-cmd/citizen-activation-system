@@ -16,7 +16,7 @@ export default function AddReferralCodeModal({ onClose, onSuccess }: AddReferral
     e.preventDefault()
     
     if (!referralCode.trim()) {
-      setError('Please enter your referral code')
+      setError('Please enter your Strategic Partner Referral Code')
       return
     }
 
@@ -35,7 +35,7 @@ export default function AddReferralCodeModal({ onClose, onSuccess }: AddReferral
       if (response.ok) {
         onSuccess()
       } else {
-        setError(data.error || 'Failed to update referral code')
+        setError(data.error || 'Failed to update Strategic Partner Referral Code')
       }
     } catch (err) {
       setError('Network error. Please try again.')
@@ -58,7 +58,7 @@ export default function AddReferralCodeModal({ onClose, onSuccess }: AddReferral
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Add Your Referral Code</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Add Your Strategic Partner Referral Code</h2>
           <p className="text-gray-600">
             You received this code when you completed wallet activation with MOSCA
           </p>
@@ -82,7 +82,7 @@ export default function AddReferralCodeModal({ onClose, onSuccess }: AddReferral
               value={referralCode}
               onChange={(e) => setReferralCode(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent font-mono text-lg"
-              placeholder="Enter your MOSCA referral code"
+              placeholder="Enter your Strategic Partner Referral Code"
               autoFocus
             />
           </div>

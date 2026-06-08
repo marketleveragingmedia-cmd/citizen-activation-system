@@ -13,6 +13,7 @@ export default function EditAdminModal({ admin, onSave, onCancel }: EditAdminMod
   const [lastName, setLastName] = useState(admin.lastName)
   const [email, setEmail] = useState(admin.email)
   const [phone, setPhone] = useState(admin.phone || '')
+  const [subdomain, setSubdomain] = useState(admin.subdomain || '')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -34,7 +35,8 @@ export default function EditAdminModal({ admin, onSave, onCancel }: EditAdminMod
           firstName,
           lastName,
           email,
-          phone
+          phone,
+          subdomain: subdomain || null
         })
       })
 
@@ -112,6 +114,24 @@ export default function EditAdminModal({ admin, onSave, onCancel }: EditAdminMod
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Optional"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Subdomain
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={subdomain}
+                onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
+                className="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                placeholder="custom-subdomain"
+                maxLength={20}
+              />
+              <span className="text-gray-600 text-sm">.citizenactivation.com</span>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Lowercase letters, numbers, and hyphens only (3-20 characters)</p>
           </div>
         </div>
         <div className="p-6 border-t bg-gray-50 flex gap-3">

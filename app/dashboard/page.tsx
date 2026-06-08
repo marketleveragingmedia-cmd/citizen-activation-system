@@ -142,6 +142,7 @@ async function getDashboardData(userId: string, role: string, type: string) {
     return {
       type: 'org_admin',
       team: admin.team,
+      adminSubdomain: admin.subdomain, // Organization Admin's personal subdomain
       hasStripeAccount: !!admin.team.stripeAccountId,
       stripeAccountId: admin.team.stripeAccountId,
       stats: {
@@ -274,6 +275,7 @@ export default async function DashboardPage() {
     return (
       <OrganizationAdminDashboard
         team={data.team}
+        adminSubdomain={data.adminSubdomain}
         hasStripeAccount={data.hasStripeAccount}
         stripeAccountId={data.stripeAccountId}
         stats={data.stats}

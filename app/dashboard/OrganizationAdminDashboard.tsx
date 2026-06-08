@@ -11,6 +11,7 @@ import BrandingSettingsModal from './BrandingSettingsModal'
 
 interface OrganizationAdminDashboardProps {
   team: any
+  adminSubdomain?: string
   hasStripeAccount?: boolean
   stripeAccountId?: string | null
   stats: any
@@ -20,6 +21,7 @@ interface OrganizationAdminDashboardProps {
 
 export default function OrganizationAdminDashboard({ 
   team, 
+  adminSubdomain,
   hasStripeAccount, 
   stripeAccountId, 
   stats, 
@@ -40,7 +42,7 @@ export default function OrganizationAdminDashboard({
   const organizationName = team.organizationName || team.name || 'Organization'
   const logoUrl = team.logoUrl
   const primaryColor = team.primaryColor || '#1E8E5A'
-  const subdomain = team.subdomain || 'your-org'
+  const subdomain = adminSubdomain || 'your-org'
 
   // Helper to check if request is delayed (3+ days)
   const isDelayed = (request: any) => {
@@ -181,18 +183,16 @@ export default function OrganizationAdminDashboard({
                 Copy Link
               </button>
             </div>
-            <div className="bg-yellow-50 border border-yellow-300 rounded p-3">
-              <p className="text-xs text-yellow-900 font-semibold mb-1">
-                💡 Your Subdomain: <span className="font-mono text-sm bg-white px-2 py-1 rounded border border-yellow-400">{subdomain}</span>
+            <div className="bg-green-50 border border-green-300 rounded p-3">
+              <p className="text-xs text-green-900 font-semibold mb-1">
+                ✅ Your Subdomain: <span className="font-mono text-sm bg-white px-2 py-1 rounded border border-green-400">{subdomain}</span>
               </p>
-              <p className="text-xs text-yellow-800">
-                When sharing this link, be sure to <strong>replace "your-org"</strong> with <strong>your subdomain</strong> like:
+              <p className="text-xs text-green-800">
+                This link is <strong>auto-populated with your subdomain</strong> and ready to share! All requests coming through this link will be tracked to your organization.
               </p>
-              <ul className="text-xs text-yellow-800 mt-1 ml-4 space-y-1">
-                <li>• "abc-ministry.citizenactivation.com"</li>
-                <li>• "main-charity.citizenactivation.com"</li>
-                <li>• "grace-church.citizenactivation.com"</li>
-              </ul>
+              <p className="text-xs text-green-800 mt-2">
+                💡 <strong>Share this link with:</strong> Your entire community, church members, team, or group - everyone uses the same link!
+              </p>
             </div>
           </div>
 

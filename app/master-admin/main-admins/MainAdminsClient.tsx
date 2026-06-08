@@ -5,12 +5,15 @@ import ConfirmDialog from '../components/ConfirmDialog'
 import SuccessToast from '../components/SuccessToast'
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog'
 import EditAdminModal from '../components/EditAdminModal'
+import ProfileViewModal from '@/app/components/ProfileViewModal'
+import { useRouter } from 'next/navigation'
 
 interface MainAdminsClientProps {
   mainAdmins: any[]
 }
 
 export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) {
+  const router = useRouter()
   const [selectedAdmin, setSelectedAdmin] = useState<any>(null)
   const [adminList, setAdminList] = useState(mainAdmins)
   const [loading, setLoading] = useState(false)
@@ -19,6 +22,7 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [showResendConfirm, setShowResendConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [viewProfile, setViewProfile] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState('')
   const [error, setError] = useState('')
 
@@ -199,12 +203,28 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    onClick={() => setSelectedAdmin(mainAdmin)}
-                    className="text-blue-600 hover:text-blue-800 font-medium text-sm"
-                  >
-                    View Details
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setViewProfile(mainAdmin.id)}
+                      className="text-[#1E8E5A] hover:text-[#177349] font-medium text-sm"
+                    >
+                      View Profile
+                    </button>
+                    <span className="text-gray-300">|</span>
+                    <button
+                      onClick={() => router.push(`/master-admin/network/${mainAdmin.id}`)}
+                      className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                    >
+                      View Network
+                    </button>
+                    <span className="text-gray-300">|</span>
+                    <button
+                      onClick={() => setSelectedAdmin(mainAdmin)}
+                      className="text-gray-600 hover:text-gray-800 font-medium text-sm"
+                    >
+                      Manage
+                    </button>
+                  </div>
                 </td>
               </tr>
             )
@@ -361,6 +381,14 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
         <SuccessToast
           message={successMessage}
           onClose={() => setSuccessMessage('')}
+        />
+      )}
+
+      {/* Profile View Modal */}
+      {viewProfile && (
+        <ProfileViewModal
+          profileId={viewProfile}
+          onClose={() => setViewProfile(null)}
         />
       )}
     </>

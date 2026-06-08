@@ -125,10 +125,13 @@ export default function OrganizationAdminDashboard({
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-gray-600">{userName}</span>
-            <Link href="/profile" className="text-gray-600 hover:text-gray-900">
+            <Link href="/admin/my-network" className="text-gray-600 hover:text-gray-900 text-sm">
+              My Network
+            </Link>
+            <Link href="/profile" className="text-gray-600 hover:text-gray-900 text-sm">
               Profile
             </Link>
+            <span className="text-gray-600 text-sm">{userName}</span>
             <Link href="/api/auth/signout" className="text-red-600 hover:underline">
               Sign Out
             </Link>

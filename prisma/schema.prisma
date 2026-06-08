@@ -27,13 +27,13 @@ model Admin {
   status       AdminStatus @default(Active)
 
   // Founder fields
-  isFounder            Boolean   @default(false)
-  founderDate          DateTime?
-  founderPaymentMethod String?   // "Stripe" | "MOSCA" | "Manual"
-  founderPaymentDetails String?  @db.Text // Transaction ID, confirmation #, wallet address, etc.
-  moscaCode            String?   // MOSCA Strategic Partner Referral Code
+  isFounder             Boolean   @default(false)
+  founderDate           DateTime?
+  founderPaymentMethod  String? // "Stripe" | "MOSCA" | "Manual"
+  founderPaymentDetails String?   @db.Text // Transaction ID, confirmation #, wallet address, etc.
+  moscaCode             String? // MOSCA Strategic Partner Referral Code
 
-  teamsCreated Team[]      @relation("TeamsCreated") // Teams this Main Admin created
+  teamsCreated    Team[]           @relation("TeamsCreated") // Teams this Main Admin created
   foundersPending FounderPending[] @relation("FounderCreatedBy")
 
   @@map("admins")
@@ -52,18 +52,18 @@ model Team {
   status            TeamStatus @default(Active)
 
   // Hierarchy Tracking
-  createdByAdminId  String?    // Main Admin or Master Admin who created this team
-  createdBy         Admin?     @relation("TeamsCreated", fields: [createdByAdminId], references: [id])
+  createdByAdminId String? // Main Admin or Master Admin who created this team
+  createdBy        Admin?  @relation("TeamsCreated", fields: [createdByAdminId], references: [id])
 
   // Organization Admin Branding Fields (SoloOrg tier only)
-  organizationName      String?    // Display name (e.g., "Grace Church")
-  welcomeMessage        String?    @db.Text // Custom message on subdomain pages (max 500 chars)
-  primaryColor          String?    // Hex color: "#1E8E5A"
-  secondaryColor        String?    // Hex color: "#065F46"
-  emailFromName         String?    // Email sender name: "Grace Church Team"
-  hidePlatformBranding  Boolean    @default(false) // Hide "Powered by" footer
+  organizationName     String? // Display name (e.g., "Grace Church")
+  welcomeMessage       String? @db.Text // Custom message on subdomain pages (max 500 chars)
+  primaryColor         String? // Hex color: "#1E8E5A"
+  secondaryColor       String? // Hex color: "#065F46"
+  emailFromName        String? // Email sender name: "Grace Church Team"
+  hidePlatformBranding Boolean @default(false) // Hide "Powered by" footer
 
-  admins            Admin[]    @relation("AdminTeam")
+  admins            Admin[]            @relation("AdminTeam")
   strategicPartners StrategicPartner[]
   requests          Request[]
 
@@ -176,24 +176,24 @@ enum RequestStatus {
 }
 
 model FounderPending {
-  id                String   @id @default(cuid())
+  id                String    @id @default(cuid())
   firstName         String
   lastName          String
   email             String
   phone             String
-  moscaCode         String   // MOSCA Strategic Partner Referral Code
+  moscaCode         String // MOSCA Strategic Partner Referral Code
   subdomainOption1  String
   subdomainOption2  String
-  walletInfo        String   @db.Text // User's wallet address or TX ID
-  paymentMethod     String   @default("MOSCA") // "MOSCA" | "Manual"
-  manualPaymentType String?  // "Zelle" | "CashApp" | other
-  status            String   @default("Pending") // "Pending" | "Approved" | "Rejected"
-  submittedDate     DateTime @default(now())
+  walletInfo        String    @db.Text // User's wallet address or TX ID
+  paymentMethod     String    @default("MOSCA") // "MOSCA" | "Manual"
+  manualPaymentType String? // "Zelle" | "CashApp" | other
+  status            String    @default("Pending") // "Pending" | "Approved" | "Rejected"
+  submittedDate     DateTime  @default(now())
   approvedDate      DateTime?
   approvedByAdminId String?
-  approvedBy        Admin?   @relation("FounderCreatedBy", fields: [approvedByAdminId], references: [id])
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  approvedBy        Admin?    @relation("FounderCreatedBy", fields: [approvedByAdminId], references: [id])
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@map("founders_pending")
 }

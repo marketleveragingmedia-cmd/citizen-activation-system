@@ -3,7 +3,7 @@ import { btn } from '@/app/lib/buttonStyles'
 import EditAdminModal from '../components/EditAdminModal'
 import ConfirmDialog from '../components/ConfirmDialog'
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog'
-
+import ProfileViewModal from '@/app/components/ProfileViewModal'
 import { useState } from 'react'
 
 interface OrgAdminsClientProps {
@@ -18,6 +18,7 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [showResendConfirm, setShowResendConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [viewProfile, setViewProfile] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -194,12 +195,21 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    onClick={() => setSelectedAdmin(orgAdmin)}
-                    className="text-blue-600 hover:text-blue-800 font-medium text-sm"
-                  >
-                    View Details
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setViewProfile(orgAdmin.id)}
+                      className="text-[#1E8E5A] hover:text-[#177349] font-medium text-sm"
+                    >
+                      View Profile
+                    </button>
+                    <span className="text-gray-300">|</span>
+                    <button
+                      onClick={() => setSelectedAdmin(orgAdmin)}
+                      className="text-gray-600 hover:text-gray-800 font-medium text-sm"
+                    >
+                      Manage
+                    </button>
+                  </div>
                 </td>
               </tr>
             )
@@ -389,6 +399,14 @@ export default function OrgAdminsClient({ orgAdmins }: OrgAdminsClientProps) {
           adminName={`${selectedAdmin.firstName} ${selectedAdmin.lastName}`}
           onConfirm={handleDelete}
           onCancel={() => setShowDeleteConfirm(false)}
+        />
+      )}
+
+      {/* Profile View Modal */}
+      {viewProfile && (
+        <ProfileViewModal
+          profileId={viewProfile}
+          onClose={() => setViewProfile(null)}
         />
       )}
     </>

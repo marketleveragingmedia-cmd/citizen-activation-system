@@ -107,10 +107,15 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
         <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
           <h1 className="text-xl font-bold text-gray-900">{isMasterAdmin ? 'Master Admin Dashboard' : 'Main Admin Dashboard'}</h1>
           <div className="flex items-center gap-4">
-            <Link href="/admin/partners" className="text-gray-600 hover:text-gray-900">
-              Manage Strategic Partners
+            {!isMasterAdmin && (
+              <Link href="/admin/my-network" className="text-gray-600 hover:text-gray-900 text-sm">
+                My Network
+              </Link>
+            )}
+            <Link href="/admin/partners" className="text-gray-600 hover:text-gray-900 text-sm">
+              Strategic Partners
             </Link>
-            <Link href="/profile" className="text-gray-600 hover:text-gray-900">
+            <Link href="/profile" className="text-gray-600 hover:text-gray-900 text-sm">
               Profile
             </Link>
             <span className="text-gray-600 flex items-center gap-2">

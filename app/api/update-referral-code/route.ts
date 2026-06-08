@@ -11,39 +11,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Only Strategic Partners can update their own referral code
-    if (session.user.type !== 'partner') {
-      return NextResponse.json({ error: 'Only Strategic Partners can update referral codes' }, { status: 403 })
-    }
-
     const body = await request.json()
     const { referralCode } = body
 
     if (!referralCode || !referralCode.trim()) {
-      return NextResponse.json({ error: 'Referral Code is required' }, { status: 400 })
+      return NextResponse.json({ error: 'Referral code is required' }, { status: 400 })
     }
 
-    const cleanCode = referralCode.trim().toUpperCase()
+    const trimmedCode = referralCode.trim()
 
-    // Check if referral code already exists (it must be unique)
-    const existingPartner = await prisma.strategicPartner.findFirst({
+    // Only Strategic Partners can use this endpoint
+    if (session.user.type !== 'partner') {
+      return NextResponse.json({ error: 'Only Strategic Partners can update referral codes via this endpoint' }, { status: 403 })
+    }
+
+    // Check if referral code is already used by another partner
+    const existing = await prisma.strategicPartner.findFirst({
       where: {
-        referralCode: cleanCode,
-        id: { not: session.user.id } // Allow user to keep their own code
+        referralCode: trimmedCode,
+        id: { not: session.user.id }
       }
     })
 
-    if (existingPartner) {
-      return NextResponse.json({ error: 'This Referral Code is already in use by another Strategic Partner' }, { status: 400 })
+    if (existing) {
+      return NextResponse.json({ error: 'This referral code is already in use by another Strategic Partner' }, { status: 400 })
     }
 
     // Update the Strategic Partner's referral code
     await prisma.strategicPartner.update({
       where: { id: session.user.id },
-      data: { referralCode: cleanCode }
+      data: { referralCode: trimmedCode }
     })
 
-    return NextResponse.json({ success: true, message: 'Referral Code updated successfully' })
+    return NextResponse.json({ success: true })
 
   } catch (error) {
     console.error('Update referral code error:', error)

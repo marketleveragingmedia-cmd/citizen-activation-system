@@ -11,9 +11,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Only Main Admin can edit Strategic Partners
-    if (session.user.role !== 'MAIN_ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    // Only Main Admin and Master Admin can edit Strategic Partners
+    const allowedRoles = ['MAIN_ADMIN', 'MASTER_ADMIN']
+    if (!allowedRoles.includes(session.user.role)) {
+      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
     }
 
     const body = await request.json()

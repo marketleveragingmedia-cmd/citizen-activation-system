@@ -2,12 +2,12 @@
 
 import { useState } from 'react'
 
-interface ReferralCodeModalProps {
+interface AddReferralCodeModalProps {
   onClose: () => void
   onSuccess: () => void
 }
 
-export default function ReferralCodeModal({ onClose, onSuccess }: ReferralCodeModalProps) {
+export default function AddReferralCodeModal({ onClose, onSuccess }: AddReferralCodeModalProps) {
   const [referralCode, setReferralCode] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -16,7 +16,7 @@ export default function ReferralCodeModal({ onClose, onSuccess }: ReferralCodeMo
     e.preventDefault()
     
     if (!referralCode.trim()) {
-      setError('Referral Code is required')
+      setError('Please enter your referral code')
       return
     }
 
@@ -35,13 +35,18 @@ export default function ReferralCodeModal({ onClose, onSuccess }: ReferralCodeMo
       if (response.ok) {
         onSuccess()
       } else {
-        setError(data.error || 'Failed to update Referral Code')
+        setError(data.error || 'Failed to update referral code')
       }
     } catch (err) {
       setError('Network error. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const handleSkip = () => {
+    // Close modal but don't mark as completed - will show again next login
+    onClose()
   }
 
   return (
@@ -53,25 +58,22 @@ export default function ReferralCodeModal({ onClose, onSuccess }: ReferralCodeMo
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Add Your Referral Code
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Add Your Referral Code</h2>
           <p className="text-gray-600">
             You received this code when you completed wallet activation with MOSCA
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-800 font-medium">Error</p>
-            <p className="text-red-600 text-sm mt-1">{error}</p>
+          <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-4">
+            {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="referralCode" className="block text-sm font-semibold text-gray-700 mb-2">
-              Referral Code *
+            <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
+              Strategic Partner Referral Code *
             </label>
             <input
               type="text"
@@ -79,29 +81,39 @@ export default function ReferralCodeModal({ onClose, onSuccess }: ReferralCodeMo
               required
               value={referralCode}
               onChange={(e) => setReferralCode(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-lg font-mono"
-              placeholder="Your Strategic Partner Referral Code"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E8E5A] focus:border-transparent font-mono text-lg"
+              placeholder="Enter your MOSCA referral code"
               autoFocus
             />
-            <p className="text-sm text-gray-500 mt-2">
-              Check your MOSCA wallet activation confirmation email or dashboard
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+            <p className="text-sm text-blue-800">
+              <strong>Where to find it:</strong> Check your MOSCA wallet activation confirmation email or dashboard.
             </p>
           </div>
 
-          <div className="flex justify-end gap-3">
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={handleSkip}
+              className="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium text-gray-700"
+            >
+              Skip for Now
+            </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full px-6 py-3 bg-[#1E8E5A] hover:bg-[#177349] disabled:bg-gray-400 text-white font-bold rounded-lg"
+              className="flex-1 px-6 py-3 bg-[#1E8E5A] hover:bg-[#177349] disabled:bg-gray-400 text-white font-bold rounded-lg"
             >
-              {isSubmitting ? 'Saving...' : 'Complete Setup'}
+              {isSubmitting ? 'Saving...' : 'Save Code'}
             </button>
           </div>
         </form>
 
-        <div className="mt-4 text-center text-xs text-gray-500">
-          <p>You can also add this later in your Profile Settings</p>
-        </div>
+        <p className="text-xs text-gray-500 text-center mt-4">
+          You can also add this later in your Profile Settings
+        </p>
       </div>
     </div>
   )

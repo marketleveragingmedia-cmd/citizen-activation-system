@@ -34,7 +34,7 @@ export default function OrganizationAdminDashboard({
   const [showBrandingSettings, setShowBrandingSettings] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const requestsPerPage = 20
+  const requestsPerPage = 25
 
   // Get branding
   const organizationName = team.organizationName || team.name || 'Organization'

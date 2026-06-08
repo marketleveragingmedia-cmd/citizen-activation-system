@@ -31,7 +31,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
   const [updatingSlots, setUpdatingSlots] = useState<any>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const requestsPerPage = 20
+  const requestsPerPage = 25
 
   // Helper to check if request is delayed (3+ days)
   const isDelayed = (request: any) => {

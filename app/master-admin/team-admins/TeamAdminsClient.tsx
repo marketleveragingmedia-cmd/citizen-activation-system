@@ -217,8 +217,18 @@ export default function TeamAdminsClient({ teamAdmins }: TeamAdminsClientProps) 
       {selectedAdmin && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b">
+            <div className="p-6 border-b flex justify-between items-center">
               <h2 className="text-xl font-bold text-gray-900">Team Admin Account Details</h2>
+              <button
+                onClick={() => {
+                  const adminId = selectedAdmin.id
+                  setSelectedAdmin(null)
+                  setViewProfile(adminId)
+                }}
+                className="text-[#1E8E5A] hover:text-[#177349] font-medium text-sm"
+              >
+                👤 View Profile
+              </button>
             </div>
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">

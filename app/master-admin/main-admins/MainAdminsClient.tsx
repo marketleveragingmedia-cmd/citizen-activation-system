@@ -236,8 +236,18 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
       {selectedAdmin && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b">
+            <div className="p-6 border-b flex justify-between items-center">
               <h2 className="text-xl font-bold text-gray-900">Main Admin Account</h2>
+              <button
+                onClick={() => {
+                  const adminId = selectedAdmin.id
+                  setSelectedAdmin(null)
+                  setViewProfile(adminId)
+                }}
+                className="text-[#1E8E5A] hover:text-[#177349] font-medium text-sm"
+              >
+                👤 View Profile
+              </button>
             </div>
             <div className="p-6 space-y-4">
               {error && (
@@ -273,6 +283,17 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
             </div>
             
             <div className="p-6 border-t bg-gray-50">
+              <div className="mb-3">
+                <button
+                  onClick={() => {
+                    setSelectedAdmin(null)
+                    router.push(`/master-admin/network/${selectedAdmin.id}`)
+                  }}
+                  className="w-full bg-[#1E8E5A] hover:bg-[#177349] text-white font-medium py-2.5 px-4 rounded-lg text-sm"
+                >
+                  👁️ View Complete Network
+                </button>
+              </div>
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
                   onClick={() => setShowEdit(true)}

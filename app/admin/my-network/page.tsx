@@ -69,7 +69,7 @@ export default async function MyNetworkPage() {
       )
     }
   } else if (admin.role === 'TEAM_ADMIN' || admin.role === 'ORG_ADMIN') {
-    // Team/Org Admin: Show their Strategic Partners
+    // Team/Org Admin: Show their Strategic Partners + Team/Org Admins they added (for payment tracking)
     const team = await prisma.team.findUnique({
       where: { id: admin.teamId! },
       include: {
@@ -84,11 +84,25 @@ export default async function MyNetworkPage() {
       }
     })
 
+    // Get Team/Org Admins they created (flat list for payment tracking)
+    const createdTeams = await prisma.team.findMany({
+      where: { createdByAdminId: admin.id },
+      include: {
+        admins: true
+      },
+      orderBy: { createdDate: 'desc' }
+    })
+
     network = {
       team,
       partners: team?.strategicPartners || [],
       totalPartners: team?.strategicPartners.length || 0,
-      totalActivations: team?.strategicPartners.reduce((sum, p) => sum + p.assignedRequests.length, 0) || 0
+      totalActivations: team?.strategicPartners.reduce((sum, p) => sum + p.assignedRequests.length, 0) || 0,
+      createdTeams,
+      teamAdmins: createdTeams.filter(t => t.tierType === 'FullSystem'),
+      orgAdmins: createdTeams.filter(t => t.tierType === 'SoloOrg'),
+      totalTeamAdmins: createdTeams.filter(t => t.tierType === 'FullSystem').length,
+      totalOrgAdmins: createdTeams.filter(t => t.tierType === 'SoloOrg').length
     }
     
     createdBy = team?.createdBy || null

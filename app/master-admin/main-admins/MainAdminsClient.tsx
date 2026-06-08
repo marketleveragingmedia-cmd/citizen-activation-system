@@ -5,7 +5,6 @@ import ConfirmDialog from '../components/ConfirmDialog'
 import SuccessToast from '../components/SuccessToast'
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog'
 import EditAdminModal from '../components/EditAdminModal'
-import ProfileViewModal from '@/app/components/ProfileViewModal'
 import { useRouter } from 'next/navigation'
 
 interface MainAdminsClientProps {
@@ -22,7 +21,6 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [showResendConfirm, setShowResendConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  const [viewProfile, setViewProfile] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState('')
   const [error, setError] = useState('')
 
@@ -203,28 +201,12 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setViewProfile(mainAdmin.id)}
-                      className="text-[#1E8E5A] hover:text-[#177349] font-medium text-sm"
-                    >
-                      View Profile
-                    </button>
-                    <span className="text-gray-300">|</span>
-                    <button
-                      onClick={() => router.push(`/master-admin/network/${mainAdmin.id}`)}
-                      className="text-blue-600 hover:text-blue-800 font-medium text-sm"
-                    >
-                      View Network
-                    </button>
-                    <span className="text-gray-300">|</span>
-                    <button
-                      onClick={() => setSelectedAdmin(mainAdmin)}
-                      className="text-gray-600 hover:text-gray-800 font-medium text-sm"
-                    >
-                      Manage
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => router.push(`/master-admin/network/${mainAdmin.id}`)}
+                    className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                  >
+                    View Network
+                  </button>
                 </td>
               </tr>
             )
@@ -236,18 +218,8 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
       {selectedAdmin && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b flex justify-between items-center">
+            <div className="p-6 border-b">
               <h2 className="text-xl font-bold text-gray-900">Main Admin Account</h2>
-              <button
-                onClick={() => {
-                  const adminId = selectedAdmin.id
-                  setSelectedAdmin(null)
-                  setViewProfile(adminId)
-                }}
-                className="text-[#1E8E5A] hover:text-[#177349] font-medium text-sm"
-              >
-                👤 View Profile
-              </button>
             </div>
             <div className="p-6 space-y-4">
               {error && (
@@ -273,6 +245,13 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                 <div className="text-sm font-medium text-gray-500">Email</div>
                 <div className="text-gray-900">{selectedAdmin.email}</div>
               </div>
+
+              {selectedAdmin.subdomain && (
+                <div>
+                  <div className="text-sm font-medium text-gray-500">Subdomain</div>
+                  <div className="text-gray-900 font-mono">{selectedAdmin.subdomain}.citizenactivation.com</div>
+                </div>
+              )}
 
               {selectedAdmin.referralCode && (
                 <div className="border-t pt-4">
@@ -402,14 +381,6 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
         <SuccessToast
           message={successMessage}
           onClose={() => setSuccessMessage('')}
-        />
-      )}
-
-      {/* Profile View Modal */}
-      {viewProfile && (
-        <ProfileViewModal
-          profileId={viewProfile}
-          onClose={() => setViewProfile(null)}
         />
       )}
     </>

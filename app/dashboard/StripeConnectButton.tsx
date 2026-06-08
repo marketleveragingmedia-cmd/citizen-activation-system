@@ -24,8 +24,8 @@ export default function StripeConnectButton({ hasStripeAccount, stripeAccountId 
       const data = await response.json()
 
       if (response.ok && data.onboardingUrl) {
-        // Redirect to Stripe onboarding
-        window.location.href = data.onboardingUrl
+        // Open Stripe onboarding in new tab
+        window.open(data.onboardingUrl, '_blank', 'noopener,noreferrer')
       } else {
         setError(data.error || 'Failed to create Stripe account')
       }

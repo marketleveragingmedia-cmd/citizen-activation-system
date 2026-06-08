@@ -308,7 +308,7 @@ export default async function DashboardPage() {
             <h1 className="text-2xl font-bold text-gray-900">Main Admin Dashboard</h1>
             <div className="flex items-center gap-4">
               <span className="text-gray-600">{session.user.name}</span>
-              <Link href="/api/auth/signout" className="text-red-600 hover:underline">
+              <Link href="/api/auth/signout" className="text-[#1E8E5A] hover:text-[#177349] font-semibold">
                 Sign Out
               </Link>
             </div>
@@ -408,7 +408,7 @@ export default async function DashboardPage() {
             <h1 className="text-2xl font-bold text-gray-900">Strategic Partner Dashboard</h1>
             <div className="flex items-center gap-4">
               <span className="text-gray-600">{session.user.name}</span>
-              <Link href="/api/auth/signout" className="text-red-600 hover:underline">
+              <Link href="/api/auth/signout" className="text-[#1E8E5A] hover:text-[#177349] font-semibold">
                 Sign Out
               </Link>
             </div>

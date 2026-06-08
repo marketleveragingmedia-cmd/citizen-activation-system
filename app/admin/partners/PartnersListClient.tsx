@@ -66,7 +66,7 @@ export default function PartnersListClient({ partners, userName }: any) {
               ← Back to Dashboard
             </Link>
             <span className="text-gray-600">{userName}</span>
-            <Link href="/api/auth/signout" className="text-red-600 hover:underline">
+            <Link href="/api/auth/signout" className="text-[#1E8E5A] hover:text-[#177349] font-semibold">
               Sign Out
             </Link>
           </div>

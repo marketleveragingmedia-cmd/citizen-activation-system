@@ -64,7 +64,7 @@ export default async function OrgAdminsPage() {
             <Link href="/dashboard" className="text-blue-600 hover:underline">
               ← Back to Dashboard
             </Link>
-            <Link href="/api/auth/signout" className="text-red-600 hover:underline">
+            <Link href="/api/auth/signout" className="text-[#1E8E5A] hover:text-[#177349] font-semibold">
               Sign Out
             </Link>
           </div>

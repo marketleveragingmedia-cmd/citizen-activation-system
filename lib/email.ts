@@ -198,3 +198,79 @@ export function getNewStrategicPartnerWelcomeEmail(
     `
   }
 }
+
+export function getAdminWelcomeEmail(
+  name: string,
+  email: string,
+  tempPassword: string,
+  roleText: string,
+  referralCode: string,
+  subdomain: string,
+  isFounder: boolean = false
+) {
+  const loginUrl = `https://${subdomain}.citizenactivation.com/login`
+  const subdomainUrl = `https://${subdomain}.citizenactivation.com`
+
+  return {
+    subject: `Welcome to Citizen Activation System - ${roleText} Account Created`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f9fafb; border-bottom: 3px solid #1E8E5A;">
+          <h1 style="margin: 0; color: #1f2937; font-size: 28px;">Citizen Activation System</h1>
+        </div>
+        
+        <h2 style="color: #1f2937;">Welcome, ${name}!</h2>
+        <p>Your ${roleText} account has been successfully created by the Master Admin.</p>
+        
+        ${isFounder ? `
+          <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; font-weight: bold; color: #92400e;">🎉 FOUNDER STATUS</p>
+            <p style="margin: 5px 0 0 0; color: #92400e;">You're part of the exclusive Founders Beta with lifetime access!</p>
+          </div>
+        ` : ''}
+        
+        <h3 style="color: #1f2937; margin-top: 30px;">Your Login Credentials</h3>
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Email:</strong> ${email}</p>
+          <p style="margin: 5px 0;"><strong>Temporary Password:</strong> <code style="background: #e5e7eb; padding: 4px 8px; border-radius: 4px; font-size: 14px;">${tempPassword}</code></p>
+          <p style="margin: 5px 0;"><strong>Your Referral Code:</strong> <code style="background: #e5e7eb; padding: 4px 8px; border-radius: 4px; font-size: 14px;">${referralCode}</code></p>
+          <p style="margin: 5px 0;"><strong>Your Subdomain Link:</strong> <a href="${subdomainUrl}" style="color: #1E8E5A;">${subdomainUrl}</a></p>
+        </div>
+        
+        <p style="margin: 30px 0;">
+          <a href="${loginUrl}" style="background: #1E8E5A; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+            Login to Your Dashboard
+          </a>
+        </p>
+        
+        <div style="background: #dbeafe; border-left: 4px solid #3b82f6; padding: 15px; margin: 20px 0;">
+          <p style="margin: 0; font-weight: bold; color: #1e40af;">⚠️ IMPORTANT: First Login</p>
+          <p style="margin: 5px 0 0 0; color: #1e3a8a;">You will be required to change your password immediately upon first login.</p>
+        </div>
+        
+        <h3 style="color: #1f2937; margin-top: 30px;">What's Next?</h3>
+        <ol style="line-height: 1.8;">
+          <li>Click the login button above</li>
+          <li>Enter your email and temporary password</li>
+          <li>Create a new secure password</li>
+          <li>Explore your dashboard and get started!</li>
+        </ol>
+        
+        ${subdomain ? `
+          <div style="background: #f0fdf4; border-left: 4px solid #22c55e; padding: 15px; margin: 30px 0;">
+            <p style="margin: 0; font-weight: bold; color: #15803d;">📢 Share Your Link</p>
+            <p style="margin: 5px 0 0 0; color: #166534;">All requests submitted through your subdomain link will be automatically assigned to you:</p>
+            <p style="margin: 10px 0 0 0;"><a href="${subdomainUrl}" style="color: #15803d; font-weight: bold;">${subdomainUrl}</a></p>
+          </div>
+        ` : ''}
+        
+        <hr style="margin: 40px 0; border: none; border-top: 1px solid #e5e7eb;">
+        <p style="font-size: 12px; color: #6b7280; text-align: center;">
+          Citizen Activation System<br>
+          Strategic Partner Hub<br>
+          <a href="https://hub.citizenactivation.com" style="color: #1E8E5A;">hub.citizenactivation.com</a>
+        </p>
+      </div>
+    `
+  }
+}

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../../auth/[...nextauth]/route'
+import { sendEmail, getAdminWelcomeEmail } from '@/lib/email'
 
 /**
  * Master Admin - Create Account Without Payment
@@ -274,12 +275,51 @@ export async function POST(req: Request) {
       // Don't fail account creation if Vercel registration fails
     }
 
-    // TODO: Send welcome email with credentials
-    // For now, return credentials in response
+    // Determine role text for email
+    let roleText = 'Admin'
+    switch (accountType) {
+      case 'MAIN_ADMIN':
+        roleText = 'Main Admin (White Label)'
+        break
+      case 'TEAM_ADMIN':
+        roleText = 'Team Admin'
+        break
+      case 'ORG_ADMIN':
+        roleText = 'Organization Admin'
+        break
+      case 'FOUNDER':
+        roleText = 'Founder (Main Admin)'
+        break
+    }
+
+    // Send welcome email with credentials
+    try {
+      const emailContent = getAdminWelcomeEmail(
+        `${firstName} ${lastName}`,
+        newAdmin.email,
+        tempPassword,
+        roleText,
+        referralCode,
+        cleanSubdomain,
+        accountType === 'FOUNDER'
+      )
+
+      await sendEmail({
+        to: newAdmin.email,
+        subject: emailContent.subject,
+        html: emailContent.html
+      })
+
+      console.log(`Welcome email sent to ${newAdmin.email}`)
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError)
+      // Don't fail account creation if email fails
+    }
 
     return NextResponse.json({
       success: true,
       message: `${accountType} account created successfully`,
+      emailSent: true,
       account: {
         id: newAdmin.id,
         role: newAdmin.role,
@@ -294,7 +334,8 @@ export async function POST(req: Request) {
         email: newAdmin.email,
         temporaryPassword: tempPassword,
         loginUrl: `https://${cleanSubdomain}.citizenactivation.com/login`,
-        instructions: 'User must change password on first login'
+        instructions: 'User must change password on first login',
+        emailNote: 'Welcome email with credentials has been sent to the user'
       }
     })
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { dashboardStyles, getRoleBadge, getStatusBadge } from '@/app/lib/dashboardStyles'
 
 interface ProfileViewModalProps {
@@ -91,7 +92,7 @@ export default function ProfileViewModal({ profileId, onClose }: ProfileViewModa
                 </span>
                 {data.isFounder && (
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                    ⭐ Founder
+                    <Image src="/founder-badge.png" alt="Founder" width={14} height={14} className="inline mr-1" /> Founder
                   </span>
                 )}
               </div>

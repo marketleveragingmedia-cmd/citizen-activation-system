@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import Image from 'next/image'
 import NetworkViewer from './NetworkViewer'
 
 export default async function MasterAdminNetworkPage({ params }: { params: { id: string } }) {
@@ -86,7 +87,7 @@ export default async function MasterAdminNetworkPage({ params }: { params: { id:
               {targetAdmin.email}
               {targetAdmin.isFounder && (
                 <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
-                  ⭐ Founder
+                  <Image src="/founder-badge.png" alt="Founder" width={16} height={16} className="inline mr-1" /> Founder
                 </span>
               )}
             </p>

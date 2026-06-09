@@ -159,7 +159,9 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                 <p className="text-xs text-green-700 mt-1">Manage Partners</p>
               </Link>
               <Link href="/master-admin/founders" className="block p-3 bg-white border-2 border-yellow-600 rounded-lg hover:bg-yellow-50 transition">
-                <h3 className="font-bold text-yellow-900 text-sm">⭐ Founders</h3>
+                <h3 className="font-bold text-yellow-900 text-sm inline-flex items-center gap-1">
+                  <Image src="/founder-badge.png" alt="Founder" width={16} height={16} className="inline" /> Founders
+                </h3>
                 <p className="text-xs text-yellow-700 mt-1">Founders & MOSCA</p>
               </Link>
               <Link href="/master-admin/create-account" className="block p-3 bg-white border-2 border-teal-600 rounded-lg hover:bg-teal-50 transition">

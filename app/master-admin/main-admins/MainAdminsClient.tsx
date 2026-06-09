@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import ConfirmDialog from '../components/ConfirmDialog'
 import SuccessToast from '../components/SuccessToast'
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog'
@@ -186,7 +187,7 @@ export default function MainAdminsClient({ mainAdmins }: MainAdminsClientProps) 
                 <td className="px-6 py-4 whitespace-nowrap">
                   {mainAdmin.isFounder ? (
                     <span className="inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-3 py-1 rounded-full text-xs font-bold">
-                      ⭐ Founder
+                      <Image src="/founder-badge.png" alt="Founder" width={16} height={16} className="inline" /> Founder
                     </span>
                   ) : (
                     <span className="text-gray-600 text-sm">Main Admin</span>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 export default function CreateAccountPage() {
   const router = useRouter()
@@ -262,7 +263,11 @@ export default function CreateAccountPage() {
               {formData.accountType === 'MAIN_ADMIN' && 'Full network control, can add Team Admins & Org Admins'}
               {formData.accountType === 'TEAM_ADMIN' && 'Manage Strategic Partners & Requests'}
               {formData.accountType === 'ORG_ADMIN' && 'Organization branding, sees only their network'}
-              {formData.accountType === 'FOUNDER' && '⭐ Founder Badge • Lifetime Access • Zero Annual Fees'}
+              {formData.accountType === 'FOUNDER' && (
+                <span className="inline-flex items-center gap-1">
+                  <Image src="/founder-badge.png" alt="Founder" width={16} height={16} className="inline" /> Founder Badge • Lifetime Access • Zero Annual Fees
+                </span>
+              )}
             </p>
           </div>
 

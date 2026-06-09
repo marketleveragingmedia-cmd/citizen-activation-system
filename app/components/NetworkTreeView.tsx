@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { dashboardStyles, getRoleBadge } from '@/app/lib/dashboardStyles'
 import ProfileViewModal from './ProfileViewModal'
 
@@ -58,7 +59,9 @@ export default function NetworkTreeView({ network, role }: NetworkTreeViewProps)
                 {admin.role.replace('_', ' ')}
               </span>
               {admin.isFounder && (
-                <span className="text-yellow-600 text-xs font-semibold">⭐ Founder</span>
+                <span className="text-yellow-600 text-xs font-semibold inline-flex items-center gap-1">
+                  <Image src="/founder-badge.png" alt="Founder" width={14} height={14} className="inline" /> Founder
+                </span>
               )}
             </div>
             <div className="text-xs text-gray-600 mt-1">{admin.email}</div>

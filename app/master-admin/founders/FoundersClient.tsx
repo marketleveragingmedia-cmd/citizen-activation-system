@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 import { btn } from '@/app/lib/buttonStyles'
 import EditAdminModal from '../components/EditAdminModal'
 import ConfirmDialog from '../components/ConfirmDialog'
@@ -261,7 +262,9 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b">
-              <h2 className="text-xl font-bold text-gray-900">⭐ Founder Account Details</h2>
+              <h2 className="text-xl font-bold text-gray-900 inline-flex items-center gap-2">
+                <Image src="/founder-badge.png" alt="Founder" width={24} height={24} className="inline" /> Founder Account Details
+              </h2>
             </div>
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -275,7 +278,7 @@ export default function FoundersClient({ founders }: FoundersClientProps) {
                   <div className="text-sm font-medium text-gray-500">Type</div>
                   <div className="text-lg">
                     <span className="inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                      ⭐ Founder
+                      <Image src="/founder-badge.png" alt="Founder" width={16} height={16} className="inline" /> Founder
                     </span>
                   </div>
                 </div>

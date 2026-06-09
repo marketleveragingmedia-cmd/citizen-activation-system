@@ -3,6 +3,12 @@ import { prisma } from '@/lib/prisma'
 import RequestForm from './RequestForm'
 import { redirect } from 'next/navigation'
 import Image from 'next/image'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Request MOSCA Activation',
+  description: 'Submit your MOSCA wallet activation request. Get connected with a Strategic Partner who will guide you through the onboarding process.',
+}
 
 async function getSubdomainData(subdomain: string | null) {
   if (!subdomain) return null

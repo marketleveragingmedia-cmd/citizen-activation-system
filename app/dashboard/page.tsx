@@ -3,10 +3,15 @@ import { authOptions } from '../api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import StrategicPartnerDashboard from './StrategicPartnerDashboard'
 import MainAdminDashboard from './MainAdminDashboard'
 import TeamAdminDashboard from './TeamAdminDashboard'
 import OrganizationAdminDashboard from './OrganizationAdminDashboard'
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+}
 
 
 async function getDashboardData(userId: string, role: string, type: string) {

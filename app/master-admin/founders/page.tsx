@@ -3,7 +3,12 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import FoundersClient from './FoundersClient'
+
+export const metadata: Metadata = {
+  title: 'Founders',
+}
 
 export default async function FoundersPage() {
   const session = await getServerSession(authOptions)

@@ -695,6 +695,20 @@
 
     <script>
         const modal = document.getElementById('joinModal');
+        const LEAD_CRM_API = 'https://mlm-lead-crm.vercel.app/api/capture-lead';
+        
+        // Cookie utilities
+        function setCookie(name, value, days) {
+            const expires = new Date(Date.now() + days * 864e5).toUTCString();
+            document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+        }
+        
+        function getCookie(name) {
+            return document.cookie.split('; ').reduce((r, v) => {
+                const parts = v.split('=');
+                return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+            }, '');
+        }
         
         function openModal() {
             modal.style.display = 'block';
@@ -713,7 +727,7 @@
             }
         }
         
-        function handleSubmit(event) {
+        async function handleSubmit(event) {
             event.preventDefault();
             
             const submitBtn = document.getElementById('submitBtn');
@@ -723,18 +737,54 @@
             
             // Disable button and show processing state
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Redirecting...';
+            submitBtn.textContent = 'Submitting...';
             
-            // Store data in localStorage (optional - for tracking)
-            localStorage.setItem('cfv_firstName', firstName);
-            localStorage.setItem('cfv_lastName', lastName);
-            localStorage.setItem('cfv_email', email);
-            localStorage.setItem('cfv_timestamp', new Date().toISOString());
-            
-            // Redirect to Skool community
-            setTimeout(() => {
-                window.location.href = 'https://www.skool.com/network-leveraging-cash-flow-4401';
-            }, 500);
+            try {
+                // Submit to Lead CRM
+                const response = await fetch(LEAD_CRM_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        phone: '',
+                        sourcePage: 'cash-flow-visionaries.html',
+                        avatarTag: 'cash-flow-visionary'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Set cookie (30 days)
+                    setCookie('cfv_captured', 'true', 30);
+                    
+                    // Store data in localStorage
+                    localStorage.setItem('cfv_firstName', firstName);
+                    localStorage.setItem('cfv_lastName', lastName);
+                    localStorage.setItem('cfv_email', email);
+                    localStorage.setItem('cfv_timestamp', new Date().toISOString());
+                    
+                    // Close modal
+                    closeModal();
+                    
+                    // Redirect to SKOOL
+                    submitBtn.textContent = 'Redirecting...';
+                    setTimeout(() => {
+                        window.location.href = 'https://www.skool.com/network-leveraging-cash-flow-4401';
+                    }, 300);
+                } else {
+                    alert('Something went wrong. Please try again.');
+                    submitBtn.textContent = 'Continue to Community';
+                    submitBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Connection error. Please check your internet and try again.');
+                submitBtn.textContent = 'Continue to Community';
+                submitBtn.disabled = false;
+            }
         }
     </script>
 </body>

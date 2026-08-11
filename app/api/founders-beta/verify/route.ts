@@ -86,28 +86,24 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // Return Founder Beta data
+    // Return Founder Beta data (flattened for frontend compatibility)
     return NextResponse.json({
       verified: true,
       paymentStatus: founderBeta.paymentStatus,
       founderLevel: founderBeta.founderLevel,
-      founderBeta: {
-        id: founderBeta.id,
-        fullName: founderBeta.fullName,
-        email: founderBeta.email,
-        phone: founderBeta.phone,
-        address1: founderBeta.address1,
-        address2: founderBeta.address2,
-        city: founderBeta.city,
-        state: founderBeta.state,
-        zip: founderBeta.zip,
-        country: founderBeta.country,
-        founderLevel: founderBeta.founderLevel,
-        amountPaid: founderBeta.amountPaid,
-        paymentStatus: founderBeta.paymentStatus,
-        intakeCompleted: founderBeta.intakeCompleted,
-        createdAt: founderBeta.createdAt,
-      },
+      id: founderBeta.id,
+      fullName: founderBeta.fullName,
+      email: founderBeta.email,
+      phone: founderBeta.phone,
+      address1: founderBeta.address1,
+      address2: founderBeta.address2,
+      city: founderBeta.city,
+      state: founderBeta.state,
+      zip: founderBeta.zip,
+      country: founderBeta.country,
+      amountPaid: founderBeta.amountPaid,
+      intakeCompleted: founderBeta.intakeCompleted,
+      createdAt: founderBeta.createdAt,
     }, { headers: corsHeaders });
 
   } catch (error: any) {

@@ -8,7 +8,25 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 const prisma = new PrismaClient();
 
+// Handle CORS preflight
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  });
+}
+
 export async function POST(req: NextRequest) {
+  // CORS headers
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
   try {
     const body = await req.json();
     const { tier } = body; // 'citizen' or 'enterprise'
@@ -94,13 +112,13 @@ export async function POST(req: NextRequest) {
       success: true,
       sessionId: session.id,
       checkoutUrl: session.url,
-    });
+    }, { headers: corsHeaders });
 
   } catch (error: any) {
     console.error('❌ Checkout session creation error:', error);
     return NextResponse.json(
       { error: error.message },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   } finally {
     await prisma.$disconnect();

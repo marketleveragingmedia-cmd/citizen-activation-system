@@ -66,10 +66,11 @@ export async function POST(req: NextRequest) {
     });
 
     // Pre-create Founder Beta record with pending status
+    const tempEmail = `pending-${Date.now()}-${Math.random().toString(36).substring(7)}@temp.com`;
     const founderBeta = await prisma.founderBeta.create({
       data: {
         fullName: 'Pending',
-        email: 'pending@temp.com',
+        email: tempEmail,
         phone: '',
         address1: '',
         city: '',

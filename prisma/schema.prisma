@@ -197,3 +197,42 @@ model FounderPending {
 
   @@map("founders_pending")
 }
+
+model FounderBeta {
+  id                       String    @id @default(cuid())
+  
+  // Contact Info
+  fullName                 String
+  email                    String    @unique
+  phone                    String
+  
+  // Address
+  address1                 String
+  address2                 String?
+  city                     String
+  state                    String
+  zip                      String
+  country                  String    @default("United States")
+  
+  // Founder Level
+  founderLevel             String    // "Citizen" | "Enterprise"
+  
+  // Payment Info (Stripe)
+  stripeCustomerId         String?
+  stripeCheckoutSessionId  String    @unique
+  stripePaymentIntentId    String?
+  stripePriceId            String    // Price ID from Stripe
+  amountPaid               Int       // Amount in cents
+  currency                 String    @default("usd")
+  paymentStatus            String    @default("pending") // "pending" | "paid" | "failed"
+  
+  // Intake Status
+  intakeCompleted          Boolean   @default(false)
+  intakeCompletedAt        DateTime?
+  
+  // Timestamps
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+  
+  @@map("founders_beta")
+}

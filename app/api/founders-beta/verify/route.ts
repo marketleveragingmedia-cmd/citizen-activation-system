@@ -7,6 +7,19 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-11-20.acacia',
 });
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: corsHeaders,
+  });
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -15,7 +28,7 @@ export async function GET(req: NextRequest) {
     if (!sessionId) {
       return NextResponse.json(
         { error: 'Missing session_id parameter' },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -29,7 +42,7 @@ export async function GET(req: NextRequest) {
     if (!founderBeta) {
       return NextResponse.json(
         { error: 'Founder Beta record not found', verified: false },
-        { status: 404 }
+        { status: 404, headers: corsHeaders }
       );
     }
 
@@ -61,14 +74,14 @@ export async function GET(req: NextRequest) {
         } else {
           return NextResponse.json(
             { error: 'Payment not yet completed', verified: false, paymentStatus: session.payment_status },
-            { status: 400 }
+            { status: 400, headers: corsHeaders }
           );
         }
       } catch (stripeError: any) {
         console.error('Stripe API error:', stripeError.message);
         return NextResponse.json(
           { error: 'Unable to verify payment with Stripe', details: stripeError.message },
-          { status: 500 }
+          { status: 500, headers: corsHeaders }
         );
       }
     }
@@ -95,13 +108,13 @@ export async function GET(req: NextRequest) {
         intakeCompleted: founderBeta.intakeCompleted,
         createdAt: founderBeta.createdAt,
       },
-    });
+    }, { headers: corsHeaders });
 
   } catch (error: any) {
     console.error('Error verifying Founder Beta:', error);
     return NextResponse.json(
       { error: error.message },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   } finally {
     await prisma.$disconnect();

@@ -41,50 +41,65 @@ export async function POST(req: NextRequest) {
 
       console.log('✅ Checkout session completed:', session.id);
 
-      // Determine Founder Level based on amount (Stripe payment links don't include line_items)
-      let founderLevel = 'Unknown';
-      const amount = session.amount_total || 0;
-      
-      if (amount === 149700) {
-        founderLevel = 'Citizen Founder-Beta';
-      } else if (amount === 199700) {
-        founderLevel = 'Enterprise Founder-Beta';
-      } else {
-        console.warn('⚠️ Unknown amount:', amount);
-        founderLevel = amount === 149700 ? 'Citizen Founder-Beta' : 'Enterprise Founder-Beta';
-      }
-      
-      console.log('💰 Amount:', amount, '| Level:', founderLevel);
-
-      // Create Founder Beta record
-      const founderBeta = await prisma.founderBeta.create({
-        data: {
-          fullName: session.customer_details?.name || 'Unknown',
-          email: session.customer_details?.email || '',
-          phone: session.customer_details?.phone || '',
-          address1: session.customer_details?.address?.line1 || '',
-          address2: session.customer_details?.address?.line2 || null,
-          city: session.customer_details?.address?.city || '',
-          state: session.customer_details?.address?.state || '',
-          zip: session.customer_details?.address?.postal_code || '',
-          country: session.customer_details?.address?.country || 'United States',
-          founderLevel,
-          stripeCustomerId: session.customer as string || null,
-          stripeCheckoutSessionId: session.id,
-          stripePaymentIntentId: session.payment_intent as string || null,
-          stripePriceId: session.metadata?.price_id || 'payment_link',
-          amountPaid: session.amount_total || 0,
-          currency: session.currency || 'usd',
-          paymentStatus: 'paid',
-          intakeCompleted: false,
-        },
+      // Look for existing pending record
+      const existingRecord = await prisma.founderBeta.findUnique({
+        where: { stripeCheckoutSessionId: session.id },
       });
 
-      console.log('✅ Founder Beta record created:', founderBeta.id);
+      if (existingRecord) {
+        // Update existing record with payment details
+        const updated = await prisma.founderBeta.update({
+          where: { id: existingRecord.id },
+          data: {
+            fullName: session.customer_details?.name || 'Unknown',
+            email: session.customer_details?.email || '',
+            phone: session.customer_details?.phone || '',
+            address1: session.customer_details?.address?.line1 || '',
+            address2: session.customer_details?.address?.line2 || null,
+            city: session.customer_details?.address?.city || '',
+            state: session.customer_details?.address?.state || '',
+            zip: session.customer_details?.address?.postal_code || '',
+            country: session.customer_details?.address?.country || 'United States',
+            stripeCustomerId: session.customer as string || null,
+            stripePaymentIntentId: session.payment_intent as string || null,
+            paymentStatus: 'paid',
+          },
+        });
+        console.log('✅ Founder Beta record updated:', updated.id);
+      } else {
+        console.warn('⚠️ No pending record found for session:', session.id);
+        // This shouldn't happen with Checkout Sessions, but handle it anyway
+        const amount = session.amount_total || 0;
+        const founderLevel = amount === 149700 ? 'Citizen Founder-Beta' : 'Enterprise Founder-Beta';
+        
+        const newRecord = await prisma.founderBeta.create({
+          data: {
+            fullName: session.customer_details?.name || 'Unknown',
+            email: session.customer_details?.email || '',
+            phone: session.customer_details?.phone || '',
+            address1: session.customer_details?.address?.line1 || '',
+            address2: session.customer_details?.address?.line2 || null,
+            city: session.customer_details?.address?.city || '',
+            state: session.customer_details?.address?.state || '',
+            zip: session.customer_details?.address?.postal_code || '',
+            country: session.customer_details?.address?.country || 'United States',
+            founderLevel,
+            stripeCustomerId: session.customer as string || null,
+            stripeCheckoutSessionId: session.id,
+            stripePaymentIntentId: session.payment_intent as string || null,
+            stripePriceId: 'checkout_session',
+            amountPaid: session.amount_total || 0,
+            currency: session.currency || 'usd',
+            paymentStatus: 'paid',
+            intakeCompleted: false,
+          },
+        });
+        console.log('✅ Founder Beta record created (fallback):', newRecord.id);
+      }
 
       return NextResponse.json({
         success: true,
-        founderBetaId: founderBeta.id,
+        message: 'Payment processed',
       });
     }
 

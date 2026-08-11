@@ -26,54 +26,44 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    // If not found, fetch from Stripe and create record (webhook backup)
     if (!founderBeta) {
-      console.log('Record not found, fetching from Stripe:', sessionId);
-      
+      return NextResponse.json(
+        { error: 'Founder Beta record not found', verified: false },
+        { status: 404 }
+      );
+    }
+
+    // If payment is still pending, check Stripe for update
+    if (founderBeta.paymentStatus === 'pending') {
       try {
         const session = await stripe.checkout.sessions.retrieve(sessionId);
         
-        if (session.payment_status !== 'paid') {
+        if (session.payment_status === 'paid') {
+          // Update record with payment completion
+          founderBeta = await prisma.founderBeta.update({
+            where: { id: founderBeta.id },
+            data: {
+              fullName: session.customer_details?.name || founderBeta.fullName,
+              email: session.customer_details?.email || founderBeta.email,
+              phone: session.customer_details?.phone || founderBeta.phone,
+              address1: session.customer_details?.address?.line1 || founderBeta.address1,
+              address2: session.customer_details?.address?.line2 || founderBeta.address2,
+              city: session.customer_details?.address?.city || founderBeta.city,
+              state: session.customer_details?.address?.state || founderBeta.state,
+              zip: session.customer_details?.address?.postal_code || founderBeta.zip,
+              country: session.customer_details?.address?.country || founderBeta.country,
+              stripeCustomerId: session.customer as string || founderBeta.stripeCustomerId,
+              stripePaymentIntentId: session.payment_intent as string || founderBeta.stripePaymentIntentId,
+              paymentStatus: 'paid',
+            },
+          });
+          console.log('✅ Payment confirmed and record updated:', founderBeta.id);
+        } else {
           return NextResponse.json(
-            { error: 'Payment not completed', verified: false, paymentStatus: session.payment_status },
+            { error: 'Payment not yet completed', verified: false, paymentStatus: session.payment_status },
             { status: 400 }
           );
         }
-
-        // Determine Founder Level
-        const amount = session.amount_total || 0;
-        let founderLevel = 'Unknown';
-        if (amount === 149700) {
-          founderLevel = 'Citizen Founder-Beta';
-        } else if (amount === 199700) {
-          founderLevel = 'Enterprise Founder-Beta';
-        }
-
-        // Create the record
-        founderBeta = await prisma.founderBeta.create({
-          data: {
-            fullName: session.customer_details?.name || 'Unknown',
-            email: session.customer_details?.email || '',
-            phone: session.customer_details?.phone || '',
-            address1: session.customer_details?.address?.line1 || '',
-            address2: session.customer_details?.address?.line2 || null,
-            city: session.customer_details?.address?.city || '',
-            state: session.customer_details?.address?.state || '',
-            zip: session.customer_details?.address?.postal_code || '',
-            country: session.customer_details?.address?.country || 'United States',
-            founderLevel,
-            stripeCustomerId: session.customer as string || null,
-            stripeCheckoutSessionId: session.id,
-            stripePaymentIntentId: session.payment_intent as string || null,
-            stripePriceId: session.metadata?.price_id || 'payment_link',
-            amountPaid: session.amount_total || 0,
-            currency: session.currency || 'usd',
-            paymentStatus: 'paid',
-            intakeCompleted: false,
-          },
-        });
-
-        console.log('✅ Founder Beta record created via verify API:', founderBeta.id);
       } catch (stripeError: any) {
         console.error('Stripe API error:', stripeError.message);
         return NextResponse.json(
@@ -85,7 +75,9 @@ export async function GET(req: NextRequest) {
 
     // Return Founder Beta data
     return NextResponse.json({
-      success: true,
+      verified: true,
+      paymentStatus: founderBeta.paymentStatus,
+      founderLevel: founderBeta.founderLevel,
       founderBeta: {
         id: founderBeta.id,
         fullName: founderBeta.fullName,

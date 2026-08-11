@@ -41,16 +41,20 @@ export async function POST(req: NextRequest) {
 
       console.log('✅ Checkout session completed:', session.id);
 
-      // Determine Founder Level based on Price ID
-      const priceId = session.line_items?.data[0]?.price?.id || session.metadata?.price_id || '';
+      // Determine Founder Level based on amount (Stripe payment links don't include line_items)
       let founderLevel = 'Unknown';
+      const amount = session.amount_total || 0;
       
-      // You'll need to update these with your actual Stripe Price IDs
-      if (priceId.includes('citizen') || session.amount_total === 149700) {
-        founderLevel = 'Citizen';
-      } else if (priceId.includes('enterprise') || session.amount_total === 199700) {
-        founderLevel = 'Enterprise';
+      if (amount === 149700) {
+        founderLevel = 'Citizen Founder-Beta';
+      } else if (amount === 199700) {
+        founderLevel = 'Enterprise Founder-Beta';
+      } else {
+        console.warn('⚠️ Unknown amount:', amount);
+        founderLevel = amount === 149700 ? 'Citizen Founder-Beta' : 'Enterprise Founder-Beta';
       }
+      
+      console.log('💰 Amount:', amount, '| Level:', founderLevel);
 
       // Create Founder Beta record
       const founderBeta = await prisma.founderBeta.create({
@@ -68,7 +72,7 @@ export async function POST(req: NextRequest) {
           stripeCustomerId: session.customer as string || null,
           stripeCheckoutSessionId: session.id,
           stripePaymentIntentId: session.payment_intent as string || null,
-          stripePriceId: priceId,
+          stripePriceId: session.metadata?.price_id || 'payment_link',
           amountPaid: session.amount_total || 0,
           currency: session.currency || 'usd',
           paymentStatus: 'paid',

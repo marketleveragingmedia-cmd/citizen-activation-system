@@ -3,6 +3,19 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: corsHeaders,
+  });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -22,7 +35,7 @@ export async function POST(req: NextRequest) {
     if (!sessionId) {
       return NextResponse.json(
         { error: 'Missing sessionId' },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -36,7 +49,7 @@ export async function POST(req: NextRequest) {
     if (!founderBeta) {
       return NextResponse.json(
         { error: 'Founder Beta record not found' },
-        { status: 404 }
+        { status: 404, headers: corsHeaders }
       );
     }
 
@@ -66,13 +79,13 @@ export async function POST(req: NextRequest) {
       success: true,
       founderBetaId: updated.id,
       founderLevel: updated.founderLevel,
-    });
+    }, { headers: corsHeaders });
 
   } catch (error: any) {
     console.error('Error processing intake:', error);
     return NextResponse.json(
       { error: error.message },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   } finally {
     await prisma.$disconnect();

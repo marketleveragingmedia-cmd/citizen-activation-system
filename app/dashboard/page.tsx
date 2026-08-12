@@ -31,7 +31,9 @@ async function getDashboardData(userId: string, role: string, type: string) {
       prisma.strategicPartner.count({ where: { status: 'Active' } }),
       prisma.founderBeta.count(), // Total Founders-Beta
       prisma.founderBeta.count({ where: { intakeCompleted: true } }), // Intake complete
-      prisma.founderBeta.count({ where: { casAccountCreated: true } }) // CAS accounts created
+      prisma.founderBeta.count({ where: { invitationRequestCompleted: true } }), // Invitation complete
+      prisma.founderBeta.count({ where: { casAccountCreated: true } }), // CAS accounts created
+      prisma.founderBeta.count({ where: { skoolCommunityAdded: true } }) // SKOOL added
     ])
     
     // Get Founders-Beta revenue
@@ -71,7 +73,9 @@ async function getDashboardData(userId: string, role: string, type: string) {
         activePartners: stats[5],
         foundersBetaTotal: stats[6],
         foundersBetaIntake: stats[7],
-        foundersBetaCAS: stats[8],
+        foundersBetaInvitation: stats[8],
+        foundersBetaCAS: stats[9],
+        foundersBetaSKOOL: stats[10],
         foundersBetaRevenue,
         foundersBetaCitizen: citizenCount,
         foundersBetaEnterprise: enterpriseCount

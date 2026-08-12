@@ -200,7 +200,7 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                 <h3 className="text-lg font-bold text-green-900">🌟 FOUNDERS BETA</h3>
                 <span className="text-xs text-green-700 font-semibold">View All →</span>
               </div>
-              <div className="grid grid-cols-3 md:grid-cols-6 gap-2 text-center">
+              <div className="grid grid-cols-4 md:grid-cols-8 gap-2 text-center">
                 <div>
                   <div className="text-green-600 text-xs mb-0.5">Total</div>
                   <div className="text-lg font-bold text-green-900">{stats.foundersBetaTotal}</div>
@@ -214,16 +214,24 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
                   <div className="text-lg font-bold text-green-900">{stats.foundersBetaEnterprise}</div>
                 </div>
                 <div>
-                  <div className="text-green-600 text-xs mb-0.5">Revenue</div>
-                  <div className="text-base font-bold text-green-900">${stats.foundersBetaRevenue?.toLocaleString()}</div>
-                </div>
-                <div>
                   <div className="text-green-600 text-xs mb-0.5">Intake</div>
                   <div className="text-lg font-bold text-green-900">{stats.foundersBetaIntake}/{stats.foundersBetaTotal}</div>
                 </div>
                 <div>
+                  <div className="text-green-600 text-xs mb-0.5">Invitation</div>
+                  <div className="text-lg font-bold text-green-900">{stats.foundersBetaInvitation || 0}/{stats.foundersBetaTotal}</div>
+                </div>
+                <div>
                   <div className="text-green-600 text-xs mb-0.5">CAS</div>
                   <div className="text-lg font-bold text-green-900">{stats.foundersBetaCAS}/{stats.foundersBetaTotal}</div>
+                </div>
+                <div>
+                  <div className="text-green-600 text-xs mb-0.5">SKOOL</div>
+                  <div className="text-lg font-bold text-green-900">{stats.foundersBetaSKOOL || 0}/{stats.foundersBetaTotal}</div>
+                </div>
+                <div>
+                  <div className="text-green-600 text-xs mb-0.5">Revenue</div>
+                  <div className="text-base font-bold text-green-900">${stats.foundersBetaRevenue?.toLocaleString()}</div>
                 </div>
               </div>
             </div>

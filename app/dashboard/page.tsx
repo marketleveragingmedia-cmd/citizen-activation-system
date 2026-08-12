@@ -28,8 +28,19 @@ async function getDashboardData(userId: string, role: string, type: string) {
       prisma.admin.count({ where: { role: 'ORG_ADMIN', status: 'Active' } }), // Org Admins
       prisma.request.count(),
       prisma.request.count({ where: { status: 'Activated' } }),
-      prisma.strategicPartner.count({ where: { status: 'Active' } })
+      prisma.strategicPartner.count({ where: { status: 'Active' } }),
+      prisma.founderBeta.count(), // Total Founders-Beta
+      prisma.founderBeta.count({ where: { intakeCompleted: true } }), // Intake complete
+      prisma.founderBeta.count({ where: { casAccountCreated: true } }) // CAS accounts created
     ])
+    
+    // Get Founders-Beta revenue
+    const foundersBeta = await prisma.founderBeta.findMany({
+      select: { amountPaid: true, founderLevel: true }
+    })
+    const foundersBetaRevenue = foundersBeta.reduce((sum, f) => sum + (f.amountPaid || 0), 0) / 100
+    const citizenCount = foundersBeta.filter(f => f.founderLevel.includes('Citizen')).length
+    const enterpriseCount = foundersBeta.filter(f => f.founderLevel.includes('Enterprise')).length
 
     const recentRequests = await prisma.request.findMany({
       take: 25,
@@ -57,7 +68,13 @@ async function getDashboardData(userId: string, role: string, type: string) {
         orgAdmins: stats[2],
         totalRequests: stats[3],
         activations: stats[4],
-        activePartners: stats[5]
+        activePartners: stats[5],
+        foundersBetaTotal: stats[6],
+        foundersBetaIntake: stats[7],
+        foundersBetaCAS: stats[8],
+        foundersBetaRevenue,
+        foundersBetaCitizen: citizenCount,
+        foundersBetaEnterprise: enterpriseCount
       },
       recentRequests,
       partners

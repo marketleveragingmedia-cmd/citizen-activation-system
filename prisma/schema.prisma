@@ -203,6 +203,7 @@ model FounderBeta {
   
   // Contact Info
   fullName                 String
+  companyName              String?
   email                    String    @unique
   phone                    String
   
@@ -229,6 +230,15 @@ model FounderBeta {
   // Intake Status
   intakeCompleted          Boolean   @default(false)
   intakeCompletedAt        DateTime?
+  
+  // Subdomain Options
+  subdomainOption1         String?
+  subdomainOption2         String?
+  
+  // CAS Account Integration
+  casAccountCreated        Boolean   @default(false)
+  casAccountCreatedAt      DateTime?
+  casAdminId               String?   // Links to Admin table
   
   // Timestamps
   createdAt                DateTime  @default(now())

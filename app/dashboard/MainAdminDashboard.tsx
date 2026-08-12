@@ -192,6 +192,44 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
             </div>
           </div>
         )}
+        {/* Founders Beta Summary - Master Admin Only */}
+        {isMasterAdmin && stats.foundersBetaTotal > 0 && (
+          <Link href="/master-admin/founders-beta">
+            <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-lg p-6 mb-6 hover:border-green-400 transition cursor-pointer">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-green-900">🌟 FOUNDERS BETA</h2>
+                <span className="text-sm text-green-700 font-semibold">View All →</span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+                <div>
+                  <div className="text-green-600 text-xs font-semibold mb-1">Total</div>
+                  <div className="text-2xl font-bold text-green-900">{stats.foundersBetaTotal}</div>
+                </div>
+                <div>
+                  <div className="text-green-600 text-xs font-semibold mb-1">Citizen</div>
+                  <div className="text-2xl font-bold text-green-900">{stats.foundersBetaCitizen}</div>
+                </div>
+                <div>
+                  <div className="text-green-600 text-xs font-semibold mb-1">Enterprise</div>
+                  <div className="text-2xl font-bold text-green-900">{stats.foundersBetaEnterprise}</div>
+                </div>
+                <div>
+                  <div className="text-green-600 text-xs font-semibold mb-1">Revenue</div>
+                  <div className="text-xl font-bold text-green-900">${stats.foundersBetaRevenue?.toLocaleString()}</div>
+                </div>
+                <div>
+                  <div className="text-green-600 text-xs font-semibold mb-1">Intake</div>
+                  <div className="text-2xl font-bold text-green-900">{stats.foundersBetaIntake}/{stats.foundersBetaTotal}</div>
+                </div>
+                <div>
+                  <div className="text-green-600 text-xs font-semibold mb-1">CAS Accounts</div>
+                  <div className="text-2xl font-bold text-green-900">{stats.foundersBetaCAS}/{stats.foundersBetaTotal}</div>
+                </div>
+              </div>
+            </div>
+          </Link>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
           {isMasterAdmin ? (
             <>
@@ -250,6 +288,14 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
             >
               + Add Strategic Partner
             </button>
+            {isMasterAdmin && (
+              <Link
+                href="/master-admin/founders-beta"
+                className="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-lg transition"
+              >
+                🌟 Manage Founders Beta
+              </Link>
+            )}
             {!isMasterAdmin && (
               <Link
                 href="/admin/partners"

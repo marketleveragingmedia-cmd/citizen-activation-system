@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
     const {
       sessionId,
       fullName,
+      companyName,
       email,
       phone,
       address1,
@@ -30,6 +31,8 @@ export async function POST(req: NextRequest) {
       state,
       zip,
       country,
+      subdomainOption1,
+      subdomainOption2,
     } = body;
 
     if (!sessionId) {
@@ -60,6 +63,7 @@ export async function POST(req: NextRequest) {
       },
       data: {
         fullName: fullName || founderBeta.fullName,
+        companyName: companyName || null,
         email: email || founderBeta.email,
         phone: phone || founderBeta.phone,
         address1: address1 || founderBeta.address1,
@@ -68,6 +72,8 @@ export async function POST(req: NextRequest) {
         state: state || founderBeta.state,
         zip: zip || founderBeta.zip,
         country: country || founderBeta.country,
+        subdomainOption1: subdomainOption1 ? subdomainOption1.toLowerCase().trim() : null,
+        subdomainOption2: subdomainOption2 ? subdomainOption2.toLowerCase().trim() : null,
         intakeCompleted: true,
         intakeCompletedAt: new Date(),
       },

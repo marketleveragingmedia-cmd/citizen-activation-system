@@ -517,30 +517,32 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-1 justify-center items-center">
+                <div className="flex flex-col gap-1 justify-center">
                   {!founder.casAccountCreated && founder.intakeCompleted && (
                     <button
                       onClick={() => provisionAccount(founder.id)}
                       disabled={provisioningId === founder.id}
-                      className="px-1.5 py-0.5 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium rounded text-[10px]"
-                      title="Create CAS Account"
+                      className="px-2 py-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold rounded text-xs whitespace-nowrap"
                     >
-                      {provisioningId === founder.id ? '...' : 'CAS'}
+                      {provisioningId === founder.id ? 'Creating...' : 'Create CAS'}
                     </button>
                   )}
                   {!founder.intakeCompleted && (
-                    <span className="text-[10px] text-orange-600 font-medium">Pending</span>
+                    <div className="text-xs text-orange-600 font-semibold text-center">
+                      Pending
+                    </div>
                   )}
                   {founder.casAccountCreated && (
-                    <span className="text-[10px] text-green-600 font-medium">✅</span>
+                    <div className="text-xs text-green-600 font-semibold text-center">
+                      ✅ Active
+                    </div>
                   )}
                   <button
                     onClick={() => deleteFounder(founder.id, founder.fullName)}
                     disabled={deletingId === founder.id}
-                    className="px-1.5 py-0.5 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-medium rounded text-[10px]"
-                    title="Delete Founder"
+                    className="px-2 py-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-semibold rounded text-xs"
                   >
-                    {deletingId === founder.id ? '...' : '×'}
+                    {deletingId === founder.id ? '...' : 'Delete'}
                   </button>
                 </div>
               </div>

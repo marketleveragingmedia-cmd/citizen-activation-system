@@ -82,7 +82,7 @@ async function getOrCreateTag(tagName: string, tagGroupId: string): Promise<stri
       },
       body: JSON.stringify({
         name: tagName,
-        tag_group_id: tagGroupId,
+        groupId: tagGroupId,
       })
     })
     const newTag = await createRes.json()

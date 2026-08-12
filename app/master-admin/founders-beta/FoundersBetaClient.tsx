@@ -206,10 +206,6 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
           <div className="text-gray-600 text-sm font-semibold mb-1">Enterprise</div>
           <div className="text-3xl font-bold text-gray-900">{stats.enterpriseCount}</div>
         </div>
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-lg p-4">
-          <div className="text-blue-600 text-sm font-semibold mb-1">Revenue</div>
-          <div className="text-2xl font-bold text-blue-900">${stats.totalRevenue.toLocaleString()}</div>
-        </div>
         <div className="bg-white border-2 border-gray-200 rounded-lg p-3">
           <div className="text-gray-600 text-xs font-semibold mb-1">Intake</div>
           <div className="text-2xl font-bold text-gray-900">{stats.intakeComplete}/{stats.totalFounders}</div>
@@ -225,6 +221,10 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
         <div className="bg-white border-2 border-gray-200 rounded-lg p-3">
           <div className="text-gray-600 text-xs font-semibold mb-1">SKOOL</div>
           <div className="text-2xl font-bold text-gray-900">{stats.skoolAdded}/{stats.totalFounders}</div>
+        </div>
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-lg p-4">
+          <div className="text-blue-600 text-sm font-semibold mb-1">Revenue</div>
+          <div className="text-2xl font-bold text-blue-900">${stats.totalRevenue.toLocaleString()}</div>
         </div>
       </div>
 

@@ -349,7 +349,9 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Founder Info */}
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-1">{founder.fullName}</h3>
+                  <Link href={`/master-admin/founders-beta/${founder.id}`}>
+                    <h3 className="text-xl font-bold text-green-600 hover:text-green-700 mb-1 cursor-pointer">{founder.fullName}</h3>
+                  </Link>
                   {founder.companyName && (
                     <p className="text-sm text-gray-600 mb-2">{founder.companyName}</p>
                   )}

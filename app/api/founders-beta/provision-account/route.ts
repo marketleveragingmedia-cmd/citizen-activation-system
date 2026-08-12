@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../../auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
+import { syncFounderToGlobalControl } from '@/lib/globalcontrol/sync'
 import bcrypt from 'bcryptjs'
 
 export async function POST(request: Request) {
@@ -105,6 +106,28 @@ export async function POST(request: Request) {
     })
 
     console.log(`✅ CAS account created for Founder: ${founder.fullName} (${role})`)
+
+    // Sync to Global Control (CAS account created tag)
+    const updatedFounder = await prisma.founderBeta.findUnique({
+      where: { id: founder.id }
+    });
+    if (updatedFounder) {
+      try {
+        const contactId = await syncFounderToGlobalControl(updatedFounder);
+        if (contactId && !updatedFounder.globalControlContactId) {
+          await prisma.founderBeta.update({
+            where: { id: updatedFounder.id },
+            data: {
+              globalControlContactId: contactId,
+              globalControlSynced: true,
+              globalControlLastSyncedAt: new Date(),
+            }
+          });
+        }
+      } catch (syncError) {
+        console.error('Global Control sync failed (non-blocking):', syncError);
+      }
+    }
 
     // TODO: Send welcome email with credentials
     // For now, return the temp password (in production, email it)

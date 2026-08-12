@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { syncFounderToGlobalControl } from '@/lib/globalcontrol/sync';
 
 const prisma = new PrismaClient();
 
@@ -80,6 +81,23 @@ export async function POST(req: NextRequest) {
     });
 
     console.log('✅ Founder Beta intake completed:', updated.id);
+
+    // Sync to Global Control (intake complete tag)
+    try {
+      const contactId = await syncFounderToGlobalControl(updated);
+      if (contactId && !updated.globalControlContactId) {
+        await prisma.founderBeta.update({
+          where: { id: updated.id },
+          data: {
+            globalControlContactId: contactId,
+            globalControlSynced: true,
+            globalControlLastSyncedAt: new Date(),
+          }
+        });
+      }
+    } catch (syncError) {
+      console.error('Global Control sync failed (non-blocking):', syncError);
+    }
 
     return NextResponse.json({
       success: true,

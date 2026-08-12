@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
 import { PrismaClient } from '@prisma/client';
+import { syncFounderToGlobalControl } from '@/lib/globalcontrol/sync';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-11-20.acacia',
@@ -66,6 +67,23 @@ export async function POST(req: NextRequest) {
           },
         });
         console.log('✅ Founder Beta record updated:', updated.id);
+        
+        // Sync to Global Control (payment received = tier tag)
+        try {
+          const contactId = await syncFounderToGlobalControl(updated);
+          if (contactId) {
+            await prisma.founderBeta.update({
+              where: { id: updated.id },
+              data: {
+                globalControlContactId: contactId,
+                globalControlSynced: true,
+                globalControlLastSyncedAt: new Date(),
+              }
+            });
+          }
+        } catch (syncError) {
+          console.error('Global Control sync failed (non-blocking):', syncError);
+        }
       } else {
         console.warn('⚠️ No pending record found for session:', session.id);
         // This shouldn't happen with Checkout Sessions, but handle it anyway

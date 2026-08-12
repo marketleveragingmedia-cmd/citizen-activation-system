@@ -37,7 +37,9 @@ export default async function FoundersBetaPage() {
   const enterpriseCount = foundersBeta.filter(f => f.founderLevel.includes('Enterprise')).length
   const totalRevenue = foundersBeta.reduce((sum, f) => sum + (f.amountPaid || 0), 0)
   const intakeComplete = foundersBeta.filter(f => f.intakeCompleted).length
+  const invitationRequestComplete = foundersBeta.filter(f => f.invitationRequestCompleted).length
   const casAccountsCreated = foundersBeta.filter(f => f.casAccountCreated).length
+  const skoolAdded = foundersBeta.filter(f => f.skoolCommunityAdded).length
 
   const stats = {
     totalFounders,
@@ -45,7 +47,9 @@ export default async function FoundersBetaPage() {
     enterpriseCount,
     totalRevenue: totalRevenue / 100, // Convert cents to dollars
     intakeComplete,
+    invitationRequestComplete,
     casAccountsCreated,
+    skoolAdded,
   }
 
   return (

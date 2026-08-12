@@ -240,6 +240,19 @@ model FounderBeta {
   casAccountCreatedAt      DateTime?
   casAdminId               String?   // Links to Admin table
   
+  // Invitation Request Tracking
+  invitationRequestCompleted Boolean   @default(false)
+  invitationRequestCompletedAt DateTime?
+  
+  // SKOOL Community Tracking
+  skoolCommunityAdded      Boolean   @default(false)
+  skoolCommunityAddedAt    DateTime?
+  
+  // Global Control CRM Integration
+  globalControlContactId   String?
+  globalControlSynced      Boolean   @default(false)
+  globalControlLastSyncedAt DateTime?
+  
   // Timestamps
   createdAt                DateTime  @default(now())
   updatedAt                DateTime  @updatedAt

@@ -195,35 +195,35 @@ export default function MainAdminDashboard({ stats, recentRequests, partners = [
         {/* Founders Beta Summary - Master Admin Only */}
         {isMasterAdmin && stats.foundersBetaTotal > 0 && (
           <Link href="/master-admin/founders-beta">
-            <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-lg p-6 mb-6 hover:border-green-400 transition cursor-pointer">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-green-900">🌟 FOUNDERS BETA</h2>
-                <span className="text-sm text-green-700 font-semibold">View All →</span>
+            <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-lg p-3 mb-4 hover:border-green-400 transition cursor-pointer">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-bold text-green-900">🌟 FOUNDERS BETA</h3>
+                <span className="text-xs text-green-700 font-semibold">View All →</span>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+              <div className="grid grid-cols-3 md:grid-cols-6 gap-2 text-center">
                 <div>
-                  <div className="text-green-600 text-xs font-semibold mb-1">Total</div>
-                  <div className="text-2xl font-bold text-green-900">{stats.foundersBetaTotal}</div>
+                  <div className="text-green-600 text-xs mb-0.5">Total</div>
+                  <div className="text-lg font-bold text-green-900">{stats.foundersBetaTotal}</div>
                 </div>
                 <div>
-                  <div className="text-green-600 text-xs font-semibold mb-1">Citizen</div>
-                  <div className="text-2xl font-bold text-green-900">{stats.foundersBetaCitizen}</div>
+                  <div className="text-green-600 text-xs mb-0.5">Citizen</div>
+                  <div className="text-lg font-bold text-green-900">{stats.foundersBetaCitizen}</div>
                 </div>
                 <div>
-                  <div className="text-green-600 text-xs font-semibold mb-1">Enterprise</div>
-                  <div className="text-2xl font-bold text-green-900">{stats.foundersBetaEnterprise}</div>
+                  <div className="text-green-600 text-xs mb-0.5">Enterprise</div>
+                  <div className="text-lg font-bold text-green-900">{stats.foundersBetaEnterprise}</div>
                 </div>
                 <div>
-                  <div className="text-green-600 text-xs font-semibold mb-1">Revenue</div>
-                  <div className="text-xl font-bold text-green-900">${stats.foundersBetaRevenue?.toLocaleString()}</div>
+                  <div className="text-green-600 text-xs mb-0.5">Revenue</div>
+                  <div className="text-base font-bold text-green-900">${stats.foundersBetaRevenue?.toLocaleString()}</div>
                 </div>
                 <div>
-                  <div className="text-green-600 text-xs font-semibold mb-1">Intake</div>
-                  <div className="text-2xl font-bold text-green-900">{stats.foundersBetaIntake}/{stats.foundersBetaTotal}</div>
+                  <div className="text-green-600 text-xs mb-0.5">Intake</div>
+                  <div className="text-lg font-bold text-green-900">{stats.foundersBetaIntake}/{stats.foundersBetaTotal}</div>
                 </div>
                 <div>
-                  <div className="text-green-600 text-xs font-semibold mb-1">CAS Accounts</div>
-                  <div className="text-2xl font-bold text-green-900">{stats.foundersBetaCAS}/{stats.foundersBetaTotal}</div>
+                  <div className="text-green-600 text-xs mb-0.5">CAS</div>
+                  <div className="text-lg font-bold text-green-900">{stats.foundersBetaCAS}/{stats.foundersBetaTotal}</div>
                 </div>
               </div>
             </div>

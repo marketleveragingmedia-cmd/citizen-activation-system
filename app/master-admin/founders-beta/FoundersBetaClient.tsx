@@ -22,9 +22,15 @@ interface FounderBeta {
   intakeCompletedAt: Date | null
   subdomainOption1: string | null
   subdomainOption2: string | null
+  invitationRequestCompleted: boolean
+  invitationRequestCompletedAt: Date | null
   casAccountCreated: boolean
   casAccountCreatedAt: Date | null
   casAdminId: string | null
+  skoolCommunityAdded: boolean
+  skoolCommunityAddedAt: Date | null
+  globalControlContactId: string | null
+  globalControlSynced: boolean
   createdAt: Date
 }
 
@@ -34,7 +40,9 @@ interface Stats {
   enterpriseCount: number
   totalRevenue: number
   intakeComplete: number
+  invitationRequestComplete: number
   casAccountsCreated: number
+  skoolAdded: number
 }
 
 interface Props {
@@ -46,9 +54,12 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterTier, setFilterTier] = useState<'all' | 'citizen' | 'enterprise'>('all')
   const [filterIntake, setFilterIntake] = useState<'all' | 'complete' | 'pending'>('all')
+  const [filterInvitation, setFilterInvitation] = useState<'all' | 'complete' | 'pending'>('all')
   const [filterCAS, setFilterCAS] = useState<'all' | 'created' | 'pending'>('all')
+  const [filterSKOOL, setFilterSKOOL] = useState<'all' | 'added' | 'pending'>('all')
   const [provisioningId, setProvisioningId] = useState<string | null>(null)
   const [provisionResult, setProvisionResult] = useState<any>(null)
+  const [updatingSKOOL, setUpdatingSKOOL] = useState<string | null>(null)
 
   // Filter founders
   const filteredFounders = founders.filter(founder => {
@@ -68,13 +79,50 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
       (filterIntake === 'complete' && founder.intakeCompleted) ||
       (filterIntake === 'pending' && !founder.intakeCompleted)
 
+    // Invitation Request filter
+    const matchesInvitation = filterInvitation === 'all' ||
+      (filterInvitation === 'complete' && founder.invitationRequestCompleted) ||
+      (filterInvitation === 'pending' && !founder.invitationRequestCompleted)
+
     // CAS filter
     const matchesCAS = filterCAS === 'all' ||
       (filterCAS === 'created' && founder.casAccountCreated) ||
       (filterCAS === 'pending' && !founder.casAccountCreated)
 
-    return matchesSearch && matchesTier && matchesIntake && matchesCAS
+    // SKOOL filter
+    const matchesSKOOL = filterSKOOL === 'all' ||
+      (filterSKOOL === 'added' && founder.skoolCommunityAdded) ||
+      (filterSKOOL === 'pending' && !founder.skoolCommunityAdded)
+
+    return matchesSearch && matchesTier && matchesIntake && matchesInvitation && matchesCAS && matchesSKOOL
   })
+
+  const toggleSKOOL = async (founderId: string, currentValue: boolean) => {
+    setUpdatingSKOOL(founderId)
+
+    try {
+      const response = await fetch('/api/founders-beta/update-skool', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          founderBetaId: founderId, 
+          skoolAdded: !currentValue 
+        })
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        setTimeout(() => window.location.reload(), 500)
+      } else {
+        alert(result.error || 'Failed to update SKOOL status')
+      }
+    } catch (error) {
+      alert('Network error')
+    } finally {
+      setUpdatingSKOOL(null)
+    }
+  }
 
   const provisionAccount = async (founderId: string) => {
     if (!confirm('Create CAS account for this Founder?')) return
@@ -131,14 +179,21 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
 
   return (
     <div className="container mx-auto p-6">
+      {/* Back Button */}
+      <div className="mb-4">
+        <Link href="/dashboard" className="inline-flex items-center text-green-600 hover:text-green-700 font-semibold">
+          <span className="mr-2">←</span> Back to Dashboard
+        </Link>
+      </div>
+
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Founders Beta</h1>
         <p className="text-gray-600">Manage Cash Flow Visionaries Founders Beta members</p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
         <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-lg p-4">
           <div className="text-green-600 text-sm font-semibold mb-1">Total Founders</div>
           <div className="text-3xl font-bold text-green-900">{stats.totalFounders}</div>
@@ -155,19 +210,27 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
           <div className="text-blue-600 text-sm font-semibold mb-1">Revenue</div>
           <div className="text-2xl font-bold text-blue-900">${stats.totalRevenue.toLocaleString()}</div>
         </div>
-        <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
-          <div className="text-gray-600 text-sm font-semibold mb-1">Intake Complete</div>
-          <div className="text-3xl font-bold text-gray-900">{stats.intakeComplete}/{stats.totalFounders}</div>
+        <div className="bg-white border-2 border-gray-200 rounded-lg p-3">
+          <div className="text-gray-600 text-xs font-semibold mb-1">Intake</div>
+          <div className="text-2xl font-bold text-gray-900">{stats.intakeComplete}/{stats.totalFounders}</div>
         </div>
-        <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
-          <div className="text-gray-600 text-sm font-semibold mb-1">CAS Accounts</div>
-          <div className="text-3xl font-bold text-gray-900">{stats.casAccountsCreated}/{stats.totalFounders}</div>
+        <div className="bg-white border-2 border-gray-200 rounded-lg p-3">
+          <div className="text-gray-600 text-xs font-semibold mb-1">Invitation</div>
+          <div className="text-2xl font-bold text-gray-900">{stats.invitationRequestComplete}/{stats.totalFounders}</div>
+        </div>
+        <div className="bg-white border-2 border-gray-200 rounded-lg p-3">
+          <div className="text-gray-600 text-xs font-semibold mb-1">CAS</div>
+          <div className="text-2xl font-bold text-gray-900">{stats.casAccountsCreated}/{stats.totalFounders}</div>
+        </div>
+        <div className="bg-white border-2 border-gray-200 rounded-lg p-3">
+          <div className="text-gray-600 text-xs font-semibold mb-1">SKOOL</div>
+          <div className="text-2xl font-bold text-gray-900">{stats.skoolAdded}/{stats.totalFounders}</div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white border-2 border-gray-200 rounded-lg p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="bg-white border-2 border-gray-200 rounded-lg p-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Search</label>
             <input
@@ -191,11 +254,11 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Intake Status</label>
+            <label className="block text-xs font-semibold text-gray-700 mb-1">Intake</label>
             <select
               value={filterIntake}
               onChange={(e) => setFilterIntake(e.target.value as any)}
-              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none"
+              className="w-full px-3 py-2 text-sm border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none"
             >
               <option value="all">All</option>
               <option value="complete">Complete</option>
@@ -203,14 +266,38 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">CAS Account</label>
+            <label className="block text-xs font-semibold text-gray-700 mb-1">Invitation</label>
+            <select
+              value={filterInvitation}
+              onChange={(e) => setFilterInvitation(e.target.value as any)}
+              className="w-full px-3 py-2 text-sm border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none"
+            >
+              <option value="all">All</option>
+              <option value="complete">Complete</option>
+              <option value="pending">Pending</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-gray-700 mb-1">CAS</label>
             <select
               value={filterCAS}
               onChange={(e) => setFilterCAS(e.target.value as any)}
-              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none"
+              className="w-full px-3 py-2 text-sm border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none"
             >
               <option value="all">All</option>
               <option value="created">Created</option>
+              <option value="pending">Pending</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-gray-700 mb-1">SKOOL</label>
+            <select
+              value={filterSKOOL}
+              onChange={(e) => setFilterSKOOL(e.target.value as any)}
+              className="w-full px-3 py-2 text-sm border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none"
+            >
+              <option value="all">All</option>
+              <option value="added">Added</option>
               <option value="pending">Pending</option>
             </select>
           </div>
@@ -293,10 +380,31 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold text-gray-700">Invitation:</span>
+                      <span className={`text-sm font-semibold ${founder.invitationRequestCompleted ? 'text-green-600' : 'text-orange-600'}`}>
+                        {founder.invitationRequestCompleted ? '✅ Complete' : '⏳ Pending'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold text-gray-700">CAS Account:</span>
                       <span className={`text-sm font-semibold ${founder.casAccountCreated ? 'text-green-600' : 'text-orange-600'}`}>
                         {founder.casAccountCreated ? '✅ Created' : '⏳ Pending'}
                       </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold text-gray-700">SKOOL:</span>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={founder.skoolCommunityAdded}
+                          onChange={() => toggleSKOOL(founder.id, founder.skoolCommunityAdded)}
+                          disabled={updatingSKOOL === founder.id}
+                          className="w-4 h-4 text-green-600 rounded focus:ring-green-500"
+                        />
+                        <span className={`text-sm font-semibold ${founder.skoolCommunityAdded ? 'text-green-600' : 'text-gray-600'}`}>
+                          {updatingSKOOL === founder.id ? 'Updating...' : (founder.skoolCommunityAdded ? 'Added' : 'Not Added')}
+                        </span>
+                      </label>
                     </div>
                     {founder.subdomainOption1 && (
                       <div className="mt-3">

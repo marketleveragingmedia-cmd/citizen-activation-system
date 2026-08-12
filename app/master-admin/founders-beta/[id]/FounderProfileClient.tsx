@@ -174,6 +174,24 @@ export default function FounderProfileClient({ founder }: { founder: Founder }) 
           </div>
         </div>
 
+        {/* Strategic Partner / MOSCA */}
+        <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+            <span className="mr-2">🔑</span> Strategic Partner / MOSCA
+          </h2>
+          <div className="space-y-3">
+            <div>
+              <label className="text-sm font-semibold text-gray-600">Strategic Partner Referral Code</label>
+              {founder.globalControlContactId ? (
+                <p className="text-gray-900 font-mono text-lg font-bold">View in Strategic Partner Section</p>
+              ) : (
+                <p className="text-gray-500 italic">Not yet provided by MOSCA</p>
+              )}
+              <p className="text-xs text-gray-500 mt-1">Added after MOSCA wallet activation in Strategic Partner section</p>
+            </div>
+          </div>
+        </div>
+
         {/* Onboarding Progress */}
         <div className="bg-white border-2 border-gray-200 rounded-lg p-6 lg:col-span-2">
           <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">

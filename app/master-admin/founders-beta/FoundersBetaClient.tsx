@@ -395,26 +395,10 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
             </select>
           </div>
         </div>
-        <div className="mt-4 flex justify-between items-center">
-          <div className="flex gap-2">
-            <button
-              onClick={deleteTestAccountsKeepSally}
-              disabled={deletingAll}
-              className="px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-400 text-white font-semibold rounded-lg text-sm"
-            >
-              {deletingAll ? 'Deleting...' : 'Delete Test Accounts (Keep Sally)'}
-            </button>
-            <button
-              onClick={deleteAllTestAccounts}
-              disabled={deletingAll}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-semibold rounded-lg text-sm"
-            >
-              {deletingAll ? 'Deleting...' : 'Delete All Test Accounts'}
-            </button>
-          </div>
+        <div className="mt-4 flex justify-end">
           <button
             onClick={exportCSV}
-            className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg"
+            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg text-sm"
           >
             Export CSV ({filteredFounders.length})
           </button>
@@ -533,30 +517,30 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-col gap-2 justify-center">
+                <div className="flex flex-col gap-1 justify-center">
                   {!founder.casAccountCreated && founder.intakeCompleted && (
                     <button
                       onClick={() => provisionAccount(founder.id)}
                       disabled={provisioningId === founder.id}
-                      className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold rounded-lg text-sm"
+                      className="px-2 py-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold rounded text-xs"
                     >
-                      {provisioningId === founder.id ? 'Creating...' : `Create ${founder.founderLevel.includes('Enterprise') ? 'Main' : 'Team'} Admin Account`}
+                      {provisioningId === founder.id ? 'Creating...' : `Create ${founder.founderLevel.includes('Enterprise') ? 'Main' : 'Team'} Admin`}
                     </button>
                   )}
                   {!founder.intakeCompleted && (
-                    <div className="text-sm text-orange-600 font-semibold text-center">
-                      Waiting for intake completion
+                    <div className="text-xs text-orange-600 font-semibold text-center">
+                      Waiting for intake
                     </div>
                   )}
                   {founder.casAccountCreated && (
-                    <div className="text-sm text-green-600 font-semibold text-center">
-                      ✅ CAS Account Active
+                    <div className="text-xs text-green-600 font-semibold text-center">
+                      ✅ CAS Active
                     </div>
                   )}
                   <button
                     onClick={() => deleteFounder(founder.id, founder.fullName)}
                     disabled={deletingId === founder.id}
-                    className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-semibold rounded-lg text-sm mt-2"
+                    className="px-2 py-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-semibold rounded text-xs"
                   >
                     {deletingId === founder.id ? 'Deleting...' : 'Delete'}
                   </button>

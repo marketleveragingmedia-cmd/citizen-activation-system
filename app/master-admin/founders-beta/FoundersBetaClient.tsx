@@ -60,6 +60,8 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
   const [provisioningId, setProvisioningId] = useState<string | null>(null)
   const [provisionResult, setProvisionResult] = useState<any>(null)
   const [updatingSKOOL, setUpdatingSKOOL] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [deletingAll, setDeletingAll] = useState(false)
 
   // Filter founders
   const filteredFounders = founders.filter(founder => {
@@ -96,6 +98,97 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
 
     return matchesSearch && matchesTier && matchesIntake && matchesInvitation && matchesCAS && matchesSKOOL
   })
+
+  const deleteFounder = async (founderId: string, founderName: string) => {
+    if (!confirm(`⚠️ DELETE FOUNDER?\n\nAre you sure you want to permanently delete:\n${founderName}\n\nThis action CANNOT be undone!`)) {
+      return
+    }
+
+    setDeletingId(founderId)
+
+    try {
+      const response = await fetch('/api/founders-beta/delete-founder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ founderBetaId: founderId })
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        alert(`✅ ${founderName} deleted successfully`)
+        window.location.reload()
+      } else {
+        alert(`❌ Error: ${result.error}`)
+      }
+    } catch (error) {
+      alert('❌ Network error')
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
+  const deleteTestAccountsKeepSally = async () => {
+    if (!confirm(`⚠️ DELETE ALL TEST ACCOUNTS?\n\nThis will delete ALL Founder Beta accounts EXCEPT Sally Testings.\n\nSally will be kept as a demo account.\n\nThis action CANNOT be undone!`)) {
+      return
+    }
+
+    setDeletingAll(true)
+
+    try {
+      const response = await fetch('/api/founders-beta/delete-test-except-sally', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        alert(`✅ Deleted ${result.deletedCount} test account(s).\nSally Testings kept as demo.`)
+        window.location.reload()
+      } else {
+        alert(`❌ Error: ${result.error}`)
+      }
+    } catch (error) {
+      alert('❌ Network error')
+    } finally {
+      setDeletingAll(false)
+    }
+  }
+
+  const deleteAllTestAccounts = async () => {
+    if (!confirm(`⚠️ DELETE ALL ACCOUNTS?\n\nThis will delete ALL Founder Beta accounts including Sally Testings.\n\nThis action CANNOT be undone!\n\nType DELETE in the next prompt to confirm.`)) {
+      return
+    }
+
+    const confirmText = prompt('Type DELETE to confirm:')
+    if (confirmText !== 'DELETE') {
+      alert('Deletion cancelled')
+      return
+    }
+
+    setDeletingAll(true)
+
+    try {
+      const response = await fetch('/api/founders-beta/delete-all-test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        alert(`✅ Deleted ${result.deletedCount} account(s).`)
+        window.location.reload()
+      } else {
+        alert(`❌ Error: ${result.error}`)
+      }
+    } catch (error) {
+      alert('❌ Network error')
+    } finally {
+      setDeletingAll(false)
+    }
+  }
 
   const toggleSKOOL = async (founderId: string, currentValue: boolean) => {
     setUpdatingSKOOL(founderId)
@@ -302,7 +395,23 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
             </select>
           </div>
         </div>
-        <div className="mt-4 flex justify-end">
+        <div className="mt-4 flex justify-between items-center">
+          <div className="flex gap-2">
+            <button
+              onClick={deleteTestAccountsKeepSally}
+              disabled={deletingAll}
+              className="px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-400 text-white font-semibold rounded-lg text-sm"
+            >
+              {deletingAll ? 'Deleting...' : 'Delete Test Accounts (Keep Sally)'}
+            </button>
+            <button
+              onClick={deleteAllTestAccounts}
+              disabled={deletingAll}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-semibold rounded-lg text-sm"
+            >
+              {deletingAll ? 'Deleting...' : 'Delete All Test Accounts'}
+            </button>
+          </div>
           <button
             onClick={exportCSV}
             className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg"
@@ -429,7 +538,7 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
                     <button
                       onClick={() => provisionAccount(founder.id)}
                       disabled={provisioningId === founder.id}
-                      className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold rounded-lg"
+                      className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold rounded-lg text-sm"
                     >
                       {provisioningId === founder.id ? 'Creating...' : `Create ${founder.founderLevel.includes('Enterprise') ? 'Main' : 'Team'} Admin Account`}
                     </button>
@@ -444,6 +553,13 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
                       ✅ CAS Account Active
                     </div>
                   )}
+                  <button
+                    onClick={() => deleteFounder(founder.id, founder.fullName)}
+                    disabled={deletingId === founder.id}
+                    className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-semibold rounded-lg text-sm mt-2"
+                  >
+                    {deletingId === founder.id ? 'Deleting...' : 'Delete'}
+                  </button>
                 </div>
               </div>
             </div>

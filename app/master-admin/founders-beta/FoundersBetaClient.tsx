@@ -517,28 +517,28 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-col gap-1 justify-center items-center">
+                <div className="flex flex-col gap-1.5 justify-center items-center">
                   {!founder.casAccountCreated && founder.intakeCompleted && (
                     <button
                       onClick={() => provisionAccount(founder.id)}
                       disabled={provisioningId === founder.id}
-                      className="px-2 py-0.5 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium rounded text-xs"
+                      className="px-3 py-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium rounded-md text-sm"
                     >
-                      {provisioningId === founder.id ? '...' : 'Create'}
+                      {provisioningId === founder.id ? 'Creating...' : 'Create'}
                     </button>
                   )}
                   {!founder.intakeCompleted && (
-                    <span className="text-xs text-orange-600">Pending</span>
+                    <span className="text-sm text-orange-600 font-medium">Pending</span>
                   )}
                   {founder.casAccountCreated && (
-                    <span className="text-xs text-green-600">✅</span>
+                    <span className="text-sm text-green-600 font-medium">✅ Active</span>
                   )}
                   <button
                     onClick={() => deleteFounder(founder.id, founder.fullName)}
                     disabled={deletingId === founder.id}
-                    className="px-2 py-0.5 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-medium rounded text-xs"
+                    className="px-3 py-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-medium rounded-md text-sm"
                   >
-                    {deletingId === founder.id ? '...' : 'Del'}
+                    {deletingId === founder.id ? 'Deleting...' : 'Delete'}
                   </button>
                 </div>
               </div>

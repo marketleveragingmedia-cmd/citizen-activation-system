@@ -517,32 +517,28 @@ export default function FoundersBetaClient({ founders, stats }: Props) {
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-col gap-1 justify-center">
+                <div className="flex flex-col gap-1 justify-center items-center">
                   {!founder.casAccountCreated && founder.intakeCompleted && (
                     <button
                       onClick={() => provisionAccount(founder.id)}
                       disabled={provisioningId === founder.id}
-                      className="px-2 py-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold rounded text-xs whitespace-nowrap"
+                      className="px-2 py-0.5 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium rounded text-xs"
                     >
-                      {provisioningId === founder.id ? 'Creating...' : 'Create CAS'}
+                      {provisioningId === founder.id ? '...' : 'Create'}
                     </button>
                   )}
                   {!founder.intakeCompleted && (
-                    <div className="text-xs text-orange-600 font-semibold text-center">
-                      Pending
-                    </div>
+                    <span className="text-xs text-orange-600">Pending</span>
                   )}
                   {founder.casAccountCreated && (
-                    <div className="text-xs text-green-600 font-semibold text-center">
-                      ✅ Active
-                    </div>
+                    <span className="text-xs text-green-600">✅</span>
                   )}
                   <button
                     onClick={() => deleteFounder(founder.id, founder.fullName)}
                     disabled={deletingId === founder.id}
-                    className="px-2 py-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-semibold rounded text-xs"
+                    className="px-2 py-0.5 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-medium rounded text-xs"
                   >
-                    {deletingId === founder.id ? '...' : 'Delete'}
+                    {deletingId === founder.id ? '...' : 'Del'}
                   </button>
                 </div>
               </div>

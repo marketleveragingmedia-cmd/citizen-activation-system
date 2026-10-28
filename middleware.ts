@@ -42,13 +42,6 @@ export function middleware(request: NextRequest) {
     }
     
     // Valid subdomain detected
-    // If accessing root path, redirect to /request
-    if (request.nextUrl.pathname === '/') {
-      const url = request.nextUrl.clone()
-      url.pathname = '/request'
-      return NextResponse.redirect(url)
-    }
-    
     // Add subdomain to headers for API routes to access
     const response = NextResponse.next()
     response.headers.set('x-subdomain', subdomain)

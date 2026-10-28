@@ -43,7 +43,8 @@ export async function POST() {
         zip: '',
         status: 'Active',
         availableSlots: 100,
-        maxSlots: 100
+        maxSlots: 100,
+        passwordHash: hashedPassword
       }
     })
 

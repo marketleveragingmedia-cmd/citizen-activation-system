@@ -44,7 +44,8 @@ export async function POST() {
         status: 'Active',
         availableSlots: 100,
         maxSlots: 100,
-        passwordHash: hashedPassword
+        passwordHash: hashedPassword,
+        activationLevel: 'None'
       }
     })
 

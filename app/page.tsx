@@ -81,7 +81,7 @@ export default async function PressPlayPage() {
 
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
             Seeing Money in a<br />Completely Different Way
           </h1>
           <p className="text-2xl text-[#1E8E5A] font-semibold mb-2">

@@ -64,7 +64,7 @@ export default async function PressPlayPage() {
   const strategicPartnerName = `${admin.firstName} ${admin.lastName}`
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FFF8E7' }}>
+    <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-6 py-12">
         
         {/* Brand Header */}
@@ -76,29 +76,32 @@ export default async function PressPlayPage() {
           </div>
         </div>
 
-        {/* Logo */}
-        <div className="flex justify-center mb-8">
-          <Image
-            src="/citizen-activation-logo.jpg"
-            alt="Citizen Activation System"
-            width={280}
-            height={110}
-            priority
-            className="object-contain"
-          />
-        </div>
+        {/* Hero Section with Frame */}
+        <div className="bg-white border-2 border-gray-200 rounded-2xl shadow-sm p-8 md:p-10 mb-8">
+          {/* Logo */}
+          <div className="flex justify-center mb-8">
+            <Image
+              src="/citizen-activation-logo.jpg"
+              alt="Citizen Activation System"
+              width={280}
+              height={110}
+              priority
+              className="object-contain"
+              style={{ mixBlendMode: 'multiply' }}
+            />
+          </div>
 
-        {/* Hero Section */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-5 leading-tight">
-            Seeing Money in a<br />Completely Different Way
-          </h1>
-          <p className="text-base md:text-lg text-gray-700 mb-3 max-w-3xl mx-auto">
-            What If Creating Cash Flow Didn't Require More Work, Another Business, or Building Something From Scratch?
-          </p>
-          <p className="text-sm md:text-base text-[#1E8E5A] font-semibold">
-            Personally Invited by {strategicPartnerName}
-          </p>
+          <div className="text-center">
+            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-5 leading-tight">
+              Seeing Money in a<br />Completely Different Way
+            </h1>
+            <p className="text-base md:text-lg text-gray-700 mb-3 max-w-3xl mx-auto">
+              What If Creating Cash Flow Didn't Require More Work, Another Business, or Building Something From Scratch?
+            </p>
+            <p className="text-sm md:text-base text-[#1E8E5A] font-semibold">
+              Personally Invited by {strategicPartnerName}
+            </p>
+          </div>
         </div>
 
         {/* Video Section */}
@@ -225,15 +228,38 @@ export default async function PressPlayPage() {
           </p>
         </div>
 
+        {/* Disclosures Section */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <details className="bg-gray-50 rounded-lg p-6">
+            <summary className="cursor-pointer font-bold text-gray-900 text-base md:text-lg mb-2">
+              Educational & Earnings Disclosure
+            </summary>
+            <div className="mt-4 space-y-3 text-sm text-gray-700 leading-relaxed">
+              <p>
+                The Presentation, examples and educational materials are provided for informational and educational purposes. Any cash-flow illustrations are examples only and are not promises, representations or guarantees of earnings or financial performance.
+              </p>
+              <p>
+                Results depend on multiple factors, including individual participation, execution, qualifying activity, timing, market conditions, technology availability and other circumstances. Past or hypothetical examples should not be treated as a prediction of future results.
+              </p>
+              <p>
+                Participants should evaluate any opportunity independently and obtain appropriate professional advice when needed.
+              </p>
+            </div>
+          </details>
+        </div>
+
         {/* Footer Branding */}
-        <div className="mt-16 pt-8 border-t border-gray-200 text-center">
+        <div className="mt-8 pt-6 border-t border-gray-200 text-center">
           <div className="flex items-center justify-center gap-2 text-gray-600 mb-2">
             <span className="font-semibold text-[#1E8E5A]">Network Leveraging Cash Flow</span>
             <span>•</span>
             <span className="font-semibold text-[#C9A441]">Cash Flow Visionaries</span>
           </div>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 mb-1">
             Powered by Citizen Activation System
+          </p>
+          <p className="text-xs text-gray-400">
+            Educational Content. No Earnings Guarantee. Participation Requires Informed Decision-Making.
           </p>
         </div>
 

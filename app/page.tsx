@@ -64,16 +64,25 @@ export default async function PressPlayPage() {
   const strategicPartnerName = `${admin.firstName} ${admin.lastName}`
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
+    <div className="min-h-screen" style={{ backgroundColor: '#FFF8E7' }}>
       <div className="max-w-4xl mx-auto px-6 py-12">
         
+        {/* Brand Header */}
+        <div className="text-center mb-6">
+          <div className="flex items-center justify-center gap-2 text-sm md:text-base mb-6">
+            <span className="font-semibold text-[#1E8E5A]">Network Leveraging Cash Flow</span>
+            <span className="text-gray-400">•</span>
+            <span className="font-semibold text-[#C9A441]">Cash Flow Visionaries</span>
+          </div>
+        </div>
+
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <Image
             src="/citizen-activation-logo.jpg"
             alt="Citizen Activation System"
-            width={320}
-            height={125}
+            width={280}
+            height={110}
             priority
             className="object-contain"
           />
@@ -81,20 +90,20 @@ export default async function PressPlayPage() {
 
         {/* Hero Section */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-5 leading-tight">
             Seeing Money in a<br />Completely Different Way
           </h1>
-          <p className="text-lg md:text-xl text-gray-700 mb-3 max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-gray-700 mb-3 max-w-3xl mx-auto">
             What If Creating Cash Flow Didn't Require More Work, Another Business, or Building Something From Scratch?
           </p>
-          <p className="text-base md:text-lg text-[#1E8E5A] font-semibold">
+          <p className="text-sm md:text-base text-[#1E8E5A] font-semibold">
             Personally Invited by {strategicPartnerName}
           </p>
         </div>
 
         {/* Video Section */}
         <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-12">
-          <div className="aspect-video bg-gradient-to-br from-emerald-50 via-teal-50 to-emerald-100 rounded-lg flex items-center justify-center relative overflow-hidden">
+          <div className="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg flex items-center justify-center relative overflow-hidden">
             <div className="text-center p-8 z-10">
               <div className="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-[#1E8E5A] mb-4 shadow-lg">
                 <svg 
@@ -105,10 +114,10 @@ export default async function PressPlayPage() {
                   <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
                 </svg>
               </div>
-              <p className="text-gray-800 font-bold text-lg md:text-xl mb-2">
+              <p className="text-gray-800 font-bold text-base md:text-lg mb-2">
                 Watch the Free Presentation
               </p>
-              <p className="text-sm md:text-base text-gray-600">
+              <p className="text-xs md:text-sm text-gray-600">
                 Video presentation coming soon
               </p>
             </div>
@@ -118,7 +127,7 @@ export default async function PressPlayPage() {
 
         {/* What You'll Discover Section */}
         <div className="bg-white rounded-xl shadow-lg p-6 md:p-10 mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-8 text-center">
             What You'll Discover
           </h2>
           
@@ -131,7 +140,7 @@ export default async function PressPlayPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 text-lg md:text-xl mb-2">Working Harder Isn't the Answer</h3>
+                <h3 className="font-bold text-gray-900 text-base md:text-lg mb-2">Working Harder Isn't the Answer</h3>
                 <p className="text-gray-600 leading-relaxed">
                   You're Already Working, Earning and Managing Financial Responsibilities. Discover why creating additional Cash Flow may require a different Strategy, not simply more of your time and energy.
                 </p>
@@ -146,7 +155,7 @@ export default async function PressPlayPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 text-lg md:text-xl mb-2">No Creating. No Selling. No Building From Scratch.</h3>
+                <h3 className="font-bold text-gray-900 text-base md:text-lg mb-2">No Creating. No Selling. No Building From Scratch.</h3>
                 <p className="text-gray-600 leading-relaxed">
                   Discover a different approach to Cash Flow without creating Digital Products, learning AI, building an Online Business or becoming an Affiliate Marketer. Learn why Leveraging What Already Exists changes the conversation.
                 </p>
@@ -161,7 +170,7 @@ export default async function PressPlayPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 text-lg md:text-xl mb-2">Network Leveraging Cash Flow: A Different Approach</h3>
+                <h3 className="font-bold text-gray-900 text-base md:text-lg mb-2">Network Leveraging Cash Flow: A Different Approach</h3>
                 <p className="text-gray-600 leading-relaxed">
                   Discover how Technology, Community and an established Framework come together to create a different way to approach Cash Flow, without having to build an entire System on your own.
                 </p>
@@ -176,7 +185,7 @@ export default async function PressPlayPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 text-lg md:text-xl mb-2">Three Connections. Infinite Possibilities.</h3>
+                <h3 className="font-bold text-gray-900 text-base md:text-lg mb-2">Three Connections. Infinite Possibilities.</h3>
                 <p className="text-gray-600 leading-relaxed">
                   Discover the Connect • Activate • Duplicate Framework and how intentional Connections, Community Expansion and Duplication create the Foundation for exploring Immediate and Residual Cash Flow possibilities.
                 </p>
@@ -191,7 +200,7 @@ export default async function PressPlayPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 text-lg md:text-xl mb-2">Become an Official Cash Flow Visionary</h3>
+                <h3 className="font-bold text-gray-900 text-base md:text-lg mb-2">Become an Official Cash Flow Visionary</h3>
                 <p className="text-gray-600 leading-relaxed">
                   Discover what it means to become part of a Movement built around Financial Freedom, Connection and IMPACT, and how Premium Membership opens the door to the private Experience where the Solution is revealed.
                 </p>
@@ -201,17 +210,17 @@ export default async function PressPlayPage() {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-br from-[#1E8E5A] to-[#065F46] rounded-xl shadow-xl p-8 md:p-12 mb-12 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+        <div className="bg-gradient-to-br from-[#1E8E5A] to-[#065F46] rounded-xl shadow-xl p-8 md:p-10 mb-12 text-center">
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
             Ready to See Cash Flow in a Completely Different Way?
           </h2>
           <Link
             href="/request"
-            className="inline-block bg-white text-[#1E8E5A] hover:bg-gray-100 font-bold text-lg md:text-xl px-10 py-4 rounded-lg shadow-lg transform transition hover:scale-105 mb-4"
+            className="inline-block bg-white text-[#1E8E5A] hover:bg-gray-100 font-bold text-base md:text-lg px-8 py-3 rounded-lg shadow-lg transform transition hover:scale-105 mb-3"
           >
             Request Your Invitation
           </Link>
-          <p className="text-sm md:text-base text-white/90">
+          <p className="text-xs md:text-sm text-white/90">
             Personally Invited by {strategicPartnerName}
           </p>
         </div>

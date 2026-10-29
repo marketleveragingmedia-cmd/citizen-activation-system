@@ -6,15 +6,16 @@ interface RequestFormProps {
   subdomain: string
   primaryColor: string
   secondaryColor: string
+  referralCode?: string
 }
 
-export default function RequestForm({ subdomain, primaryColor, secondaryColor }: RequestFormProps) {
+export default function RequestForm({ subdomain, primaryColor, secondaryColor, referralCode = '' }: RequestFormProps) {
   const [formData, setFormData] = useState({
     requesterFirstName: '',
     requesterLastName: '',
     requesterEmail: '',
     requesterPhone: '',
-    referralCode: '',
+    referralCode: referralCode,
     activationLevel: 'Citizen'
   })
   const [isSubmitting, setIsSubmitting] = useState(false)

@@ -103,6 +103,7 @@ export default async function RequestPage() {
           subdomain={subdomain}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
+          referralCode={admin.referralCode || ''}
         />
 
         {/* Footer - matches hub structure */}

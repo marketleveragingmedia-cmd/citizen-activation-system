@@ -279,7 +279,7 @@ export async function POST(req: Request) {
     let roleText = 'Admin'
     switch (accountType) {
       case 'MAIN_ADMIN':
-        roleText = 'Main Admin (White Label)'
+        roleText = 'Main Admin'
         break
       case 'TEAM_ADMIN':
         roleText = 'Team Admin'
